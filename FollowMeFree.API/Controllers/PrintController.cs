@@ -37,7 +37,8 @@ namespace FollowMeFree.API.Controllers
             {
                 Command = "PrintJob",
                 TargetPrinterName = request.PrinterName,
-                FilePath = request.FilePath
+                FilePath = request.FilePath,
+                Datatype = request.Datatype
             };
 
             var response = await _pipeClient.SendRequestAsync(ipcRequest);
@@ -53,5 +54,6 @@ namespace FollowMeFree.API.Controllers
     {
         public string PrinterName { get; set; } = string.Empty;
         public string FilePath { get; set; } = string.Empty;
+        public string Datatype { get; set; }
     }
 }

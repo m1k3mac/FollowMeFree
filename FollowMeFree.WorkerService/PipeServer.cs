@@ -126,7 +126,10 @@ namespace FollowMeFree.WorkerService
                     request.FilePath, request.TargetPrinterName);
 
                 var fullPath = Path.Combine(_appSettings.JobFilePath, request.FilePath);
-                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath);
+                string datatype = !string.IsNullOrEmpty(request.Datatype)
+                    ? request.Datatype
+                    : PrintJobExtractor.ParseDatatypeFromFileName(request.FilePath);
+                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath, datatype);
 
                 return new IpcResponse
                 {

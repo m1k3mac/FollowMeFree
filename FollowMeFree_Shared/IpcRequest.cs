@@ -8,5 +8,6 @@ namespace FollowMeFree_Shared
         public string TargetPrinterIp { get; set; }
         public string TargetPrinterName { get; set; }
         public string FilePath { get; set; }
+        public string Datatype { get; set; }
     }
 }

@@ -222,7 +222,8 @@ namespace FollowMeFree.WorkerService
                 string safeDocName = SanitizeFileName(job.JobName ?? $"unknown");
                 string pages = job.NumberOfPages.ToString();
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                string fileName = $"{username};{safeDocName};{pages};{timestamp};{job.JobId}.prn";
+                string safeDatatype = SanitizeFileName(job.Datatype ?? "RAW");
+                string fileName = $"{username};{safeDocName};{pages};{timestamp};{job.JobId};{safeDatatype}.prn";
                 string outputPath = Path.Combine(outputFolder, fileName);
 
                 if (ExtractAndRemoveJob(job.JobId, outputPath))
@@ -300,7 +301,8 @@ namespace FollowMeFree.WorkerService
                 string safeDocName = SanitizeFileName(job.JobName ?? "unknown");
                 string pages = job.NumberOfPages.ToString();
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                string fileName = $"{safeSubmitter};{safeDocName};{pages};{timestamp};{job.JobId}.prn";
+                string safeDatatype = SanitizeFileName(job.Datatype ?? "RAW");
+                string fileName = $"{safeSubmitter};{safeDocName};{pages};{timestamp};{job.JobId};{safeDatatype}.prn";
                 string outputPath = Path.Combine(outputFolder, fileName);
 
                 if (ExtractAndRemoveJob(job.JobId, outputPath))
@@ -482,6 +484,24 @@ namespace FollowMeFree.WorkerService
                 name = name.Replace(c, '_');
             }
             return name;
+        }
+
+        /// <summary>
+        /// Parses the datatype from a PRN filename that uses the naming convention:
+        /// submitter;docname;pages;timestamp;jobId;datatype.prn
+        /// Returns "RAW" if the datatype segment is missing or the filename doesn't match the convention.
+        /// </summary>
+        public static string ParseDatatypeFromFileName(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return "RAW";
+
+            string nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+            string[] parts = nameWithoutExt.Split(';');
+            if (parts.Length >= 6 && !string.IsNullOrWhiteSpace(parts[5]))
+                return parts[5];
+
+            return "RAW";
         }
 
         #endregion
