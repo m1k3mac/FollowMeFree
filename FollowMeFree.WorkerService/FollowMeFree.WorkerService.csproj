@@ -16,4 +16,6 @@
     <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
   </ItemGroup>
 
+  <Import Project="..\FollowMeFree_Shared\FollowMeFree_Shared.projitems" Label="Shared" />
+
 </Project>
