@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37111.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowMeFree", "FollowMeFree\FollowMeFree.csproj", "{78E19C3F-28C8-4A7B-A292-FE0537484804}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FollowMeFree.Shared", "FollowMeFree_Shared\FollowMeFree.Shared.shproj", "{15D6DB00-6CD3-4AE3-BDC4-D8B279C47DA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowMeFree.WorkerService", "FollowMeFree.WorkerService\FollowMeFree.WorkerService.csproj", "{D5357C9D-8FAC-482A-A6E1-0210E1DA86E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5357C9D-8FAC-482A-A6E1-0210E1DA86E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5357C9D-8FAC-482A-A6E1-0210E1DA86E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5357C9D-8FAC-482A-A6E1-0210E1DA86E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5357C9D-8FAC-482A-A6E1-0210E1DA86E0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {60357823-4B96-4033-B4AD-AE51933C3966}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		FollowMeFree_Shared\FollowMeFree_Shared.projitems*{15d6db00-6cd3-4ae3-bdc4-d8b279c47da3}*SharedItemsImports = 13
+		FollowMeFree_Shared\FollowMeFree_Shared.projitems*{78e19c3f-28c8-4a7b-a292-fe0537484804}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal
