@@ -45,91 +45,138 @@ namespace FollowMeFree.WorkerService
         /// <param name="printerName">The name of the target printer.</param>
         /// <param name="filePath">Full path to the PRN file to print.</param>
         /// <returns>True if the data was sent successfully.</returns>
-        public static bool SendToPrinterByName(string printerName, string filePath)
+        public static bool SendToPrinterByName(string printerName, string filePath, string dataType = "RAW")
         {
-            if (string.IsNullOrEmpty(printerName))
-                throw new ArgumentNullException(nameof(printerName));
-            if (string.IsNullOrEmpty(filePath))
-                throw new ArgumentNullException(nameof(filePath));
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException($"PRN file not found: {filePath}", filePath);
-
-            byte[] fileData = File.ReadAllBytes(filePath);
-
-            IntPtr hPrinter = IntPtr.Zero;
-            bool success = false;
-
             try
             {
-                if (!OpenPrinter(printerName, out hPrinter, IntPtr.Zero))
-                {
-                    int error = Marshal.GetLastWin32Error();
-                    Console.WriteLine($"[PrnPrinter] OpenPrinter failed for '{printerName}' (Win32 error {error})");
-                    return false;
-                }
+                byte[] bytes = File.ReadAllBytes(filePath);
+                IntPtr pUnmanagedBytes = Marshal.AllocCoTaskMem(bytes.Length);
+                Marshal.Copy(bytes, 0, pUnmanagedBytes, bytes.Length);
 
-                var docInfo = new DOC_INFO_1
+                DOC_INFO_1 di = new DOC_INFO_1
                 {
                     pDocName = Path.GetFileName(filePath),
-                    pOutputFile = null,
-                    pDatatype = "RAW"
+                    pDatatype = dataType
                 };
 
-                if (!StartDocPrinter(hPrinter, 1, ref docInfo))
+                IntPtr hPrinter;
+                if (!OpenPrinter(printerName, out hPrinter, IntPtr.Zero))
                 {
-                    int error = Marshal.GetLastWin32Error();
-                    Console.WriteLine($"[PrnPrinter] StartDocPrinter failed (Win32 error {error})");
-                    return false;
+                    Marshal.FreeCoTaskMem(pUnmanagedBytes);
+                    throw new Exception($"Failed to open printer: {printerName}");
                 }
 
-                try
+                bool success = false;
+                if (StartDocPrinter(hPrinter, 1, di))
                 {
-                    if (!StartPagePrinter(hPrinter))
+                    if (StartPagePrinter(hPrinter))
                     {
-                        int error = Marshal.GetLastWin32Error();
-                        Console.WriteLine($"[PrnPrinter] StartPagePrinter failed (Win32 error {error})");
-                        return false;
+                        int written;
+                        success = WritePrinter(hPrinter, pUnmanagedBytes, bytes.Length, out written);
+                        EndPagePrinter(hPrinter);
                     }
-
-                    IntPtr pUnmanagedBytes = Marshal.AllocCoTaskMem(fileData.Length);
-                    try
-                    {
-                        Marshal.Copy(fileData, 0, pUnmanagedBytes, fileData.Length);
-                        if (WritePrinter(hPrinter, pUnmanagedBytes, fileData.Length, out int bytesWritten))
-                        {
-                            success = bytesWritten == fileData.Length;
-                            Console.WriteLine($"[PrnPrinter] Sent {bytesWritten:N0} bytes to '{printerName}'");
-                        }
-                        else
-                        {
-                            int error = Marshal.GetLastWin32Error();
-                            Console.WriteLine($"[PrnPrinter] WritePrinter failed (Win32 error {error})");
-                        }
-                    }
-                    finally
-                    {
-                        Marshal.FreeCoTaskMem(pUnmanagedBytes);
-                    }
-
-                    EndPagePrinter(hPrinter);
-                }
-                finally
-                {
                     EndDocPrinter(hPrinter);
                 }
+
+                ClosePrinter(hPrinter);
+                Marshal.FreeCoTaskMem(pUnmanagedBytes);
+
+                return success;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PrnPrinter] Error sending to printer '{printerName}': {ex.Message}");
+                Console.WriteLine($"Error sending to printer: {ex.Message}");
                 return false;
             }
-            finally
-            {
-                if (hPrinter != IntPtr.Zero)
-                    ClosePrinter(hPrinter);
-            }
 
-            return success;
+
+
+
+
+
+            //if (string.IsNullOrEmpty(printerName))
+            //    throw new ArgumentNullException(nameof(printerName));
+            //if (string.IsNullOrEmpty(filePath))
+            //    throw new ArgumentNullException(nameof(filePath));
+            //if (!File.Exists(filePath))
+            //    throw new FileNotFoundException($"PRN file not found: {filePath}", filePath);
+
+            //byte[] fileData = File.ReadAllBytes(filePath);
+
+            //IntPtr hPrinter = IntPtr.Zero;
+            //bool success = false;
+
+            //try
+            //{
+            //    if (!OpenPrinter(printerName, out hPrinter, IntPtr.Zero))
+            //    {
+            //        int error = Marshal.GetLastWin32Error();
+            //        Console.WriteLine($"[PrnPrinter] OpenPrinter failed for '{printerName}' (Win32 error {error})");
+            //        return false;
+            //    }
+
+            //    var docInfo = new DOC_INFO_1
+            //    {
+            //        pDocName = Path.GetFileName(filePath),
+            //        pOutputFile = null,
+            //        pDatatype = "RAW"
+            //    };
+
+            //    if (!StartDocPrinter(hPrinter, 1, ref docInfo))
+            //    {
+            //        int error = Marshal.GetLastWin32Error();
+            //        Console.WriteLine($"[PrnPrinter] StartDocPrinter failed (Win32 error {error})");
+            //        return false;
+            //    }
+
+            //    try
+            //    {
+            //        if (!StartPagePrinter(hPrinter))
+            //        {
+            //            int error = Marshal.GetLastWin32Error();
+            //            Console.WriteLine($"[PrnPrinter] StartPagePrinter failed (Win32 error {error})");
+            //            return false;
+            //        }
+
+            //        IntPtr pUnmanagedBytes = Marshal.AllocCoTaskMem(fileData.Length);
+            //        try
+            //        {
+            //            Marshal.Copy(fileData, 0, pUnmanagedBytes, fileData.Length);
+            //            if (WritePrinter(hPrinter, pUnmanagedBytes, fileData.Length, out int bytesWritten))
+            //            {
+            //                success = bytesWritten == fileData.Length;
+            //                Console.WriteLine($"[PrnPrinter] Sent {bytesWritten:N0} bytes to '{printerName}'");
+            //            }
+            //            else
+            //            {
+            //                int error = Marshal.GetLastWin32Error();
+            //                Console.WriteLine($"[PrnPrinter] WritePrinter failed (Win32 error {error})");
+            //            }
+            //        }
+            //        finally
+            //        {
+            //            Marshal.FreeCoTaskMem(pUnmanagedBytes);
+            //        }
+
+            //        EndPagePrinter(hPrinter);
+            //    }
+            //    finally
+            //    {
+            //        EndDocPrinter(hPrinter);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"[PrnPrinter] Error sending to printer '{printerName}': {ex.Message}");
+            //    return false;
+            //}
+            //finally
+            //{
+            //    if (hPrinter != IntPtr.Zero)
+            //        ClosePrinter(hPrinter);
+            //}
+
+            //return success;
         }
     }
 }

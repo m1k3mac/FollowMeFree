@@ -12,10 +12,12 @@ namespace FollowMeFree.WorkerService
         public const string PipeName = "FollowMeFree_Pipe";
 
         private readonly ILogger<PipeServer> _logger;
+        private readonly AppSettingsProvider _appSettings;
 
-        public PipeServer(ILogger<PipeServer> logger)
+        public PipeServer(ILogger<PipeServer> logger, AppSettingsProvider appSettings)
         {
             _logger = logger;
+            _appSettings = appSettings;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -123,7 +125,8 @@ namespace FollowMeFree.WorkerService
                 _logger.LogInformation("PipeServer: printing '{FilePath}' to '{Printer}'",
                     request.FilePath, request.TargetPrinterName);
 
-                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, request.FilePath);
+                var fullPath = Path.Combine(_appSettings.JobFilePath, request.FilePath);
+                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath);
 
                 return new IpcResponse
                 {

@@ -1,31 +1,17 @@
-using System.Configuration;
-
 namespace FollowMeFree.WorkerService
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly string JobFilePath;
-        private readonly string FMFPrinterName;
+        private readonly AppSettingsProvider _appSettings;
         private readonly PrintJobExtractor _printJobExtractor;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, AppSettingsProvider appSettings)
         {
             _logger = logger;
+            _appSettings = appSettings;
 
-            // Load settings from the App.config of the FollowMeFree project
-            var appConfigPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "FollowMeFree", "App.config");
-            var configMap = new ExeConfigurationFileMap { ExeConfigFilename = Path.GetFullPath(appConfigPath) };
-            var config = System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-            var settingsGroup = config.GetSectionGroup("applicationSettings");
-            var section = settingsGroup?.Sections["FollowMeFree.Properties.Settings"] as ClientSettingsSection;
-            var setting = section?.Settings.Get("JobFilePath");
-            JobFilePath = setting?.Value?.ValueXml?.InnerText ?? string.Empty;
-
-            var printerSetting = section?.Settings.Get("FMFPrinterName");
-            FMFPrinterName = printerSetting?.Value?.ValueXml?.InnerText ?? string.Empty;
-
-            _printJobExtractor = new PrintJobExtractor(FMFPrinterName);
+            _printJobExtractor = new PrintJobExtractor(_appSettings.FMFPrinterName);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -39,7 +25,7 @@ namespace FollowMeFree.WorkerService
 
                 try
                 {
-                    var extractedJobs = await _printJobExtractor.ExtractAllJobsAsync(JobFilePath);
+                    var extractedJobs = await _printJobExtractor.ExtractAllJobsAsync(_appSettings.JobFilePath);
                     if (extractedJobs.Count > 0)
                     {
                         _logger.LogInformation("Extracted {count} print job(s)", extractedJobs.Count);
