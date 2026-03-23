@@ -1,0 +1,6 @@
+@FollowMeFree.API_HostAddress = http://localhost:5224
+
+GET {{FollowMeFree.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
