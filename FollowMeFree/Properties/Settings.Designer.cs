@@ -32,15 +32,12 @@ namespace FollowMeFree.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("FMF Print Queue")]
         public string FMFPrinterName {
             get {
                 return ((string)(this["FMFPrinterName"]));
-            }
-            set {
-                this["FMFPrinterName"] = value;
             }
         }
     }

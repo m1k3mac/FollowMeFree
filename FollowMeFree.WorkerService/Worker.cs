@@ -6,13 +6,14 @@ namespace FollowMeFree.WorkerService
     {
         private readonly ILogger<Worker> _logger;
         private readonly string JobFilePath;
+        private readonly string FMFPrinterName;
         private readonly PrintJobExtractor _printJobExtractor;
 
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
 
-            // Load the JobFilePath from the App.config of the FollowMeFree project
+            // Load settings from the App.config of the FollowMeFree project
             var appConfigPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "FollowMeFree", "App.config");
             var configMap = new ExeConfigurationFileMap { ExeConfigFilename = Path.GetFullPath(appConfigPath) };
             var config = System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
@@ -21,7 +22,10 @@ namespace FollowMeFree.WorkerService
             var setting = section?.Settings.Get("JobFilePath");
             JobFilePath = setting?.Value?.ValueXml?.InnerText ?? string.Empty;
 
-            _printJobExtractor = new PrintJobExtractor("FMF Print Queue");
+            var printerSetting = section?.Settings.Get("FMFPrinterName");
+            FMFPrinterName = printerSetting?.Value?.ValueXml?.InnerText ?? string.Empty;
+
+            _printJobExtractor = new PrintJobExtractor(FMFPrinterName);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
