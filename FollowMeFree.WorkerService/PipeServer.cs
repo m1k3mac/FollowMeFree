@@ -2,6 +2,8 @@ using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
 using FollowMeFree_Shared;
+using FollowMeFree.WorkerService.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -12,12 +14,12 @@ namespace FollowMeFree.WorkerService
         public const string PipeName = "FollowMeFree_Pipe";
 
         private readonly ILogger<PipeServer> _logger;
-        private readonly AppSettingsProvider _appSettings;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public PipeServer(ILogger<PipeServer> logger, AppSettingsProvider appSettings)
+        public PipeServer(ILogger<PipeServer> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
-            _appSettings = appSettings;
+            _scopeFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -122,10 +124,20 @@ namespace FollowMeFree.WorkerService
 
             try
             {
+                using var scope = _scopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<FollowMeFreeDbContext>();
+                var config = db.Configs.FirstOrDefault();
+
+                if (config == null)
+                {
+                    _logger.LogError("No configuration found in Config table");
+                    return new IpcResponse { Success = false, Message = "No configuration found in Config table" };
+                }
+
                 _logger.LogInformation("PipeServer: printing '{FilePath}' to '{Printer}'",
                     request.FilePath, request.TargetPrinterName);
 
-                var fullPath = Path.Combine(_appSettings.JobFilePath, request.FilePath);
+                var fullPath = Path.Combine(config.JobFilePath, request.FilePath);
                 string datatype = !string.IsNullOrEmpty(request.Datatype)
                     ? request.Datatype
                     : PrintJobExtractor.ParseDatatypeFromFileName(request.FilePath);

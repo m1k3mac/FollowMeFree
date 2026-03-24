@@ -7,9 +7,9 @@ namespace FollowMeFree.WorkerService
         private readonly string _filePath;
         private readonly object _lock = new();
 
-        public FileLoggerProvider(AppSettingsProvider appSettings)
+        public FileLoggerProvider(string logDirectory)
         {
-            var directory = appSettings.LogFilePath;
+            var directory = logDirectory;
             if (!string.IsNullOrEmpty(directory))
             {
                 Directory.CreateDirectory(directory);

@@ -3,7 +3,6 @@ using FollowMeFree.WorkerService.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddSingleton<AppSettingsProvider>();
 builder.Services.AddDbContext<FollowMeFreeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Logging.Services.AddSingleton<ILoggerProvider>(sp =>

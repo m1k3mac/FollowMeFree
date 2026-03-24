@@ -1,3 +1,4 @@
+using FollowMeFree.WorkerService.Data.Scaffolded;
 using Microsoft.EntityFrameworkCore;
 
 namespace FollowMeFree.WorkerService.Data
@@ -10,9 +11,23 @@ namespace FollowMeFree.WorkerService.Data
         }
 
         public DbSet<LogEntry> Logs { get; set; }
+        public DbSet<Config> Configs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Config>(entity =>
+            {
+                entity
+                    .HasNoKey()
+                    .ToTable("Config");
+
+                entity.Property(e => e.FmfprinterName)
+                    .IsUnicode(false)
+                    .HasColumnName("FMFPrinterName");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.JobFilePath).IsUnicode(false);
+            });
+
             modelBuilder.Entity<LogEntry>(entity =>
             {
                 entity.ToTable("Logs");

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37111.16
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowMeFree", "FollowMeFree\FollowMeFree.csproj", "{78E19C3F-28C8-4A7B-A292-FE0537484804}"
 EndProject
@@ -18,7 +18,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E19C3F-28C8-4A7B-A292-FE0537484804}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5357C9D-8FAC-482A-A6E1-0210E1DA86E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
