@@ -131,6 +131,19 @@ namespace FollowMeFree.WorkerService
                     : PrintJobExtractor.ParseDatatypeFromFileName(request.FilePath);
                 bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath, datatype);
 
+                if (result && File.Exists(fullPath))
+                {
+                    try
+                    {
+                        File.Delete(fullPath);
+                        _logger.LogInformation("PipeServer: deleted file '{FilePath}' after successful print", fullPath);
+                    }
+                    catch (Exception deleteEx)
+                    {
+                        _logger.LogWarning(deleteEx, "PipeServer: failed to delete file '{FilePath}' after printing", fullPath);
+                    }
+                }
+
                 return new IpcResponse
                 {
                     Success = result,
