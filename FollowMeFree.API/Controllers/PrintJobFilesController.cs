@@ -21,7 +21,7 @@ namespace FollowMeFree.API.Controllers
         /// </summary>
         /// <param name="submitter">The username of the job submitter to filter by.</param>
         [HttpGet]
-        public async Task<IActionResult> GetPrintJobFiles([FromQuery] string submitter)
+        public async Task<ActionResult<IEnumerable<PrintJobFileDto>>> GetPrintJobFiles([FromQuery] string submitter)
         {
             if (string.IsNullOrWhiteSpace(submitter))
                 return BadRequest("Submitter is required.");
