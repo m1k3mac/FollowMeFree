@@ -6,6 +6,7 @@ namespace FollowMeFree.WorkerService
     {
         public string JobFilePath { get; }
         public string FMFPrinterName { get; }
+        public string LogFilePath { get; }
 
         public AppSettingsProvider()
         {
@@ -20,6 +21,9 @@ namespace FollowMeFree.WorkerService
 
             var printerSetting = section?.Settings.Get("FMFPrinterName");
             FMFPrinterName = printerSetting?.Value?.ValueXml?.InnerText ?? string.Empty;
+
+            var logFileSetting = section?.Settings.Get("LogFilePath");
+            LogFilePath = logFileSetting?.Value?.ValueXml?.InnerText ?? string.Empty;
         }
     }
 }

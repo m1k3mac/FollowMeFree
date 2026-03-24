@@ -18,17 +18,21 @@ namespace FollowMeFree.WorkerService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                }
+                //if (_logger.IsEnabled(LogLevel.Information))
+                //{
+                //    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                //}
 
                 try
                 {
                     var extractedJobs = await _printJobExtractor.ExtractAllJobsAsync(_appSettings.JobFilePath);
                     if (extractedJobs.Count > 0)
                     {
-                        _logger.LogInformation("Extracted {count} print job(s)", extractedJobs.Count);
+                        //_logger.LogInformation("Extracted {count} print job(s)", extractedJobs.Count);
+                        foreach (var job in extractedJobs)
+                        {
+                            _logger.LogInformation("Extracted print job: {@job}", job);
+                        }
                     }
                 }
                 catch (Exception ex)

@@ -8,5 +8,8 @@
     <Setting Name="FMFPrinterName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">FMF Print Queue</Value>
     </Setting>
+    <Setting Name="LogFilePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Test</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
