@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<PipeClient>();
+builder.Services.AddSingleton<PrintJobFileSettings>();
 
 var app = builder.Build();
 

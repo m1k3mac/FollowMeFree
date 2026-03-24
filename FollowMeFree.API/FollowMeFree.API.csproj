@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.5" />
   </ItemGroup>
 
   <Import Project="..\FollowMeFree_Shared\FollowMeFree_Shared.projitems" Label="Shared" />
