@@ -21,7 +21,7 @@ namespace FollowMeFree.API.Controllers
         /// </summary>
         /// <param name="submitter">The username of the job submitter to filter by.</param>
         [HttpGet]
-        public IActionResult GetPrintJobFiles([FromQuery] string submitter)
+        public async Task<IActionResult> GetPrintJobFiles([FromQuery] string submitter)
         {
             if (string.IsNullOrWhiteSpace(submitter))
                 return BadRequest("Submitter is required.");
@@ -38,7 +38,7 @@ namespace FollowMeFree.API.Controllers
                 return Ok(Array.Empty<PrintJobFileDto>());
             }
 
-            var files = Directory.GetFiles(_settings.JobFilePath, "*.prn");
+            var files = await Task.Run(() => Directory.GetFiles(_settings.JobFilePath, "*.prn"));
             var results = new List<PrintJobFileDto>();
 
             foreach (var filePath in files)

@@ -12,6 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<PipeClient>();
 builder.Services.AddSingleton<PrintJobFileSettings>();
 
+builder.Logging.AddProvider(new FileLoggerProvider());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

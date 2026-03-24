@@ -49,5 +49,14 @@ namespace FollowMeFree.Properties {
                 return ((string)(this["LogFilePath"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("c:\\Test")]
+        public string APILogFilePath {
+            get {
+                return ((string)(this["APILogFilePath"]));
+            }
+        }
     }
 }
