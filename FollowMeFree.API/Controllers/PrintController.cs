@@ -25,7 +25,7 @@ namespace FollowMeFree.API.Controllers
         /// Sends one or more PRN files to printers by name via the WorkerService.
         /// </summary>
         /// <param name="requests">A list of print job requests, each containing the target printer name and file path.</param>
-        [HttpPost("execute")]
+        [HttpPost("Print")]
         public async Task<IActionResult> ExecutePrintJob([FromBody] List<PrintJobRequest> requests)
         {
             if (requests == null || requests.Count == 0)
@@ -64,7 +64,7 @@ namespace FollowMeFree.API.Controllers
         /// <summary>
         /// GetPrinters - Returns all configured printers ordered by printer name.
         /// </summary>
-        [HttpGet(Name = "GetPrinters")]
+        [HttpGet("GetPrinters")]
         public async Task<ActionResult<IEnumerable<Printer>>> GetPrinters()
         {
             var results = await _db.Printers.OrderBy(p => p.Printer1).ToListAsync();
