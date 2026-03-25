@@ -11,7 +11,7 @@ making changes to the FMFData database. Set the Default project dropdown in the
 Package Manager Console to "FollowMeFree.WorkerService" before running.
 
 WorkerService
-Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data\Scaffolded -Context ScaffoldedDbContext -NoOnConfiguring -Force
+Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data -Context FollowMeFreeDbContext -NoOnConfiguring -Force
 
 API
 Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -ContextDir Data -Context FmfDataContext -NoOnConfiguring -Force
@@ -125,3 +125,39 @@ Level breakdown:
       queries, change-tracker events, etc.). Only Warning and above
       will be logged for EF Core, keeping the console cleaner during
       normal operation.
+
+--------------------------------------------------------------------------------
+PRN Filename Schema (PrintJobExtractor)
+--------------------------------------------------------------------------------
+
+Extracted print-job files use a semicolon-delimited naming convention
+so metadata can be recovered from the filename alone.
+
+Format:
+  {Username};{DocumentName};{Pages};{Timestamp};{JobId};{Datatype}.prn
+
+Example:
+  MichaelM;SERVO INVOICE 200169802.pdf;2;20260324_195355;4;NT EMF 1.008.prn
+
+Parsing (C#):
+  var parts = Path.GetFileNameWithoutExtension(fileName).Split(';');
+
+  parts[0] = Username       – The submitter / owner of the print job.
+  parts[1] = DocumentName   – The document name shown in the print queue
+                               (e.g. "test.txt - Notepad", "report.pdf").
+  parts[2] = Pages          – Total number of pages (int).
+  parts[3] = Timestamp      – Date/time the file was extracted, formatted
+                               as yyyyMMdd_HHmmss (e.g. 20260324_195355).
+  parts[4] = JobId          – The Windows spooler job identifier (int).
+  parts[5] = Datatype       – The spool datatype reported by the spooler
+                               (e.g. "RAW", "NT EMF 1.008"). Defaults to
+                               "RAW" when unknown.
+
+Extension is always ".prn".
+
+Notes:
+  - Invalid filename characters in Username, DocumentName, and Datatype
+    are replaced with underscores by SanitizeFileName().
+  - The helper ParseDatatypeFromFileName() in PrintJobExtractor extracts
+    parts[5] from a filename and falls back to "RAW" if it is missing.
+  - Built in ExtractJobsByUsername() and ExtractAllJobs().

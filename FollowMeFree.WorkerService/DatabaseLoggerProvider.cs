@@ -1,4 +1,5 @@
 using FollowMeFree.WorkerService.Data;
+using FollowMeFree.WorkerService.Data.Scaffolded;
 using Microsoft.Extensions.Logging;
 
 namespace FollowMeFree.WorkerService
@@ -48,7 +49,7 @@ namespace FollowMeFree.WorkerService
             if (!IsEnabled(logLevel))
                 return;
 
-            var logEntry = new LogEntry
+            var logEntry = new Log
             {
                 Timestamp = DateTime.Now,
                 LogLevel = logLevel.ToString(),

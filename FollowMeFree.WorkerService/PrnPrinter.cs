@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using FollowMeFree_Shared;
+using FollowMeFree.WorkerService.Data;
+using FollowMeFree.WorkerService.Data.Scaffolded;
 using Microsoft.Extensions.Logging;
 
 // This class provides functionality to send raw PRN files directly to a specified printer using the Windows Spooler API.
@@ -44,7 +46,7 @@ namespace FollowMeFree.WorkerService
 
         #endregion
         
-        public static bool SendToPrinterByName(string printerName, string filePath, string datatype = "RAW")
+        public static bool SendToPrinterByName(string printerName, string filePath, string datatype = "RAW", FollowMeFreeDbContext db = null)
         {
             if (string.IsNullOrEmpty(printerName))
                 throw new ArgumentNullException(nameof(printerName));
@@ -110,6 +112,37 @@ namespace FollowMeFree.WorkerService
                             }
 
                             File.Move(filePath, Path.Combine(directoryPath, "Printed", Path.GetFileName(filePath)));
+
+                            // Get the filename and split by ';'. Then map to PrintJobSnapshot
+                            var fileName = Path.GetFileName(filePath);
+                            var parts = fileName.Split(';');
+                            PrintJobSnapshot snapshot = new PrintJobSnapshot
+                            {
+                                JobId = int.Parse(parts[4]),
+                                JobName = parts[1],
+                                Submitter = parts[0],
+                                TimeSubmitted = DateTime.UtcNow,
+                                NumberOfPages = int.Parse(parts[2]),
+                                Datatype = parts[5]
+                            };
+
+                            // Write the snapshot to the PrintJob table in the database
+                            if (db != null)
+                            {
+                                var printJob = new PrintJob
+                                {
+                                    UserName = snapshot.Submitter,
+                                    DepartmentId = 1,
+                                    DocumentName = snapshot.JobName,
+                                    JobId = snapshot.JobId,
+                                    Pages = snapshot.NumberOfPages,
+                                    DateTimePrinted = snapshot.TimeSubmitted,
+                                    DataType = snapshot.Datatype
+                                };
+                                db.PrintJobs.Add(printJob);
+                                db.SaveChanges();
+                            }
+
                         }
                         else
                         {
@@ -143,7 +176,7 @@ namespace FollowMeFree.WorkerService
             return success;
         }
 
-        public static List<PrintJobResult> SendBatchToPrinterByName(List<PrintJobItem> jobs, string jobFilePath, ILogger logger)
+        public static List<PrintJobResult> SendBatchToPrinterByName(List<PrintJobItem> jobs, string jobFilePath, ILogger logger, FollowMeFreeDbContext db = null)
         {
             var results = new List<PrintJobResult>();
 
@@ -159,7 +192,7 @@ namespace FollowMeFree.WorkerService
                     logger.LogInformation("[PrnPrinter] Printing '{FilePath}' to '{Printer}'",
                         job.FilePath, job.TargetPrinterName);
 
-                    bool success = SendToPrinterByName(job.TargetPrinterName, fullPath, datatype);
+                    bool success = SendToPrinterByName(job.TargetPrinterName, fullPath, datatype, db);
 
                     results.Add(new PrintJobResult
                     {

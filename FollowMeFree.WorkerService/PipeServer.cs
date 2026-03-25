@@ -150,7 +150,7 @@ namespace FollowMeFree.WorkerService
                 string datatype = !string.IsNullOrEmpty(request.Datatype)
                     ? request.Datatype
                     : PrintJobExtractor.ParseDatatypeFromFileName(request.FilePath);
-                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath, datatype);
+                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath, datatype, db);
 
                 if (result && File.Exists(fullPath))
                 {
@@ -203,7 +203,7 @@ namespace FollowMeFree.WorkerService
                     return new IpcResponse { Success = false, Message = "No configuration found in Config table" };
                 }
 
-                var results = PrnPrinter.SendBatchToPrinterByName(request.PrintJobs, config.JobFilePath, _logger);
+                var results = PrnPrinter.SendBatchToPrinterByName(request.PrintJobs, config.JobFilePath, _logger, db);
 
                 foreach (var result in results.Where(r => r.Success))
                 {

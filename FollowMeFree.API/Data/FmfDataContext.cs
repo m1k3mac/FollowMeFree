@@ -13,7 +13,11 @@ public partial class FmfDataContext : DbContext
 
     public virtual DbSet<Config> Configs { get; set; }
 
+    public virtual DbSet<Department> Departments { get; set; }
+
     public virtual DbSet<Log> Logs { get; set; }
+
+    public virtual DbSet<PrintJob> PrintJobs { get; set; }
 
     public virtual DbSet<Printer> Printers { get; set; }
 
@@ -32,6 +36,13 @@ public partial class FmfDataContext : DbContext
             entity.Property(e => e.JobFilePath).IsUnicode(false);
         });
 
+        modelBuilder.Entity<Department>(entity =>
+        {
+            entity.Property(e => e.DepartmentName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Log>(entity =>
         {
             entity.HasIndex(e => e.Source, "IX_Logs_Source");
@@ -43,6 +54,20 @@ public partial class FmfDataContext : DbContext
             entity.Property(e => e.Category).HasMaxLength(256);
             entity.Property(e => e.LogLevel).HasMaxLength(20);
             entity.Property(e => e.Source).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<PrintJob>(entity =>
+        {
+            entity.Property(e => e.DataType).IsUnicode(false);
+            entity.Property(e => e.DateTimePrinted).HasPrecision(0);
+            entity.Property(e => e.DocumentName).IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Department).WithMany(p => p.PrintJobs)
+                .HasForeignKey(d => d.DepartmentId)
+                .HasConstraintName("FK_PrintJobs_Departments");
         });
 
         modelBuilder.Entity<Printer>(entity =>
