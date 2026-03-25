@@ -25,7 +25,7 @@ namespace FollowMeFree.WorkerService
                 {
                     using var scope = _scopeFactory.CreateScope();
                     var db = scope.ServiceProvider.GetRequiredService<FollowMeFreeDbContext>();
-                    var config = await db.Configs.FirstOrDefaultAsync(stoppingToken);
+                    var config = await db.Configs.OrderBy(c => c.Id).FirstOrDefaultAsync(stoppingToken);
 
                     if (config == null)
                     {

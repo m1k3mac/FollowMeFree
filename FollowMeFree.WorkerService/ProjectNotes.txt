@@ -39,12 +39,40 @@ Notes:
     HTTP is the simplest option.
   - Windows Firewall must allow inbound connections on ports 5224 and 7178.
 
-  -------------------------
+  --------------------------------------------------------------------------------
   DATABASE and Connection String
-  --------------------------
+  --------------------------------------------------------------------------------
 
-  For now each project's connection string is hardcoded to use the local FMFData database which is mounted in sql server.
-  The database file must be moved into the project folder and the connection string updated.
+  The database files (FMFData.mdf, FMFData_log.ldf) have been moved from the
+  mounted SQL Server instance into the project folder at:
+
+    FollowMeFree.WorkerService\Data\FMFData.mdf
+    FollowMeFree.WorkerService\Data\FMFData_log.ldf
+
+  The database is no longer mounted in SQL Server. Instead, LocalDB attaches the
+  .mdf file on demand at runtime via the AttachDbFilename connection string
+  parameter.
+
+  Connection string (appsettings.json):
+    Server=(localdb)\MSSQLLocalDB;
+    AttachDbFilename=|DataDirectory|\Data\FMFData.mdf;
+    Database=FMFData;
+    Trusted_Connection=True;
+    MultipleActiveResultSets=true
+
+    |DataDirectory| is a substitution token resolved by SqlClient at runtime.
+    It defaults to AppDomain.CurrentDomain.BaseDirectory (the output folder).
+
+  Files changed:
+    - FollowMeFree.WorkerService\appsettings.json
+        Updated DefaultConnection to use AttachDbFilename with the
+        |DataDirectory| token instead of relying on a mounted database.
+
+    - FollowMeFree.WorkerService\FollowMeFree.WorkerService.csproj
+        Added Content items for FMFData.mdf and FMFData_log.ldf with
+        CopyToOutputDirectory set to PreserveNewest. This copies the
+        database files into the output folder on build, but only when
+        the source files are newer (avoiding overwrites of runtime data).
 
 --------------------------------------------------------------------------------
 Logging Levels (appsettings.json)
