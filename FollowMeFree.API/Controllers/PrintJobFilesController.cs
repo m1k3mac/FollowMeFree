@@ -27,7 +27,7 @@ namespace FollowMeFree.API.Controllers
             if (string.IsNullOrWhiteSpace(submitter))
                 return BadRequest("Submitter is required.");
 
-            var config = await _db.Configs.FirstOrDefaultAsync();
+            var config = await _db.Configs.OrderBy(c => c.Id).FirstOrDefaultAsync();
             var jobFilePath = config?.JobFilePath;
 
             if (string.IsNullOrEmpty(jobFilePath))

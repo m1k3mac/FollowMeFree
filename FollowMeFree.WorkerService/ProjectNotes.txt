@@ -74,6 +74,38 @@ Notes:
         database files into the output folder on build, but only when
         the source files are newer (avoiding overwrites of runtime data).
 
+  Shared database access architecture:
+
+    The WorkerService owns the physical database files and attaches them
+    to LocalDB on startup via AttachDbFilename. The API connects to the
+    same LocalDB database by name only (no AttachDbFilename).
+
+    Both the WorkerService and API retain direct database access for
+    their own logging and configuration reads. This avoids a circular
+    dependency (API depends on WorkerService for print commands via
+    pipes; WorkerService must not depend on the API for logging).
+
+    External consumers (WinForms, Flutter) access data through the API
+    endpoints only.
+
+    Startup order: The WorkerService must start before the API so the
+    database is attached and available when the API connects.
+
+    Connection strings:
+      WorkerService (attaches .mdf):
+        Server=(localdb)\MSSQLLocalDB;
+        AttachDbFilename=|DataDirectory|\Data\FMFData.mdf;
+        Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true
+
+      API (connects by name):
+        Server=(localdb)\MSSQLLocalDB;
+        Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true
+
+    Diagram:
+      WinForms / Flutter  --HTTP-->  API  --direct DB--> LocalDB FMFData
+                                     API  --pipe-->      WorkerService
+                                                         WorkerService --direct DB--> (same LocalDB)
+
 --------------------------------------------------------------------------------
 Logging Levels (appsettings.json)
 --------------------------------------------------------------------------------
