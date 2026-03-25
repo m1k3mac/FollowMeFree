@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Json;
 using FollowMeFree_Shared;
 
+// This class handles IPC communication with the WorkerService using named pipes.
+
 namespace FollowMeFree.API.Services
 {
     public class PipeClient

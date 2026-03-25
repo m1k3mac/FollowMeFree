@@ -2,6 +2,9 @@ using FollowMeFree.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Listen on all network interfaces so other devices on the LAN can connect.
+builder.WebHost.UseUrls("http://0.0.0.0:5224", "https://0.0.0.0:7178");
+
 // Add services to the container.
 
 builder.Services.AddCors(options =>

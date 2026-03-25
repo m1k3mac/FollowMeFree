@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
+// This class provides functionality to send raw PRN files directly to a specified printer using the Windows Spooler API.
+
 namespace FollowMeFree.WorkerService
 {
     public static class PrnPrinter
@@ -38,14 +40,7 @@ namespace FollowMeFree.WorkerService
         }
 
         #endregion
-
-        /// <summary>
-        /// Sends a PRN file to a printer by its name.
-        /// </summary>
-        /// <param name="printerName">The name of the target printer.</param>
-        /// <param name="filePath">Full path to the PRN file to print.</param>
-        /// <param name="datatype">The spool datatype (e.g. "RAW", "NT EMF 1.008"). Defaults to "RAW" if null or empty.</param>
-        /// <returns>True if the data was sent successfully.</returns>
+        
         public static bool SendToPrinterByName(string printerName, string filePath, string datatype = "RAW")
         {
             if (string.IsNullOrEmpty(printerName))

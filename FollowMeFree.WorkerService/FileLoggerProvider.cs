@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Logging;
 
+// NOTE: This is no longer being used since moving the logging to the database, but I'm keeping it here in case we want to log to a file again in the future.
+// It was useful for debugging during development.
+
 namespace FollowMeFree.WorkerService
 {
     public class FileLoggerProvider : ILoggerProvider

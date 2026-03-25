@@ -5,6 +5,8 @@ using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 
+// This class represents the model of a print job.
+
 namespace FollowMeFree.WorkerService
 {
     public class PrintJobSnapshot

@@ -11,3 +11,30 @@ making changes to the FMFData database. Set the Default project dropdown in the
 Package Manager Console to "FollowMeFree.WorkerService" before running.
 
 Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data\Scaffolded -Context ScaffoldedDbContext -NoOnConfiguring -Force
+
+--------------------------------------------------------------------------------
+API - LAN Network Access Configuration
+--------------------------------------------------------------------------------
+
+Changed the API project to listen on all network interfaces (0.0.0.0) instead
+of localhost only, so that other computers on the local network can connect.
+
+Files changed:
+  - FollowMeFree.API\Program.cs
+      Added: builder.WebHost.UseUrls("http://0.0.0.0:5224", "https://0.0.0.0:7178")
+      This ensures the API binds to all interfaces when run outside Visual Studio.
+
+  - FollowMeFree.API\Properties\launchSettings.json
+      Updated "http" profile:    http://localhost:5224  -->  http://0.0.0.0:5224
+      Updated "https" profile:   https://localhost:7178;http://localhost:5224
+                                  -->  https://0.0.0.0:7178;http://0.0.0.0:5224
+
+Access from other devices on the LAN:
+  HTTP:   http://192.168.18.199:5224
+  HTTPS:  https://192.168.18.199:7178
+
+Notes:
+  - The default ASP.NET dev certificate is only trusted for localhost. Other
+    machines will see a certificate warning when using HTTPS. For LAN use,
+    HTTP is the simplest option.
+  - Windows Firewall must allow inbound connections on ports 5224 and 7178.

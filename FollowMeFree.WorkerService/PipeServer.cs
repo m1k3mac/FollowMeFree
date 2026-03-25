@@ -7,6 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+// This class implements a named pipe server that listens for IPC requests from client applications.
+// It processes commands such as "PrintJob" to send print jobs to specified printers and returns responses back to the clients.
+// Used for communication between the FollowMeFree desktop application, API, and the background worker service.
+
 namespace FollowMeFree.WorkerService
 {
     public class PipeServer : BackgroundService

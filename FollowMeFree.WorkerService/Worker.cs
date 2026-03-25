@@ -1,6 +1,9 @@
 using FollowMeFree.WorkerService.Data;
 using Microsoft.EntityFrameworkCore;
 
+// This class defines a background worker service that periodically extracts print jobs using the PrintJobExtractor class. It retrieves configuration settings from the database and logs the extracted print jobs.
+// The service runs continuously until it is stopped, with a delay between each extraction cycle.
+
 namespace FollowMeFree.WorkerService
 {
     public class Worker : BackgroundService

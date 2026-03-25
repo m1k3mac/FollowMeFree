@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Printing;
 
+// This class provides functionality to extract print jobs from a specified printer queue,
+
 namespace FollowMeFree.WorkerService
 {
     public class PrintJobExtractor
@@ -59,11 +61,7 @@ namespace FollowMeFree.WorkerService
 
         #endregion
 
-        /// <summary>
-        /// Creates a new PrintJobExtractor for the specified printer.
-        /// If the printer is not paused, it will be paused automatically to hold jobs for extraction.
-        /// </summary>
-        /// <param name="printerName">The name of the local printer queue to extract jobs from.</param>
+        
         public PrintJobExtractor(string printerName)
         {
             _printerName = printerName ?? throw new ArgumentNullException(nameof(printerName));
@@ -89,13 +87,8 @@ namespace FollowMeFree.WorkerService
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Finds all jobs in the queue that were submitted by the specified username.
-        /// </summary>
-        /// <param name="username">The submitter username to search for (case-insensitive).</param>
-        /// <returns>A list of matching job snapshots.</returns>
+        }        
+        
         public List<PrintJobSnapshot> FindJobsByUsername(string username)
         {
             if (string.IsNullOrEmpty(username))
@@ -133,14 +126,7 @@ namespace FollowMeFree.WorkerService
             Console.WriteLine($"[PrintJobExtractor] Found {results.Count} job(s) for user '{username}'");
             return results;
         }
-
-        /// <summary>
-        /// Reads the raw spool data for a specific job, saves it to the given file path,
-        /// and then cancels the job from the queue.
-        /// </summary>
-        /// <param name="jobId">The print job identifier.</param>
-        /// <param name="outputFilePath">Full path where the spool data will be saved.</param>
-        /// <returns>True if the job was saved and removed successfully.</returns>
+        
         public bool ExtractAndRemoveJob(int jobId, string outputFilePath)
         {
             if (string.IsNullOrEmpty(outputFilePath))
@@ -175,27 +161,12 @@ namespace FollowMeFree.WorkerService
             // Step 3: Remove from queue
             return CancelJob(jobId);
         }
-
-        /// <summary>
-        /// Asynchronously reads the raw spool data for a specific job, saves it to the given file path,
-        /// and then cancels the job from the queue.
-        /// </summary>
-        /// <param name="jobId">The print job identifier.</param>
-        /// <param name="outputFilePath">Full path where the spool data will be saved.</param>
-        /// <returns>True if the job was saved and removed successfully.</returns>
+        
         public Task<bool> ExtractAndRemoveJobAsync(int jobId, string outputFilePath)
         {
             return Task.Run(() => ExtractAndRemoveJob(jobId, outputFilePath));
         }
-
-        /// <summary>
-        /// Finds all jobs for a given username, saves each to the output folder, and
-        /// removes them from the printer queue.
-        /// File naming format: username;documentname;pages;datetime.prn
-        /// </summary>
-        /// <param name="username">The submitter username to search for (case-insensitive).</param>
-        /// <param name="outputFolder">Folder where extracted PRN files will be saved.</param>
-        /// <returns>A list of snapshots for successfully extracted jobs, with OutputFilePath set.</returns>
+        
         public List<PrintJobSnapshot> ExtractJobsByUsername(string username, string outputFolder)
         {
             if (string.IsNullOrEmpty(username))
@@ -236,15 +207,7 @@ namespace FollowMeFree.WorkerService
             Console.WriteLine($"[PrintJobExtractor] Extracted {savedJobs.Count}/{jobs.Count} job(s) for user '{username}'");
             return savedJobs;
         }
-
-        /// <summary>
-        /// Extracts all jobs from the printer queue, saves each to the output folder,
-        /// and removes them from the queue. Jobs that are still spooling are skipped
-        /// because their spool data is incomplete and would produce corrupt output.
-        /// File naming format: submitter;documentname;pages;datetime.prn
-        /// </summary>
-        /// <param name="outputFolder">Folder where extracted PRN files will be saved.</param>
-        /// <returns>A list of snapshots for successfully extracted jobs, with OutputFilePath set.</returns>
+        
         public List<PrintJobSnapshot> ExtractAllJobs(string outputFolder)
         {
             if (string.IsNullOrEmpty(outputFolder))
