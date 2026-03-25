@@ -6,6 +6,8 @@ using FollowMeFree.WorkerService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
 
 // This class implements a named pipe server that listens for IPC requests from client applications.
 // It processes commands such as "PrintJob" to send print jobs to specified printers and returns responses back to the clients.
@@ -105,6 +107,9 @@ namespace FollowMeFree.WorkerService
                 case "PrintJob":
                     return HandlePrintJob(request);
 
+                case "PrintJobs":
+                    return HandlePrintJobs(request);
+
                 default:
                     return new IpcResponse
                     {
@@ -171,6 +176,65 @@ namespace FollowMeFree.WorkerService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PipeServer: error executing PrintJob");
+                return new IpcResponse
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
+                };
+            }
+        }
+
+        private IpcResponse HandlePrintJobs(IpcRequest request)
+        {
+            if (request.PrintJobs == null || request.PrintJobs.Count == 0)
+            {
+                return new IpcResponse { Success = false, Message = "PrintJobs list is empty" };
+            }
+
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<FollowMeFreeDbContext>();
+                var config = db.Configs.FirstOrDefault();
+
+                if (config == null)
+                {
+                    _logger.LogError("No configuration found in Config table");
+                    return new IpcResponse { Success = false, Message = "No configuration found in Config table" };
+                }
+
+                var results = PrnPrinter.SendBatchToPrinterByName(request.PrintJobs, config.JobFilePath, _logger);
+
+                foreach (var result in results.Where(r => r.Success))
+                {
+                    var fullPath = Path.Combine(config.JobFilePath, result.FilePath);
+                    if (File.Exists(fullPath))
+                    {
+                        try
+                        {
+                            File.Delete(fullPath);
+                            _logger.LogInformation("PipeServer: deleted file '{FilePath}' after successful print", fullPath);
+                        }
+                        catch (Exception deleteEx)
+                        {
+                            _logger.LogWarning(deleteEx, "PipeServer: failed to delete file '{FilePath}' after printing", fullPath);
+                        }
+                    }
+                }
+
+                bool allSucceeded = results.All(r => r.Success);
+                int successCount = results.Count(r => r.Success);
+
+                return new IpcResponse
+                {
+                    Success = allSucceeded,
+                    Message = $"{successCount}/{results.Count} print job(s) completed successfully",
+                    JsonPayload = JsonSerializer.Serialize(results)
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "PipeServer: error executing PrintJobs");
                 return new IpcResponse
                 {
                     Success = false,

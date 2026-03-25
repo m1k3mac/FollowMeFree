@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using FollowMeFree_Shared;
+using Microsoft.Extensions.Logging;
 
 // This class provides functionality to send raw PRN files directly to a specified printer using the Windows Spooler API.
 
@@ -138,6 +141,52 @@ namespace FollowMeFree.WorkerService
             }
 
             return success;
+        }
+
+        public static List<PrintJobResult> SendBatchToPrinterByName(List<PrintJobItem> jobs, string jobFilePath, ILogger logger)
+        {
+            var results = new List<PrintJobResult>();
+
+            foreach (var job in jobs)
+            {
+                var fullPath = Path.Combine(jobFilePath, job.FilePath);
+                string datatype = !string.IsNullOrEmpty(job.Datatype)
+                    ? job.Datatype
+                    : PrintJobExtractor.ParseDatatypeFromFileName(job.FilePath);
+
+                try
+                {
+                    logger.LogInformation("[PrnPrinter] Printing '{FilePath}' to '{Printer}'",
+                        job.FilePath, job.TargetPrinterName);
+
+                    bool success = SendToPrinterByName(job.TargetPrinterName, fullPath, datatype);
+
+                    results.Add(new PrintJobResult
+                    {
+                        PrinterName = job.TargetPrinterName,
+                        FilePath = job.FilePath,
+                        Success = success,
+                        Message = success
+                            ? $"Print job sent to '{job.TargetPrinterName}' successfully"
+                            : $"Failed to send print job to '{job.TargetPrinterName}'"
+                    });
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "[PrnPrinter] Error printing '{FilePath}' to '{Printer}'",
+                        job.FilePath, job.TargetPrinterName);
+
+                    results.Add(new PrintJobResult
+                    {
+                        PrinterName = job.TargetPrinterName,
+                        FilePath = job.FilePath,
+                        Success = false,
+                        Message = $"Error: {ex.Message}"
+                    });
+                }
+            }
+
+            return results;
         }
     }
 }

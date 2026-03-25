@@ -56,7 +56,7 @@ namespace FollowMeFree.API.Controllers
 
             _logger.LogInformation("Found {Count} job file(s) for submitter '{Submitter}'", results.Count, submitter);
             return Ok(results);
-        }
+        }        
 
         /// <summary>
         /// Parses a PRN filename in the format: submitter;docname;pages;timestamp;jobId;datatype.prn

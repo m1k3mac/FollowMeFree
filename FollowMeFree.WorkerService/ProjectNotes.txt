@@ -10,7 +10,11 @@ Run the following command in the Package Manager Console (Visual Studio) after
 making changes to the FMFData database. Set the Default project dropdown in the
 Package Manager Console to "FollowMeFree.WorkerService" before running.
 
+WorkerService
 Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data\Scaffolded -Context ScaffoldedDbContext -NoOnConfiguring -Force
+
+API
+Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -ContextDir Data -Context FmfDataContext -NoOnConfiguring -Force
 
 --------------------------------------------------------------------------------
 API - LAN Network Access Configuration

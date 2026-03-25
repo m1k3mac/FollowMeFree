@@ -1,6 +1,8 @@
+using FollowMeFree.API.Data;
 using FollowMeFree.API.Services;
 using FollowMeFree_Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FollowMeFree.API.Controllers
 {
@@ -8,37 +10,47 @@ namespace FollowMeFree.API.Controllers
     [Route("api/[controller]")]
     public class PrintController : ControllerBase
     {
+        private readonly FmfDataContext _db;
         private readonly PipeClient _pipeClient;
         private readonly ILogger<PrintController> _logger;
 
-        public PrintController(PipeClient pipeClient, ILogger<PrintController> logger)
+        public PrintController(PipeClient pipeClient, ILogger<PrintController> logger, FmfDataContext db)
         {
             _pipeClient = pipeClient;
             _logger = logger;
+            _db = db;
         }
 
         /// <summary>
-        /// Sends a PRN file to a printer by name via the WorkerService.
+        /// Sends one or more PRN files to printers by name via the WorkerService.
         /// </summary>
-        /// <param name="request">The print job request containing the target printer name and file path.</param>
+        /// <param name="requests">A list of print job requests, each containing the target printer name and file path.</param>
         [HttpPost("execute")]
-        public async Task<IActionResult> ExecutePrintJob([FromBody] PrintJobRequest request)
+        public async Task<IActionResult> ExecutePrintJob([FromBody] List<PrintJobRequest> requests)
         {
-            if (string.IsNullOrEmpty(request.PrinterName))
-                return BadRequest("PrinterName is required");
+            if (requests == null || requests.Count == 0)
+                return BadRequest("At least one print job request is required");
 
-            if (string.IsNullOrEmpty(request.FilePath))
-                return BadRequest("FilePath is required");
+            foreach (var request in requests)
+            {
+                if (string.IsNullOrEmpty(request.PrinterName))
+                    return BadRequest("PrinterName is required for all print jobs");
 
-            _logger.LogInformation("PrintController: executing print job for '{FilePath}' on '{Printer}'",
-                request.FilePath, request.PrinterName);
+                if (string.IsNullOrEmpty(request.FileName))
+                    return BadRequest("FilePath is required for all print jobs");
+            }
+
+            _logger.LogInformation("PrintController: executing {Count} print job(s)", requests.Count);
 
             var ipcRequest = new IpcRequest
             {
-                Command = "PrintJob",
-                TargetPrinterName = request.PrinterName,
-                FilePath = request.FilePath,
-                Datatype = request.Datatype
+                Command = "PrintJobs",
+                PrintJobs = requests.Select(r => new PrintJobItem
+                {
+                    TargetPrinterName = r.PrinterName,
+                    FilePath = r.FileName,
+                    Datatype = r.Datatype
+                }).ToList()
             };
 
             var response = await _pipeClient.SendRequestAsync(ipcRequest);
@@ -48,12 +60,23 @@ namespace FollowMeFree.API.Controllers
 
             return StatusCode(500, response);
         }
+
+        /// <summary>
+        /// GetPrinters - Returns all configured printers ordered by printer name.
+        /// </summary>
+        [HttpGet(Name = "GetPrinters")]
+        public async Task<ActionResult<IEnumerable<Printer>>> GetPrinters()
+        {
+            var results = await _db.Printers.OrderBy(p => p.Printer1).ToListAsync();
+
+            return Ok(results);
+        }
     }
 
     public class PrintJobRequest
     {
         public string PrinterName { get; set; } = string.Empty;
-        public string FilePath { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
         public string Datatype { get; set; }
     }
 }

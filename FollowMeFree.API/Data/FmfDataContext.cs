@@ -15,6 +15,8 @@ public partial class FmfDataContext : DbContext
 
     public virtual DbSet<Log> Logs { get; set; }
 
+    public virtual DbSet<Printer> Printers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Config>(entity =>
@@ -41,6 +43,16 @@ public partial class FmfDataContext : DbContext
             entity.Property(e => e.Category).HasMaxLength(256);
             entity.Property(e => e.LogLevel).HasMaxLength(20);
             entity.Property(e => e.Source).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Printer>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Printer1)
+                .IsUnicode(false)
+                .HasColumnName("Printer");
         });
 
         OnModelCreatingPartial(modelBuilder);
