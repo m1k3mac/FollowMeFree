@@ -38,3 +38,40 @@ Notes:
     machines will see a certificate warning when using HTTPS. For LAN use,
     HTTP is the simplest option.
   - Windows Firewall must allow inbound connections on ports 5224 and 7178.
+
+  -------------------------
+  DATABASE and Connection String
+  --------------------------
+
+  For now each project's connection string is hardcoded to use the local FMFData database which is mounted in sql server.
+  The database file must be moved into the project folder and the connection string updated.
+
+--------------------------------------------------------------------------------
+Logging Levels (appsettings.json)
+--------------------------------------------------------------------------------
+
+Configured in: FollowMeFree.WorkerService\appsettings.json
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "Microsoft.EntityFrameworkCore": "Warning"
+    }
+  }
+
+Level breakdown:
+  - Default: Information
+      The baseline level for all categories not explicitly listed.
+      Logs Information, Warning, Error, and Critical messages.
+
+  - Microsoft.Hosting.Lifetime: Information
+      Controls host start/stop messages (e.g., "Application started",
+      "Content root path"). Kept at Information so these operational
+      messages remain visible.
+
+  - Microsoft.EntityFrameworkCore: Warning
+      Suppresses the verbose EF Core Information/Debug output (SQL
+      queries, change-tracker events, etc.). Only Warning and above
+      will be logged for EF Core, keeping the console cleaner during
+      normal operation.

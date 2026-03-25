@@ -1,5 +1,6 @@
-using FollowMeFree.API.Services;
+using FollowMeFree.API.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FollowMeFree.API.Controllers
 {
@@ -7,12 +8,12 @@ namespace FollowMeFree.API.Controllers
     [Route("api/[controller]")]
     public class PrintJobFilesController : ControllerBase
     {
-        private readonly PrintJobFileSettings _settings;
+        private readonly FmfDataContext _db;
         private readonly ILogger<PrintJobFilesController> _logger;
 
-        public PrintJobFilesController(PrintJobFileSettings settings, ILogger<PrintJobFilesController> logger)
+        public PrintJobFilesController(FmfDataContext db, ILogger<PrintJobFilesController> logger)
         {
-            _settings = settings;
+            _db = db;
             _logger = logger;
         }
 
@@ -26,19 +27,22 @@ namespace FollowMeFree.API.Controllers
             if (string.IsNullOrWhiteSpace(submitter))
                 return BadRequest("Submitter is required.");
 
-            if (string.IsNullOrEmpty(_settings.JobFilePath))
+            var config = await _db.Configs.FirstOrDefaultAsync();
+            var jobFilePath = config?.JobFilePath;
+
+            if (string.IsNullOrEmpty(jobFilePath))
             {
-                _logger.LogError("JobFilePath is not configured in App.config.");
+                _logger.LogError("JobFilePath is not configured in the database.");
                 return StatusCode(500, "JobFilePath is not configured.");
             }
 
-            if (!Directory.Exists(_settings.JobFilePath))
+            if (!Directory.Exists(jobFilePath))
             {
-                _logger.LogWarning("Job file directory does not exist: {Path}", _settings.JobFilePath);
+                _logger.LogWarning("Job file directory does not exist: {Path}", jobFilePath);
                 return Ok(Array.Empty<PrintJobFileDto>());
             }
 
-            var files = await Task.Run(() => Directory.GetFiles(_settings.JobFilePath, "*.prn"));
+            var files = await Task.Run(() => Directory.GetFiles(jobFilePath, "*.prn"));
             var results = new List<PrintJobFileDto>();
 
             foreach (var filePath in files)

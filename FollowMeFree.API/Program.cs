@@ -1,4 +1,6 @@
+using FollowMeFree.API.Data;
 using FollowMeFree.API.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,15 +19,16 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddDbContext<FmfDataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<PipeClient>();
-builder.Services.AddSingleton<PrintJobFileSettings>();
-
-builder.Logging.AddProvider(new FileLoggerProvider());
+builder.Services.AddSingleton<ILoggerProvider, DbLoggerProvider>();
 
 var app = builder.Build();
 
