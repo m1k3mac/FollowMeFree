@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -26,15 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Scaffolded\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Data\FMFData.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\FMFData_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <Import Project="..\FollowMeFree_Shared\FollowMeFree_Shared.projitems" Label="Shared" />

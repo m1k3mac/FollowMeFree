@@ -43,36 +43,22 @@ Notes:
   DATABASE and Connection String
   --------------------------------------------------------------------------------
 
-  The database files (FMFData.mdf, FMFData_log.ldf) have been moved from the
-  mounted SQL Server instance into the project folder at:
+  The database files (FMFData.mdf, FMFData_log.ldf) live outside the
+  solution in a shared location:
 
-    FollowMeFree.WorkerService\Data\FMFData.mdf
-    FollowMeFree.WorkerService\Data\FMFData_log.ldf
+    C:\FollwMeFree\DB\FMFData.mdf
+    C:\FollwMeFree\DB\FMFData_log.ldf
 
-  The database is no longer mounted in SQL Server. Instead, LocalDB attaches the
-  .mdf file on demand at runtime via the AttachDbFilename connection string
-  parameter.
-
-  Connection string (appsettings.json):
-    Server=(localdb)\MSSQLLocalDB;
-    AttachDbFilename=|DataDirectory|\Data\FMFData.mdf;
-    Database=FMFData;
-    Trusted_Connection=True;
-    MultipleActiveResultSets=true
-
-    |DataDirectory| is a substitution token resolved by SqlClient at runtime.
-    It defaults to AppDomain.CurrentDomain.BaseDirectory (the output folder).
+  The database is not mounted in SQL Server. Instead, LocalDB attaches
+  the .mdf file on demand at runtime via the AttachDbFilename connection
+  string parameter. Placing the files outside the solution avoids
+  per-project output copies and ensures all projects share the same
+  physical database.
 
   Files changed:
     - FollowMeFree.WorkerService\appsettings.json
-        Updated DefaultConnection to use AttachDbFilename with the
-        |DataDirectory| token instead of relying on a mounted database.
-
-    - FollowMeFree.WorkerService\FollowMeFree.WorkerService.csproj
-        Added Content items for FMFData.mdf and FMFData_log.ldf with
-        CopyToOutputDirectory set to PreserveNewest. This copies the
-        database files into the output folder on build, but only when
-        the source files are newer (avoiding overwrites of runtime data).
+        Updated DefaultConnection to use AttachDbFilename with an
+        absolute path to C:\FollwMeFree\DB\FMFData.mdf.
 
   Shared database access architecture:
 
@@ -94,7 +80,7 @@ Notes:
     Connection strings:
       WorkerService (attaches .mdf):
         Server=(localdb)\MSSQLLocalDB;
-        AttachDbFilename=|DataDirectory|\Data\FMFData.mdf;
+        AttachDbFilename=C:\FollwMeFree\DB\FMFData.mdf;
         Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true
 
       API (connects by name):

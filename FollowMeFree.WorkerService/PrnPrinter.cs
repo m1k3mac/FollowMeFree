@@ -98,6 +98,15 @@ namespace FollowMeFree.WorkerService
                         {
                             success = bytesWritten == fileData.Length;
                             Console.WriteLine($"[PrnPrinter] Sent {bytesWritten:N0} bytes to '{printerName}'");
+
+                            // Move the processed file to a "Printed" subdirectory
+                            var directoryPath = Path.GetDirectoryName(filePath);
+                            if(!Directory.Exists(Path.Combine(directoryPath,"Printed")))
+                            {
+                                Directory.CreateDirectory(Path.Combine(directoryPath,"Printed"));
+                            }
+
+                            File.Move(filePath, Path.Combine(directoryPath, "Printed", Path.GetFileName(filePath)));
                         }
                         else
                         {
