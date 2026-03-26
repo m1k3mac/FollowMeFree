@@ -18,6 +18,7 @@ namespace FollowMeFree
         public UserManagementControl()
         {
             InitializeComponent();
+            gridView1.BestFitColumns();
         }
 
         private void UserManagementControl_Load(object sender, EventArgs e)
@@ -25,6 +26,7 @@ namespace FollowMeFree
             _dbContext = new FMFDataEntities();
             var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();            
             userBindingSource.DataSource = query;
+            gridView1.BestFitColumns();
         }
 
         private void barButtonItem_New_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -84,6 +86,7 @@ namespace FollowMeFree
 
             var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();
             userBindingSource.DataSource = query;
+            gridView1.BestFitColumns();
         }
     }
 }
