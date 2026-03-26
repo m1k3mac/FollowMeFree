@@ -42,6 +42,7 @@
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.barButtonItem_PrinterManagement = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             this.SuspendLayout();
@@ -104,9 +105,10 @@
             this.ribbonControl1.ExpandCollapseItem,
             this.ribbonControl1.SearchEditItem,
             this.barButtonItem_UserManagement,
-            this.barButtonItem_Close});
+            this.barButtonItem_Close,
+            this.barButtonItem_PrinterManagement});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 3;
+            this.ribbonControl1.MaxItemId = 4;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
@@ -151,8 +153,17 @@
             // ribbonPageGroup2
             // 
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_UserManagement);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_PrinterManagement);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "ribbonPageGroup2";
+            // 
+            // barButtonItem_PrinterManagement
+            // 
+            this.barButtonItem_PrinterManagement.Caption = "Printers";
+            this.barButtonItem_PrinterManagement.Id = 3;
+            this.barButtonItem_PrinterManagement.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_PrinterManagement.ImageOptions.SvgImage")));
+            this.barButtonItem_PrinterManagement.Name = "barButtonItem_PrinterManagement";
+            this.barButtonItem_PrinterManagement.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             // 
             // Main
             // 
@@ -190,6 +201,7 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Close;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
         private System.Windows.Forms.Panel panelContent;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem_PrinterManagement;
     }
 }
 
