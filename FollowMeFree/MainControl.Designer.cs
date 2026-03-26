@@ -37,13 +37,13 @@
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.printJobBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colJobId = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colUserName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDocumentName = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colJobId = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPages = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colDateTimePrinted = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDataType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDepartment = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDateTimePrinted = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
@@ -140,6 +140,13 @@
             this.gridView1.OptionsFind.AlwaysVisible = true;
             this.gridView1.OptionsView.EnableAppearanceEvenRow = true;
             // 
+            // colJobId
+            // 
+            this.colJobId.FieldName = "JobId";
+            this.colJobId.Name = "colJobId";
+            this.colJobId.Visible = true;
+            this.colJobId.VisibleIndex = 0;
+            // 
             // colUserName
             // 
             this.colUserName.FieldName = "UserName";
@@ -154,26 +161,12 @@
             this.colDocumentName.Visible = true;
             this.colDocumentName.VisibleIndex = 2;
             // 
-            // colJobId
-            // 
-            this.colJobId.FieldName = "JobId";
-            this.colJobId.Name = "colJobId";
-            this.colJobId.Visible = true;
-            this.colJobId.VisibleIndex = 0;
-            // 
             // colPages
             // 
             this.colPages.FieldName = "Pages";
             this.colPages.Name = "colPages";
             this.colPages.Visible = true;
             this.colPages.VisibleIndex = 3;
-            // 
-            // colDateTimePrinted
-            // 
-            this.colDateTimePrinted.FieldName = "DateTimePrinted";
-            this.colDateTimePrinted.Name = "colDateTimePrinted";
-            this.colDateTimePrinted.Visible = true;
-            this.colDateTimePrinted.VisibleIndex = 6;
             // 
             // colDataType
             // 
@@ -189,6 +182,15 @@
             this.colDepartment.Name = "colDepartment";
             this.colDepartment.Visible = true;
             this.colDepartment.VisibleIndex = 5;
+            // 
+            // colDateTimePrinted
+            // 
+            this.colDateTimePrinted.DisplayFormat.FormatString = "DateTime \"yyyy-MM-dd HH:mm:ss\"";
+            this.colDateTimePrinted.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.colDateTimePrinted.FieldName = "DateTimePrinted";
+            this.colDateTimePrinted.Name = "colDateTimePrinted";
+            this.colDateTimePrinted.Visible = true;
+            this.colDateTimePrinted.VisibleIndex = 6;
             // 
             // Root
             // 
