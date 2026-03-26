@@ -207,6 +207,7 @@
     <None Include="EFModel.edmx.diagram">
       <DependentUpon>EFModel.edmx</DependentUpon>
     </None>
+    <None Include="Properties\DataSources\PrintJob.datasource" />
     <None Include="Properties\DataSources\User.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
