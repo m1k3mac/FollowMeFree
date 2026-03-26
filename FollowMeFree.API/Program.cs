@@ -1,6 +1,9 @@
+using System.Text;
 using FollowMeFree.API.Data;
 using FollowMeFree.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,27 @@ builder.Services.AddDbContext<FmfDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var jwtKey = builder.Configuration["Jwt:Key"]!;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = "FollowMeFree",
+        ValidateAudience = true,
+        ValidAudience = "FollowMeFreeApp",
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        ValidateLifetime = false // tokens do not expire
+    };
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -43,6 +67,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowFlutterApp");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

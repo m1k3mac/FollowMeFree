@@ -1,11 +1,13 @@
 using FollowMeFree.API.Data;
 using FollowMeFree.API.Services;
 using FollowMeFree_Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FollowMeFree.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PrintController : ControllerBase
