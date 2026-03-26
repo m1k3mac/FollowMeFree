@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,13 @@ namespace FollowMeFree
 
         private void MainControl_Load(object sender, EventArgs e)
         {
-            var query = _dbContext.PrintJobs.OrderByDescending(p => p.DateTimePrinted).Take(500).ToList();
+            var query = _dbContext.PrintJobs.Include(i => i.Department).OrderByDescending(p => p.DateTimePrinted).Take(500).ToList();
+            printJobBindingSource.DataSource = query;
+        }
+
+        private void barButtonItem_Refresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            var query = _dbContext.PrintJobs.Include(i => i.Department).OrderByDescending(p => p.DateTimePrinted).Take(500).ToList();
             printJobBindingSource.DataSource = query;
         }
     }
