@@ -32,5 +32,21 @@ namespace FollowMeFree
         {
             this.Close();
         }
+
+        private void barButtonItem_PrinterManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            using (var form = new PrinterManagementForm())
+            {
+                form.ShowDialog(this);
+            }
+        }
+
+        private void barButtonItem_DepartmentManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            using (var form = new DepartmentManagementForm())
+            {
+                form.ShowDialog(this);
+            }
+        }
     }
 }
