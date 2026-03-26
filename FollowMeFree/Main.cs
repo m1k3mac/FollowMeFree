@@ -15,5 +15,17 @@ namespace FollowMeFree
         {
             InitializeComponent();
         }
+
+        private void ShowControl(Control control)
+        {
+            panelContent.Controls.Clear();
+            control.Dock = DockStyle.Fill;
+            panelContent.Controls.Add(control);
+        }
+
+        private void barButtonItem_UserManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowControl(new UserManagementControl());
+        }
     }
 }
