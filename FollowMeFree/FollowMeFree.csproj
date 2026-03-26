@@ -59,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangePINForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangePINForm.Designer.cs">
+      <DependentUpon>ChangePINForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Config.cs">
       <DependentUpon>EFModel.tt</DependentUpon>
     </Compile>
@@ -70,6 +76,12 @@
     </Compile>
     <Compile Include="DepartmentManagementForm.Designer.cs">
       <DependentUpon>DepartmentManagementForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditUserForm.Designer.cs">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EFModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -124,8 +136,14 @@
     <Compile Include="UserManagementControl.Designer.cs">
       <DependentUpon>UserManagementControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChangePINForm.resx">
+      <DependentUpon>ChangePINForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DepartmentManagementForm.resx">
       <DependentUpon>DepartmentManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditUserForm.resx">
+      <DependentUpon>EditUserForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

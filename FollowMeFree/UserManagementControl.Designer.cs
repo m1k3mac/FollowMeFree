@@ -33,7 +33,7 @@
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.barButtonItem_New = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem_Edit = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem_EditUser = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_ChangePIN = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -65,7 +65,7 @@
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.barButtonItem_New,
-            this.barButtonItem_Edit,
+            this.barButtonItem_EditUser,
             this.barButtonItem_ChangePIN});
             this.barManager1.MainMenu = this.bar2;
             this.barManager1.MaxItemId = 3;
@@ -78,7 +78,7 @@
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_New),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_Edit),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_EditUser),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_ChangePIN)});
             this.bar2.OptionsBar.AllowQuickCustomization = false;
             this.bar2.OptionsBar.DisableClose = true;
@@ -97,14 +97,14 @@
             this.barButtonItem_New.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barButtonItem_New.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_New_ItemClick);
             // 
-            // barButtonItem_Edit
+            // barButtonItem_EditUser
             // 
-            this.barButtonItem_Edit.Caption = "Edit";
-            this.barButtonItem_Edit.Id = 1;
-            this.barButtonItem_Edit.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Edit.ImageOptions.SvgImage")));
-            this.barButtonItem_Edit.Name = "barButtonItem_Edit";
-            this.barButtonItem_Edit.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barButtonItem_Edit.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Edit_ItemClick);
+            this.barButtonItem_EditUser.Caption = "Edit";
+            this.barButtonItem_EditUser.Id = 1;
+            this.barButtonItem_EditUser.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Edit.ImageOptions.SvgImage")));
+            this.barButtonItem_EditUser.Name = "barButtonItem_EditUser";
+            this.barButtonItem_EditUser.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem_EditUser.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Edit_ItemClick);
             // 
             // barButtonItem_ChangePIN
             // 
@@ -257,7 +257,7 @@
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_New;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem_Edit;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem_EditUser;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_ChangePIN;
         private DevExpress.XtraGrid.GridControl gridControl1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
