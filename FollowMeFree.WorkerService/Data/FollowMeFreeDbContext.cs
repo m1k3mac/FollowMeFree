@@ -22,18 +22,17 @@ public partial class FollowMeFreeDbContext : DbContext
 
     public virtual DbSet<Printer> Printers { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Config>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Config");
+            entity.ToTable("Config");
 
             entity.Property(e => e.FmfprinterName)
                 .IsUnicode(false)
                 .HasColumnName("FMFPrinterName");
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.JobFilePath).IsUnicode(false);
         });
 
@@ -73,12 +72,31 @@ public partial class FollowMeFreeDbContext : DbContext
 
         modelBuilder.Entity<Printer>(entity =>
         {
-            entity.HasNoKey();
-
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Printer1)
                 .IsUnicode(false)
                 .HasColumnName("Printer");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasIndex(e => e.UserName, "UQ_Users_UserName").IsUnique();
+
+            entity.Property(e => e.AllowedPrinterIds).IsUnicode(false);
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Pin).HasColumnName("PIN");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Department).WithMany(p => p.Users)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Users_Departments");
         });
 
         OnModelCreatingPartial(modelBuilder);
