@@ -45,9 +45,9 @@
             this.colUserName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colFirstName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colSurname = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.Department = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPIN = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colAllowedPrinterIds = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.Department = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userBindingSource)).BeginInit();
@@ -166,6 +166,8 @@
             // 
             // gridView1
             // 
+            this.gridView1.Appearance.EvenRow.BackColor = System.Drawing.Color.FloralWhite;
+            this.gridView1.Appearance.EvenRow.Options.UseBackColor = true;
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colUserName,
             this.colFirstName,
@@ -177,7 +179,10 @@
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.False;
             this.gridView1.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.False;
+            this.gridView1.OptionsBehavior.ReadOnly = true;
             this.gridView1.OptionsFind.AlwaysVisible = true;
+            this.gridView1.OptionsLayout.Columns.AddNewColumns = false;
+            this.gridView1.OptionsView.EnableAppearanceEvenRow = true;
             // 
             // colUserName
             // 
@@ -200,20 +205,6 @@
             this.colSurname.Visible = true;
             this.colSurname.VisibleIndex = 2;
             // 
-            // colPIN
-            // 
-            this.colPIN.FieldName = "PIN";
-            this.colPIN.Name = "colPIN";
-            this.colPIN.Visible = true;
-            this.colPIN.VisibleIndex = 3;
-            // 
-            // colAllowedPrinterIds
-            // 
-            this.colAllowedPrinterIds.FieldName = "AllowedPrinterIds";
-            this.colAllowedPrinterIds.Name = "colAllowedPrinterIds";
-            this.colAllowedPrinterIds.Visible = true;
-            this.colAllowedPrinterIds.VisibleIndex = 4;
-            // 
             // Department
             // 
             this.Department.Caption = "Department";
@@ -221,6 +212,20 @@
             this.Department.Name = "Department";
             this.Department.Visible = true;
             this.Department.VisibleIndex = 3;
+            // 
+            // colPIN
+            // 
+            this.colPIN.FieldName = "PIN";
+            this.colPIN.Name = "colPIN";
+            this.colPIN.Visible = true;
+            this.colPIN.VisibleIndex = 4;
+            // 
+            // colAllowedPrinterIds
+            // 
+            this.colAllowedPrinterIds.FieldName = "AllowedPrinterIds";
+            this.colAllowedPrinterIds.Name = "colAllowedPrinterIds";
+            this.colAllowedPrinterIds.Visible = true;
+            this.colAllowedPrinterIds.VisibleIndex = 5;
             // 
             // UserManagementControl
             // 

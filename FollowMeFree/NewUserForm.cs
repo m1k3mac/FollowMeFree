@@ -120,13 +120,19 @@ namespace FollowMeFree
                 return;
             }
 
-            if(checkedComboBoxEditPrinters.EditValue == null)
+            if(textEditPIN.Text.Length < 4 || textEditPIN.Text.Length > 8)
             {
-                XtraMessageBox.Show("At least one printer must be selected.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                XtraMessageBox.Show("PIN must be at least 4 digits and not greater than 8 digits", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string allowedPrinterIds = GetSelectedPrinterIds();
+
+            if (string.IsNullOrEmpty(allowedPrinterIds))
+            {
+                XtraMessageBox.Show("At least one printer must be selected.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             using (var db = new FMFDataEntities())
             {
