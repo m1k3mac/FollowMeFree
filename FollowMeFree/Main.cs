@@ -1,4 +1,5 @@
-﻿using DevExpress.Utils.Extensions;
+﻿using DevExpress.LookAndFeel;
+using DevExpress.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,8 @@ namespace FollowMeFree
         public Main()
         {
             InitializeComponent();
+
+            DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle(SkinStyle.WXI);
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -74,6 +77,11 @@ namespace FollowMeFree
                 form.ShowDialog(this);
             }
             Cursor = Cursors.Default;
+        }
+
+        private void barButtonItem_Logs_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowControl(new LogViewerControl());
         }
     }
 }

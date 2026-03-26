@@ -109,6 +109,12 @@
     <Compile Include="Log.cs">
       <DependentUpon>EFModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LogViewerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogViewerControl.Designer.cs">
+      <DependentUpon>LogViewerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogViewerControl.resx">
+      <DependentUpon>LogViewerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainControl.resx">
       <DependentUpon>MainControl.cs</DependentUpon>

@@ -42,9 +42,10 @@
             this.barButtonItem_PrinterManagement = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_DepartmentManagement = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_Stats = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem_Advanced = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.barButtonItem_Advanced = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem_Logs = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             this.SuspendLayout();
@@ -111,9 +112,10 @@
             this.barButtonItem_PrinterManagement,
             this.barButtonItem_DepartmentManagement,
             this.barButtonItem_Stats,
-            this.barButtonItem_Advanced});
+            this.barButtonItem_Advanced,
+            this.barButtonItem_Logs});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 9;
+            this.ribbonControl1.MaxItemId = 10;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
@@ -165,6 +167,14 @@
             this.barButtonItem_Stats.Name = "barButtonItem_Stats";
             this.barButtonItem_Stats.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Stats_ItemClick);
             // 
+            // barButtonItem_Advanced
+            // 
+            this.barButtonItem_Advanced.Caption = "Advanced";
+            this.barButtonItem_Advanced.Id = 8;
+            this.barButtonItem_Advanced.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Advanced.ImageOptions.SvgImage")));
+            this.barButtonItem_Advanced.Name = "barButtonItem_Advanced";
+            this.barButtonItem_Advanced.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Advanced_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -179,17 +189,18 @@
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_PrinterManagement);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_DepartmentManagement);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Stats, true);
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Advanced, true);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Logs, true);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Advanced);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "ribbonPageGroup2";
             // 
-            // barButtonItem_Advanced
+            // barButtonItem_Logs
             // 
-            this.barButtonItem_Advanced.Caption = "Advanced";
-            this.barButtonItem_Advanced.Id = 8;
-            this.barButtonItem_Advanced.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem1.ImageOptions.SvgImage")));
-            this.barButtonItem_Advanced.Name = "barButtonItem_Advanced";
-            this.barButtonItem_Advanced.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Advanced_ItemClick);
+            this.barButtonItem_Logs.Caption = "View Logs";
+            this.barButtonItem_Logs.Id = 9;
+            this.barButtonItem_Logs.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Logs.ImageOptions.SvgImage")));
+            this.barButtonItem_Logs.Name = "barButtonItem_Logs";
+            this.barButtonItem_Logs.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Logs_ItemClick);
             // 
             // Main
             // 
@@ -231,6 +242,7 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem_DepartmentManagement;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Stats;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Advanced;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem_Logs;
     }
 }
 
