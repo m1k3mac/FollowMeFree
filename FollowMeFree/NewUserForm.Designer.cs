@@ -47,12 +47,12 @@ namespace FollowMeFree
             this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
+            this.barButtonItem_Save = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem_Cancel = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            this.barButtonItem_Cancel = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem_Save = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEditUserName.Properties)).BeginInit();
@@ -252,6 +252,24 @@ namespace FollowMeFree
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
             // 
+            // barButtonItem_Save
+            // 
+            this.barButtonItem_Save.Caption = "Save";
+            this.barButtonItem_Save.Id = 1;
+            this.barButtonItem_Save.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Save.ImageOptions.SvgImage")));
+            this.barButtonItem_Save.Name = "barButtonItem_Save";
+            this.barButtonItem_Save.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem_Save.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Save_ItemClick);
+            // 
+            // barButtonItem_Cancel
+            // 
+            this.barButtonItem_Cancel.Caption = "Cancel";
+            this.barButtonItem_Cancel.Id = 0;
+            this.barButtonItem_Cancel.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Cancel.ImageOptions.SvgImage")));
+            this.barButtonItem_Cancel.Name = "barButtonItem_Cancel";
+            this.barButtonItem_Cancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem_Cancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Cancel_ItemClick);
+            // 
             // barDockControlTop
             // 
             this.barDockControlTop.CausesValidation = false;
@@ -284,24 +302,6 @@ namespace FollowMeFree
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 182);
             // 
-            // barButtonItem_Cancel
-            // 
-            this.barButtonItem_Cancel.Caption = "Cancel";
-            this.barButtonItem_Cancel.Id = 0;
-            this.barButtonItem_Cancel.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem1.ImageOptions.SvgImage")));
-            this.barButtonItem_Cancel.Name = "barButtonItem_Cancel";
-            this.barButtonItem_Cancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barButtonItem_Cancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Cancel_ItemClick);
-            // 
-            // barButtonItem_Save
-            // 
-            this.barButtonItem_Save.Caption = "Save";
-            this.barButtonItem_Save.Id = 1;
-            this.barButtonItem_Save.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem2.ImageOptions.SvgImage")));
-            this.barButtonItem_Save.Name = "barButtonItem_Save";
-            this.barButtonItem_Save.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barButtonItem_Save.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Save_ItemClick);
-            // 
             // NewUserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -313,6 +313,7 @@ namespace FollowMeFree
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.IconOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("NewUserForm.IconOptions.SvgImage")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NewUserForm";

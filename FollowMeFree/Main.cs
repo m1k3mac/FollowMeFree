@@ -65,5 +65,15 @@ namespace FollowMeFree
         {
             ShowControl(new MainControl());
         }
+
+        private void barButtonItem_Advanced_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            using (var form = new AdvancedSettingsForm())
+            {
+                form.ShowDialog(this);
+            }
+            Cursor = Cursors.Default;
+        }
     }
 }

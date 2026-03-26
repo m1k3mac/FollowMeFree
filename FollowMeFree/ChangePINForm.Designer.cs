@@ -193,6 +193,7 @@ namespace FollowMeFree
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.IconOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("ChangePINForm.IconOptions.SvgImage")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChangePINForm";
