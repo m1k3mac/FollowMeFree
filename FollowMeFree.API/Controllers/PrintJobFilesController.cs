@@ -48,7 +48,7 @@ namespace FollowMeFree.API.Controllers
             foreach (var filePath in files)
             {
                 var dto = ParseFileName(filePath);
-                if (dto != null && dto.Submitter.Equals(submitter, StringComparison.OrdinalIgnoreCase))
+                if (dto != null && dto.Submitter.ToLower().Equals(submitter.ToLower(), StringComparison.OrdinalIgnoreCase))
                 {
                     results.Add(dto);
                 }

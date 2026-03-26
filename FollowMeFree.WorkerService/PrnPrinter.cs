@@ -132,7 +132,7 @@ namespace FollowMeFree.WorkerService
                                 var printJob = new PrintJob
                                 {
                                     UserName = snapshot.Submitter,
-                                    DepartmentId = 1,
+                                    DepartmentId = 6,
                                     DocumentName = snapshot.JobName,
                                     JobId = snapshot.JobId,
                                     Pages = snapshot.NumberOfPages,
