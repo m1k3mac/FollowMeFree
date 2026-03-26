@@ -84,14 +84,14 @@ namespace FollowMeFree
             this.layoutControl1.Location = new System.Drawing.Point(0, 24);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
-            this.layoutControl1.Size = new System.Drawing.Size(475, 182);
+            this.layoutControl1.Size = new System.Drawing.Size(477, 260);
             this.layoutControl1.TabIndex = 0;
             // 
             // textEditUserName
             // 
             this.textEditUserName.Location = new System.Drawing.Point(101, 12);
             this.textEditUserName.Name = "textEditUserName";
-            this.textEditUserName.Size = new System.Drawing.Size(362, 20);
+            this.textEditUserName.Size = new System.Drawing.Size(364, 20);
             this.textEditUserName.StyleController = this.layoutControl1;
             this.textEditUserName.TabIndex = 0;
             // 
@@ -99,7 +99,7 @@ namespace FollowMeFree
             // 
             this.textEditFirstName.Location = new System.Drawing.Point(101, 36);
             this.textEditFirstName.Name = "textEditFirstName";
-            this.textEditFirstName.Size = new System.Drawing.Size(362, 20);
+            this.textEditFirstName.Size = new System.Drawing.Size(364, 20);
             this.textEditFirstName.StyleController = this.layoutControl1;
             this.textEditFirstName.TabIndex = 1;
             // 
@@ -107,7 +107,7 @@ namespace FollowMeFree
             // 
             this.textEditSurname.Location = new System.Drawing.Point(101, 60);
             this.textEditSurname.Name = "textEditSurname";
-            this.textEditSurname.Size = new System.Drawing.Size(362, 20);
+            this.textEditSurname.Size = new System.Drawing.Size(364, 20);
             this.textEditSurname.StyleController = this.layoutControl1;
             this.textEditSurname.TabIndex = 2;
             // 
@@ -118,7 +118,7 @@ namespace FollowMeFree
             this.lookUpEditDepartment.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.lookUpEditDepartment.Properties.NullText = "";
-            this.lookUpEditDepartment.Size = new System.Drawing.Size(362, 20);
+            this.lookUpEditDepartment.Size = new System.Drawing.Size(364, 20);
             this.lookUpEditDepartment.StyleController = this.layoutControl1;
             this.lookUpEditDepartment.TabIndex = 3;
             // 
@@ -128,7 +128,7 @@ namespace FollowMeFree
             this.textEditPIN.Name = "textEditPIN";
             this.textEditPIN.Properties.Mask.EditMask = "\\d+";
             this.textEditPIN.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
-            this.textEditPIN.Size = new System.Drawing.Size(362, 20);
+            this.textEditPIN.Size = new System.Drawing.Size(364, 20);
             this.textEditPIN.StyleController = this.layoutControl1;
             this.textEditPIN.TabIndex = 4;
             // 
@@ -138,7 +138,7 @@ namespace FollowMeFree
             this.checkedComboBoxEditPrinters.Name = "checkedComboBoxEditPrinters";
             this.checkedComboBoxEditPrinters.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.checkedComboBoxEditPrinters.Size = new System.Drawing.Size(362, 20);
+            this.checkedComboBoxEditPrinters.Size = new System.Drawing.Size(364, 20);
             this.checkedComboBoxEditPrinters.StyleController = this.layoutControl1;
             this.checkedComboBoxEditPrinters.TabIndex = 5;
             // 
@@ -155,7 +155,7 @@ namespace FollowMeFree
             this.layoutControlItemPrinters,
             this.emptySpaceItem1});
             this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(475, 182);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(477, 260);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItemUserName
@@ -163,7 +163,7 @@ namespace FollowMeFree
             this.layoutControlItemUserName.Control = this.textEditUserName;
             this.layoutControlItemUserName.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItemUserName.Name = "layoutControlItemUserName";
-            this.layoutControlItemUserName.Size = new System.Drawing.Size(455, 24);
+            this.layoutControlItemUserName.Size = new System.Drawing.Size(457, 24);
             this.layoutControlItemUserName.Text = "Username";
             this.layoutControlItemUserName.TextSize = new System.Drawing.Size(77, 13);
             // 
@@ -172,7 +172,7 @@ namespace FollowMeFree
             this.layoutControlItemFirstName.Control = this.textEditFirstName;
             this.layoutControlItemFirstName.Location = new System.Drawing.Point(0, 24);
             this.layoutControlItemFirstName.Name = "layoutControlItemFirstName";
-            this.layoutControlItemFirstName.Size = new System.Drawing.Size(455, 24);
+            this.layoutControlItemFirstName.Size = new System.Drawing.Size(457, 24);
             this.layoutControlItemFirstName.Text = "First Name";
             this.layoutControlItemFirstName.TextSize = new System.Drawing.Size(77, 13);
             // 
@@ -181,7 +181,7 @@ namespace FollowMeFree
             this.layoutControlItemSurname.Control = this.textEditSurname;
             this.layoutControlItemSurname.Location = new System.Drawing.Point(0, 48);
             this.layoutControlItemSurname.Name = "layoutControlItemSurname";
-            this.layoutControlItemSurname.Size = new System.Drawing.Size(455, 24);
+            this.layoutControlItemSurname.Size = new System.Drawing.Size(457, 24);
             this.layoutControlItemSurname.Text = "Surname";
             this.layoutControlItemSurname.TextSize = new System.Drawing.Size(77, 13);
             // 
@@ -190,7 +190,7 @@ namespace FollowMeFree
             this.layoutControlItemDepartment.Control = this.lookUpEditDepartment;
             this.layoutControlItemDepartment.Location = new System.Drawing.Point(0, 72);
             this.layoutControlItemDepartment.Name = "layoutControlItemDepartment";
-            this.layoutControlItemDepartment.Size = new System.Drawing.Size(455, 24);
+            this.layoutControlItemDepartment.Size = new System.Drawing.Size(457, 24);
             this.layoutControlItemDepartment.Text = "Department";
             this.layoutControlItemDepartment.TextSize = new System.Drawing.Size(77, 13);
             // 
@@ -199,7 +199,7 @@ namespace FollowMeFree
             this.layoutControlItemPIN.Control = this.textEditPIN;
             this.layoutControlItemPIN.Location = new System.Drawing.Point(0, 96);
             this.layoutControlItemPIN.Name = "layoutControlItemPIN";
-            this.layoutControlItemPIN.Size = new System.Drawing.Size(455, 24);
+            this.layoutControlItemPIN.Size = new System.Drawing.Size(457, 24);
             this.layoutControlItemPIN.Text = "PIN";
             this.layoutControlItemPIN.TextSize = new System.Drawing.Size(77, 13);
             // 
@@ -208,7 +208,7 @@ namespace FollowMeFree
             this.layoutControlItemPrinters.Control = this.checkedComboBoxEditPrinters;
             this.layoutControlItemPrinters.Location = new System.Drawing.Point(0, 120);
             this.layoutControlItemPrinters.Name = "layoutControlItemPrinters";
-            this.layoutControlItemPrinters.Size = new System.Drawing.Size(455, 24);
+            this.layoutControlItemPrinters.Size = new System.Drawing.Size(457, 24);
             this.layoutControlItemPrinters.Text = "Allowed Printers";
             this.layoutControlItemPrinters.TextSize = new System.Drawing.Size(77, 13);
             // 
@@ -217,7 +217,7 @@ namespace FollowMeFree
             this.emptySpaceItem1.AllowHotTrack = false;
             this.emptySpaceItem1.Location = new System.Drawing.Point(0, 144);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(455, 18);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(457, 96);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // barManager1
@@ -276,15 +276,15 @@ namespace FollowMeFree
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(475, 24);
+            this.barDockControlTop.Size = new System.Drawing.Size(477, 24);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 206);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 284);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(475, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(477, 0);
             // 
             // barDockControlLeft
             // 
@@ -292,21 +292,21 @@ namespace FollowMeFree
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 182);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 260);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(475, 24);
+            this.barDockControlRight.Location = new System.Drawing.Point(477, 24);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 182);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 260);
             // 
             // NewUserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 206);
+            this.ClientSize = new System.Drawing.Size(477, 284);
             this.Controls.Add(this.layoutControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
