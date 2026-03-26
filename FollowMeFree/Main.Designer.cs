@@ -60,15 +60,15 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(692, 0);
+            this.barDockControlTop.Size = new System.Drawing.Size(790, 0);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 568);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 635);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(692, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(790, 0);
             // 
             // barDockControlLeft
             // 
@@ -76,23 +76,23 @@
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 0);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 568);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 635);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(692, 0);
+            this.barDockControlRight.Location = new System.Drawing.Point(790, 0);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 568);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 635);
             // 
             // panelContent
             // 
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(0, 133);
+            this.panelContent.Location = new System.Drawing.Point(0, 115);
             this.panelContent.Name = "panelContent";
             this.panelContent.Padding = new System.Windows.Forms.Padding(5);
-            this.panelContent.Size = new System.Drawing.Size(692, 435);
+            this.panelContent.Size = new System.Drawing.Size(790, 520);
             this.panelContent.TabIndex = 0;
             // 
             // ribbonControl1
@@ -110,7 +110,13 @@
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
-            this.ribbonControl1.Size = new System.Drawing.Size(692, 133);
+            this.ribbonControl1.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
+            this.ribbonControl1.ShowDisplayOptionsMenuButton = DevExpress.Utils.DefaultBoolean.False;
+            this.ribbonControl1.ShowMoreCommandsButton = DevExpress.Utils.DefaultBoolean.False;
+            this.ribbonControl1.ShowPageHeadersMode = DevExpress.XtraBars.Ribbon.ShowPageHeadersMode.Hide;
+            this.ribbonControl1.ShowToolbarCustomizeItem = false;
+            this.ribbonControl1.Size = new System.Drawing.Size(790, 115);
+            this.ribbonControl1.Toolbar.ShowCustomizeItem = false;
             // 
             // barButtonItem_UserManagement
             // 
@@ -126,6 +132,7 @@
             this.barButtonItem_Close.Id = 2;
             this.barButtonItem_Close.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Close.ImageOptions.SvgImage")));
             this.barButtonItem_Close.Name = "barButtonItem_Close";
+            this.barButtonItem_Close.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Close_ItemClick);
             // 
             // ribbonPage1
             // 
@@ -151,7 +158,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 568);
+            this.ClientSize = new System.Drawing.Size(790, 635);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.ribbonControl1);
             this.Controls.Add(this.barDockControlLeft);
@@ -159,6 +166,8 @@
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "Main";
+            this.Ribbon = this.ribbonControl1;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FollowMeFree";
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();

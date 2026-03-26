@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FollowMeFree
 {
-    public partial class Main : DevExpress.XtraEditors.XtraForm
+    public partial class Main : DevExpress.XtraBars.Ribbon.RibbonForm
     {
         public Main()
         {
@@ -26,6 +26,11 @@ namespace FollowMeFree
         private void barButtonItem_UserManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowControl(new UserManagementControl());
+        }
+
+        private void barButtonItem_Close_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            this.Close();
         }
     }
 }
