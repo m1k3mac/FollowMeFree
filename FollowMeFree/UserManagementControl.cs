@@ -25,10 +25,6 @@ namespace FollowMeFree
             _dbContext = new FMFDataEntities();
             var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();            
             userBindingSource.DataSource = query;
-
-
-
-
         }
 
         private void barButtonItem_New_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -40,7 +36,10 @@ namespace FollowMeFree
                 form.ShowDialog();
             }
 
-                Cursor = Cursors.Default;
+            Cursor = Cursors.Default;
+
+            var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();
+            userBindingSource.DataSource = query;
         }
 
         private void barButtonItem_Edit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

@@ -8,11 +8,19 @@ namespace FollowMeFree
 {
     public partial class NewUserForm : DevExpress.XtraEditors.XtraForm
     {
+        private bool hasDepartments;
+        private bool hasPrinters;
+
         public NewUserForm()
         {
             InitializeComponent();
             LoadDepartments();
             LoadPrinters();
+
+            if (!ValidateDepartmentAndPrinterSetup())
+            {
+                barButtonItem_Save.Enabled = false;
+            }
         }
 
         private void LoadDepartments()
@@ -20,6 +28,7 @@ namespace FollowMeFree
             using (var db = new FMFDataEntities())
             {
                 var departments = db.Departments.ToList();
+                hasDepartments = departments.Any();
                 lookUpEditDepartment.Properties.DataSource = departments;
                 lookUpEditDepartment.Properties.DisplayMember = "DepartmentName";
                 lookUpEditDepartment.Properties.ValueMember = "Id";
@@ -32,11 +41,35 @@ namespace FollowMeFree
             using (var db = new FMFDataEntities())
             {
                 var printers = db.Printers.ToList();
+                hasPrinters = printers.Any();
                 checkedComboBoxEditPrinters.Properties.DataSource = printers;
                 checkedComboBoxEditPrinters.Properties.DisplayMember = "Printer1";
                 checkedComboBoxEditPrinters.Properties.ValueMember = "Id";
             }
         }        
+
+        private bool ValidateDepartmentAndPrinterSetup()
+        {
+            if (hasDepartments && hasPrinters)
+            {
+                return true;
+            }
+
+            if (!hasDepartments && !hasPrinters)
+            {
+                XtraMessageBox.Show("No Departments or Printers were found. Please create at least one Department and one Printer, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (!hasDepartments)
+            {
+                XtraMessageBox.Show("No Departments were found. Please create a Department first, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            XtraMessageBox.Show("No Printers were found. Please create a Printer first, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
 
         private string GetSelectedPrinterIds()
         {
@@ -51,6 +84,11 @@ namespace FollowMeFree
 
         private void barButtonItem_Save_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            if (!ValidateDepartmentAndPrinterSetup())
+            {
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(textEditUserName.Text))
             {
                 XtraMessageBox.Show("Username is required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -79,6 +117,12 @@ namespace FollowMeFree
             if (!int.TryParse(textEditPIN.Text, out pin))
             {
                 XtraMessageBox.Show("PIN must be a valid number.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if(checkedComboBoxEditPrinters.EditValue == null)
+            {
+                XtraMessageBox.Show("At least one printer must be selected.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
