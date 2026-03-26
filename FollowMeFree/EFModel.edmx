@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FMFDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Config' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobFilePath" />
+            <PropertyRef Name="FMFPrinterName" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobFilePath" Type="varchar(max)" Nullable="false" />
+          <Property Name="FMFPrinterName" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="LogLevel" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Exception" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Printers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Printers">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Printer" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Printer" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrintJobs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DocumentName" Type="varchar(max)" Nullable="false" />
+          <Property Name="JobId" Type="int" Nullable="false" />
+          <Property Name="Pages" Type="int" Nullable="false" />
+          <Property Name="DateTimePrinted" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="DataType" Type="varchar(max)" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="PIN" Type="int" Nullable="false" />
+          <Property Name="AllowedPrinterIds" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK_PrintJobs_Departments">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
+          <End Role="PrintJobs" Type="Self.PrintJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PrintJobs">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Departments">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FMFDataModelStoreContainer">
+          <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrintJobs" EntityType="Self.PrintJobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Config" EntityType="Self.Config" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Config].[Id] AS [Id], 
+    [Config].[JobFilePath] AS [JobFilePath], 
+    [Config].[FMFPrinterName] AS [FMFPrinterName]
+    FROM [dbo].[Config] AS [Config]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Printers" EntityType="Self.Printers" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Printers].[Id] AS [Id], 
+    [Printers].[Printer] AS [Printer]
+    FROM [dbo].[Printers] AS [Printers]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_PrintJobs_Departments" Association="Self.FK_PrintJobs_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="PrintJobs" EntitySet="PrintJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Departments" Association="Self.FK_Users_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FMFDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PrintJobs" Relationship="Self.FK_PrintJobs_Departments" FromRole="Departments" ToRole="PrintJobs" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Departments" FromRole="Departments" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="LogLevel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Source" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PrintJob">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DocumentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="JobId" Type="Int32" Nullable="false" />
+          <Property Name="Pages" Type="Int32" Nullable="false" />
+          <Property Name="DateTimePrinted" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DataType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_PrintJobs_Departments" FromRole="PrintJobs" ToRole="Departments" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="PIN" Type="Int32" Nullable="false" />
+          <Property Name="AllowedPrinterIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Users_Departments" FromRole="Users" ToRole="Departments" />
+        </EntityType>
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobFilePath" />
+            <PropertyRef Name="FMFPrinterName" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FMFPrinterName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Printer">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Printer1" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Printer1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PrintJobs_Departments">
+          <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="PrintJobs" Type="Self.PrintJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PrintJobs">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Departments">
+          <End Role="Departments" Type="Self.Department" Multiplicity="1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FMFDataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Logs" EntityType="Self.Log" />
+          <EntitySet Name="PrintJobs" EntityType="Self.PrintJob" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Configs" EntityType="Self.Config" />
+          <EntitySet Name="Printers" EntityType="Self.Printer" />
+          <AssociationSet Name="FK_PrintJobs_Departments" Association="Self.FK_PrintJobs_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="PrintJobs" EntitySet="PrintJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Departments" Association="Self.FK_Users_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FMFDataModelStoreContainer" CdmEntityContainer="FMFDataEntities">
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="FMFDataModel.Department">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="FMFDataModel.Log">
+              <MappingFragment StoreEntitySet="Logs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="LogLevel" ColumnName="LogLevel" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrintJobs">
+            <EntityTypeMapping TypeName="FMFDataModel.PrintJob">
+              <MappingFragment StoreEntitySet="PrintJobs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="Pages" ColumnName="Pages" />
+                <ScalarProperty Name="DateTimePrinted" ColumnName="DateTimePrinted" />
+                <ScalarProperty Name="DataType" ColumnName="DataType" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="FMFDataModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="PIN" ColumnName="PIN" />
+                <ScalarProperty Name="AllowedPrinterIds" ColumnName="AllowedPrinterIds" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Configs">
+            <EntityTypeMapping TypeName="FMFDataModel.Config">
+              <MappingFragment StoreEntitySet="Config">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="JobFilePath" ColumnName="JobFilePath" />
+                <ScalarProperty Name="FMFPrinterName" ColumnName="FMFPrinterName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Printers">
+            <EntityTypeMapping TypeName="FMFDataModel.Printer">
+              <MappingFragment StoreEntitySet="Printers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Printer1" ColumnName="Printer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

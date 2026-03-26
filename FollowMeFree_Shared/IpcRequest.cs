@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace FollowMeFree_Shared
 {
     public class IpcRequest
