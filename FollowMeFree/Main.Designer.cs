@@ -40,10 +40,10 @@
             this.barButtonItem_UserManagement = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_Close = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_PrinterManagement = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.barButtonItem_DepartmentManagement = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.barButtonItem_Stats = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             this.SuspendLayout();
@@ -108,9 +108,10 @@
             this.barButtonItem_UserManagement,
             this.barButtonItem_Close,
             this.barButtonItem_PrinterManagement,
-            this.barButtonItem_DepartmentManagement});
+            this.barButtonItem_DepartmentManagement,
+            this.barButtonItem_Stats});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 5;
+            this.ribbonControl1.MaxItemId = 7;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1});
@@ -146,28 +147,6 @@
             this.barButtonItem_PrinterManagement.Name = "barButtonItem_PrinterManagement";
             this.barButtonItem_PrinterManagement.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_PrinterManagement_ItemClick);
             // 
-            // ribbonPage1
-            // 
-            this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-            this.ribbonPageGroup1,
-            this.ribbonPageGroup2});
-            this.ribbonPage1.Name = "ribbonPage1";
-            this.ribbonPage1.Text = "ribbonPage1";
-            // 
-            // ribbonPageGroup1
-            // 
-            this.ribbonPageGroup1.ItemLinks.Add(this.barButtonItem_Close);
-            this.ribbonPageGroup1.Name = "ribbonPageGroup1";
-            this.ribbonPageGroup1.Text = "ribbonPageGroup1";
-            // 
-            // ribbonPageGroup2
-            // 
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_UserManagement);
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_PrinterManagement);
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_DepartmentManagement);
-            this.ribbonPageGroup2.Name = "ribbonPageGroup2";
-            this.ribbonPageGroup2.Text = "ribbonPageGroup2";
-            // 
             // barButtonItem_DepartmentManagement
             // 
             this.barButtonItem_DepartmentManagement.Caption = "Departments";
@@ -175,6 +154,31 @@
             this.barButtonItem_DepartmentManagement.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_DepartmentManagement.ImageOptions.SvgImage")));
             this.barButtonItem_DepartmentManagement.Name = "barButtonItem_DepartmentManagement";
             this.barButtonItem_DepartmentManagement.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_DepartmentManagement_ItemClick);
+            // 
+            // ribbonPage1
+            // 
+            this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.ribbonPageGroup2});
+            this.ribbonPage1.Name = "ribbonPage1";
+            this.ribbonPage1.Text = "ribbonPage1";
+            // 
+            // ribbonPageGroup2
+            // 
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Close, true);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_UserManagement, true);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_PrinterManagement);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_DepartmentManagement);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Stats, true);
+            this.ribbonPageGroup2.Name = "ribbonPageGroup2";
+            this.ribbonPageGroup2.Text = "ribbonPageGroup2";
+            // 
+            // barButtonItem_Stats
+            // 
+            this.barButtonItem_Stats.Caption = "Statistics";
+            this.barButtonItem_Stats.Id = 6;
+            this.barButtonItem_Stats.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Stats.ImageOptions.SvgImage")));
+            this.barButtonItem_Stats.Name = "barButtonItem_Stats";
+            this.barButtonItem_Stats.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Stats_ItemClick);
             // 
             // Main
             // 
@@ -191,6 +195,7 @@
             this.Ribbon = this.ribbonControl1;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FollowMeFree";
+            this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
             this.ResumeLayout(false);
@@ -208,12 +213,12 @@
         private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_UserManagement;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage1;
-        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Close;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
         private System.Windows.Forms.Panel panelContent;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_PrinterManagement;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_DepartmentManagement;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem_Stats;
     }
 }
 

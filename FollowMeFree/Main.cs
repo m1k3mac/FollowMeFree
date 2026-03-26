@@ -17,24 +17,24 @@ namespace FollowMeFree
             InitializeComponent();
         }
 
+        private void Main_Load(object sender, EventArgs e)
+        {
+            ShowControl(new MainControl());
+        }
+
         private void ShowControl(Control control)
         {
+            Cursor = Cursors.WaitCursor;
             panelContent.Controls.Clear();
             control.Dock = DockStyle.Fill;
             panelContent.Controls.Add(control);
-        }
-
-        private void barButtonItem_UserManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            Cursor = Cursors.WaitCursor;
-            ShowControl(new UserManagementControl());
             Cursor = Cursors.Default;
         }
 
-        private void barButtonItem_Close_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            this.Close();
-        }
+        private void barButtonItem_UserManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {            
+            ShowControl(new UserManagementControl());            
+        }        
 
         private void barButtonItem_PrinterManagement_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -54,6 +54,16 @@ namespace FollowMeFree
                 form.ShowDialog(this);
             }
             Cursor = Cursors.Default;
+        }
+
+        private void barButtonItem_Close_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void barButtonItem_Stats_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowControl(new MainControl());
         }
     }
 }
