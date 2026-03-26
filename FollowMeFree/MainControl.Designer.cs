@@ -85,7 +85,7 @@
             this.digitalGauge3});
             this.gaugeControl1.Location = new System.Drawing.Point(12, 12);
             this.gaugeControl1.Name = "gaugeControl1";
-            this.gaugeControl1.Size = new System.Drawing.Size(205, 529);
+            this.gaugeControl1.Size = new System.Drawing.Size(149, 529);
             this.gaugeControl1.TabIndex = 5;
             // 
             // digitalGauge3
@@ -94,7 +94,7 @@
             this.digitalGauge3.AppearanceOn.ContentBrush = new DevExpress.XtraGauges.Core.Drawing.SolidBrushObject("Color:#02F0F7");
             this.digitalGauge3.BackgroundLayers.AddRange(new DevExpress.XtraGauges.Win.Gauges.Digital.DigitalBackgroundLayerComponent[] {
             this.digitalBackgroundLayerComponent1});
-            this.digitalGauge3.Bounds = new System.Drawing.Rectangle(6, 6, 193, 517);
+            this.digitalGauge3.Bounds = new System.Drawing.Rectangle(6, 6, 137, 517);
             this.digitalGauge3.DigitCount = 5;
             this.digitalGauge3.Name = "digitalGauge3";
             this.digitalGauge3.Padding = new DevExpress.XtraGauges.Core.Base.TextSpacing(26, 20, 26, 20);
@@ -111,10 +111,10 @@
             // gridControl1
             // 
             this.gridControl1.DataSource = this.printJobBindingSource;
-            this.gridControl1.Location = new System.Drawing.Point(221, 12);
+            this.gridControl1.Location = new System.Drawing.Point(165, 12);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(608, 529);
+            this.gridControl1.Size = new System.Drawing.Size(664, 529);
             this.gridControl1.TabIndex = 4;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -128,13 +128,13 @@
             this.gridView1.Appearance.EvenRow.BackColor = System.Drawing.Color.MintCream;
             this.gridView1.Appearance.EvenRow.Options.UseBackColor = true;
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colJobId,
             this.colUserName,
             this.colDocumentName,
-            this.colJobId,
             this.colPages,
-            this.colDateTimePrinted,
             this.colDataType,
-            this.colDepartment});
+            this.colDepartment,
+            this.colDateTimePrinted});
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsFind.AlwaysVisible = true;
@@ -145,21 +145,21 @@
             this.colUserName.FieldName = "UserName";
             this.colUserName.Name = "colUserName";
             this.colUserName.Visible = true;
-            this.colUserName.VisibleIndex = 0;
+            this.colUserName.VisibleIndex = 1;
             // 
             // colDocumentName
             // 
             this.colDocumentName.FieldName = "DocumentName";
             this.colDocumentName.Name = "colDocumentName";
             this.colDocumentName.Visible = true;
-            this.colDocumentName.VisibleIndex = 1;
+            this.colDocumentName.VisibleIndex = 2;
             // 
             // colJobId
             // 
             this.colJobId.FieldName = "JobId";
             this.colJobId.Name = "colJobId";
             this.colJobId.Visible = true;
-            this.colJobId.VisibleIndex = 2;
+            this.colJobId.VisibleIndex = 0;
             // 
             // colPages
             // 
@@ -173,21 +173,22 @@
             this.colDateTimePrinted.FieldName = "DateTimePrinted";
             this.colDateTimePrinted.Name = "colDateTimePrinted";
             this.colDateTimePrinted.Visible = true;
-            this.colDateTimePrinted.VisibleIndex = 4;
+            this.colDateTimePrinted.VisibleIndex = 6;
             // 
             // colDataType
             // 
             this.colDataType.FieldName = "DataType";
             this.colDataType.Name = "colDataType";
             this.colDataType.Visible = true;
-            this.colDataType.VisibleIndex = 5;
+            this.colDataType.VisibleIndex = 4;
             // 
             // colDepartment
             // 
-            this.colDepartment.FieldName = "DocumentName";
+            this.colDepartment.Caption = "Department";
+            this.colDepartment.FieldName = "Department.DepartmentName";
             this.colDepartment.Name = "colDepartment";
             this.colDepartment.Visible = true;
-            this.colDepartment.VisibleIndex = 6;
+            this.colDepartment.VisibleIndex = 5;
             // 
             // Root
             // 
@@ -203,9 +204,9 @@
             // layoutControlItem1
             // 
             this.layoutControlItem1.Control = this.gridControl1;
-            this.layoutControlItem1.Location = new System.Drawing.Point(209, 0);
+            this.layoutControlItem1.Location = new System.Drawing.Point(153, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(612, 533);
+            this.layoutControlItem1.Size = new System.Drawing.Size(668, 533);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
@@ -214,7 +215,7 @@
             this.layoutControlItem2.Control = this.gaugeControl1;
             this.layoutControlItem2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(209, 533);
+            this.layoutControlItem2.Size = new System.Drawing.Size(153, 533);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
             // 
