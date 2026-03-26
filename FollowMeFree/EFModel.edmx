@@ -4,14 +4,10 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="FMFDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Config' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+    <Schema Namespace="FMFDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Config">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="JobFilePath" />
-            <PropertyRef Name="FMFPrinterName" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="JobFilePath" Type="varchar(max)" Nullable="false" />
@@ -36,12 +32,9 @@ warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Config' does not
           <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Exception" Type="nvarchar(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Printers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Printers">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="Printer" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Printer" Type="varchar(max)" Nullable="false" />
@@ -96,23 +89,12 @@ warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Printers' does n
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="FMFDataModelStoreContainer">
+          <EntitySet Name="Config" EntityType="Self.Config" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Printers" EntityType="Self.Printers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrintJobs" EntityType="Self.PrintJobs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Config" EntityType="Self.Config" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Config].[Id] AS [Id], 
-    [Config].[JobFilePath] AS [JobFilePath], 
-    [Config].[FMFPrinterName] AS [FMFPrinterName]
-    FROM [dbo].[Config] AS [Config]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Printers" EntityType="Self.Printers" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Printers].[Id] AS [Id], 
-    [Printers].[Printer] AS [Printer]
-    FROM [dbo].[Printers] AS [Printers]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_PrintJobs_Departments" Association="Self.FK_PrintJobs_Departments">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="PrintJobs" EntitySet="PrintJobs" />
@@ -122,8 +104,7 @@ warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Printers' does n
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FMFDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -178,8 +159,6 @@ warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Printers' does n
         <EntityType Name="Config">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="JobFilePath" />
-            <PropertyRef Name="FMFPrinterName" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="JobFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
@@ -188,7 +167,6 @@ warning 6002: The table/view 'C:\FOLLWMEFREE\DB\FMFDATA.MDF.dbo.Printers' does n
         <EntityType Name="Printer">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="Printer1" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Printer1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
