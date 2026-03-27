@@ -78,6 +78,225 @@ Notes:
     External consumers (WinForms, Flutter) access data through the API
     endpoints only.
 
+
+================================================================================
+PRODUCTION DEPLOYMENT GUIDE
+================================================================================
+
+This application uses SQL Server LocalDB with a standalone .mdf file (never
+attached to a full SQL Server instance). All three projects share the same
+physical database. The following must be addressed when deploying to a
+customer's computer.
+
+--------------------------------------------------------------------------------
+1. PREREQUISITE: SQL Server LocalDB
+--------------------------------------------------------------------------------
+
+  LocalDB must be installed on the target machine. It is NOT installed by
+  default on Windows. It ships with:
+
+    - Visual Studio (any edition with the "Data storage and processing"
+      workload)
+    - SQL Server Express (as an optional feature)
+    - Standalone installer from Microsoft:
+      https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb
+
+  Your installer / deployment package must include the LocalDB MSI or
+  require the customer to install it beforehand. The version used in
+  development is LocalDB 17.x (SQL Server 2022 Express LocalDB).
+
+--------------------------------------------------------------------------------
+2. LOCALDB INSTANCE CREATION
+--------------------------------------------------------------------------------
+
+  The connection strings reference the instance name "MSSQLLocalDB".
+  After installing LocalDB, the instance must be created and started:
+
+    SqlLocalDB create MSSQLLocalDB
+    SqlLocalDB start  MSSQLLocalDB
+
+  If the instance already exists but is corrupt (common after
+  reinstalls), delete and recreate it:
+
+    SqlLocalDB stop   MSSQLLocalDB
+    SqlLocalDB delete MSSQLLocalDB
+    SqlLocalDB create MSSQLLocalDB
+    SqlLocalDB start  MSSQLLocalDB
+
+  NOTE: Recreating the instance wipes all login mappings. The database
+  file will need to be re-attached (see section 4).
+
+--------------------------------------------------------------------------------
+3. DATABASE FILE LOCATION
+--------------------------------------------------------------------------------
+
+  The .mdf and .ldf files must exist at the hardcoded path:
+
+    C:\FollwMeFree\DB\FMFData.mdf
+    C:\FollwMeFree\DB\FMFData_log.ldf
+
+  Deployment steps:
+    a. Create the directory   C:\FollwMeFree\DB\   if it does not exist.
+    b. Copy FMFData.mdf (and FMFData_log.ldf if available) into it.
+    c. Ensure the Windows user account that will run the services has
+       read/write permissions on this directory.
+
+  IMPORTANT: If you change this path, you must update it in ALL THREE
+  project configuration files (see section 5).
+
+--------------------------------------------------------------------------------
+4. DATABASE ATTACHMENT
+--------------------------------------------------------------------------------
+
+  The WorkerService connection string uses AttachDbFilename, which tells
+  LocalDB to auto-attach the .mdf file on first connection. However,
+  there is a known issue: if the LocalDB instance is recreated (e.g.
+  after a Visual Studio reinstall), the database may be registered by
+  its file path instead of its logical name "FMFData".
+
+  If this happens the API (which connects by database name only) will
+  fail with:
+    "Cannot open database 'FMFData' requested by the login."
+
+  To fix, run the following from an elevated command prompt:
+
+    sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
+      "EXEC sp_detach_db @dbname = N'C:\FollwMeFree\DB\FMFDATA.MDF'"
+
+    sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
+      "CREATE DATABASE [FMFData] ON (FILENAME = N'C:\FollwMeFree\DB\FMFData.mdf') FOR ATTACH"
+
+  Alternatively, start the WorkerService first (its AttachDbFilename
+  will attach the file), then verify the logical name with:
+
+    sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q "SELECT name FROM sys.databases"
+
+  The output should list "FMFData" (not a file path).
+
+--------------------------------------------------------------------------------
+5. CONNECTION STRINGS — ALL THREE PROJECTS
+--------------------------------------------------------------------------------
+
+  Each project has a hardcoded connection string referencing LocalDB and
+  the database path. If the path or instance name changes, update all of
+  them.
+
+  Project                   | File                    | Key / Name
+  ------------------------- | ----------------------- | -------------------------
+  FollowMeFree (WinForms)   | App.config              | FMFDataEntities
+  FollowMeFree.WorkerService| appsettings.json        | ConnectionStrings:DefaultConnection
+  FollowMeFree.API          | appsettings.json        | ConnectionStrings:DefaultConnection
+
+  Connection string details:
+
+  WinForms (EF6, .NET Framework 4.8):
+    provider connection string="data source=(LocalDB)\MSSQLLocalDB;
+      attachdbfilename=C:\FollwMeFree\DB\FMFData.mdf;
+      integrated security=True;..."
+
+  WorkerService (EF Core, .NET 8):
+    "Server=(localdb)\\MSSQLLocalDB;
+     AttachDbFilename=C:\\FollwMeFree\\DB\\FMFData.mdf;
+     Database=FMFData;Trusted_Connection=True;..."
+
+  API (EF Core, .NET 8):
+    "Server=(localdb)\\MSSQLLocalDB;
+     Database=FMFData;Trusted_Connection=True;..."
+
+  NOTE: The API does NOT use AttachDbFilename. It relies on the database
+  already being attached (by the WorkerService or manually). This means
+  the WorkerService must start before the API on a fresh deployment, or
+  you must manually attach the database (see section 4).
+
+--------------------------------------------------------------------------------
+6. STARTUP ORDER
+--------------------------------------------------------------------------------
+
+  Recommended startup order on a customer machine:
+
+    1. WorkerService  — attaches the .mdf via AttachDbFilename and starts
+                        listening on the named pipe.
+    2. API            — connects to the already-attached "FMFData"
+                        database by name.
+    3. WinForms app   — attaches via AttachDbFilename (independent) and
+                        communicates with the API over HTTP.
+
+  If the WorkerService is installed as a Windows Service, set it to
+  start automatically. The API can also be hosted as a Windows Service
+  or in IIS and should be configured to start after the WorkerService.
+
+--------------------------------------------------------------------------------
+7. WINDOWS USER ACCOUNT CONSIDERATIONS
+--------------------------------------------------------------------------------
+
+  All three projects use Windows Authentication (Trusted_Connection /
+  Integrated Security). This means:
+
+    - The Windows account running each process must have a login on the
+      LocalDB instance.
+    - LocalDB automatically grants the instance owner (the user who ran
+      "SqlLocalDB create") full access.
+    - If the services run under a different account (e.g. LocalSystem,
+      NetworkService, or a service account), you must add a SQL login
+      for that account:
+
+        sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
+          "CREATE LOGIN [NT AUTHORITY\LOCAL SERVICE] FROM WINDOWS"
+        sqlcmd -S "(localdb)\MSSQLLocalDB" -E -d FMFData -Q ^
+          "CREATE USER [NT AUTHORITY\LOCAL SERVICE] FOR LOGIN [NT AUTHORITY\LOCAL SERVICE]; ALTER ROLE db_owner ADD MEMBER [NT AUTHORITY\LOCAL SERVICE]"
+
+    - If multiple Windows accounts need access, repeat for each account.
+
+--------------------------------------------------------------------------------
+8. FIREWALL RULES
+--------------------------------------------------------------------------------
+
+  If the API serves clients on the LAN (Flutter app, other PCs):
+
+    - Allow inbound TCP on port 5224  (HTTP)
+    - Allow inbound TCP on port 7178 (HTTPS)
+
+  Example PowerShell (run as Administrator):
+
+    New-NetFirewallRule -DisplayName "FollowMeFree API HTTP" ^
+      -Direction Inbound -Protocol TCP -LocalPort 5224 -Action Allow
+    New-NetFirewallRule -DisplayName "FollowMeFree API HTTPS" ^
+      -Direction Inbound -Protocol TCP -LocalPort 7178 -Action Allow
+
+--------------------------------------------------------------------------------
+9. DEPLOYMENT CHECKLIST
+--------------------------------------------------------------------------------
+
+  [ ] LocalDB installed (v17.x / SQL Server 2022 Express LocalDB)
+  [ ] MSSQLLocalDB instance created and started
+  [ ] C:\FollwMeFree\DB\ directory exists with correct permissions
+  [ ] FMFData.mdf (and _log.ldf) copied to C:\FollwMeFree\DB\
+  [ ] Database attached with logical name "FMFData"
+  [ ] Connection strings verified in all three projects
+  [ ] Windows service account has LocalDB login (if not running as owner)
+  [ ] .NET 8 runtime installed (for API and WorkerService)
+  [ ] .NET Framework 4.8 runtime installed (for WinForms app)
+  [ ] Firewall rules configured for API ports
+  [ ] WorkerService starts before API
+  [ ] HTTPS certificate installed (or use HTTP only on trusted LANs)
+
+--------------------------------------------------------------------------------
+10. KNOWN ISSUES
+--------------------------------------------------------------------------------
+
+  Issue: After reinstalling Visual Studio or LocalDB, the API throws:
+    "Cannot open database 'FMFData' requested by the login."
+  Cause: The MSSQLLocalDB instance was recreated, losing the database
+         registration. The .mdf file may auto-attach under its file
+         path instead of the logical name "FMFData".
+  Fix:   Detach and re-attach with the correct name (see section 4).
+
+  Issue: EnableRetryOnFailure triggers retries but login still fails.
+  Cause: The retry policy handles transient errors (network blips,
+         instance starting up). A missing login or database is NOT
+         transient — it requires manual intervention.
+  Fix:   Follow sections 2, 4, and 7 above.
+
     Startup order: The WorkerService must start before the API so the
     database is attached and available when the API connects.
 

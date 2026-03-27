@@ -23,7 +23,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<FmfDataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 builder.Services.AddControllers();
 
