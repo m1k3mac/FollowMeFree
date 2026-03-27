@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FollowMeFree.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PrintJobFilesController : ControllerBase
@@ -70,7 +70,7 @@ namespace FollowMeFree.API.Controllers
         [HttpDelete]
         public async Task<ActionResult<DeletePrintJobFilesResponse>> DeletePrintJobFiles([FromBody] DeletePrintJobFilesRequest request)
         {
-            if (request.DocumentNames == null || request.DocumentNames.Count == 0)
+            if (request.documentNames == null || request.documentNames.Count == 0)
                 return BadRequest("At least one document name is required.");
 
             var userName = User.FindFirstValue(ClaimTypes.Name)
@@ -94,23 +94,26 @@ namespace FollowMeFree.API.Controllers
 
             var files = await Task.Run(() => Directory.GetFiles(jobFilePath, "*.prn"));
 
-            var requestedNames = new HashSet<string>(
-                request.DocumentNames, StringComparer.OrdinalIgnoreCase);
+            //var requestedNames = new HashSet<string>(
+            //    request.DocumentNames, StringComparer.OrdinalIgnoreCase);
 
             var deleted = new List<string>();
-            var notFound = new List<string>(request.DocumentNames);
+            var notFound = new List<string>(request.documentNames);
 
             foreach (var filePath in files)
             {
                 var dto = ParseFileName(filePath);
-                if (dto == null || !requestedNames.Contains(dto.JobName))
+                //if (dto == null || !requestedNames.Contains(dto.JobName))
+                //    continue;
+
+                if(filePath == null || !request.documentNames.Any(name => filePath.Contains(name, StringComparison.OrdinalIgnoreCase)))
                     continue;
 
                 try
                 {
                     await Task.Run(() => System.IO.File.Delete(filePath));
-                    deleted.Add(dto.JobName);
-                    notFound.Remove(dto.JobName);
+                    deleted.Add(filePath);// dto.JobName);
+                    notFound.Remove(filePath);// dto.JobName);
 
                     _db.Logs.Add(new Log
                     {
@@ -188,7 +191,7 @@ namespace FollowMeFree.API.Controllers
 
     public class DeletePrintJobFilesRequest
     {
-        public List<string> DocumentNames { get; set; } = new();
+        public List<string> documentNames { get; set; } = new();
     }
 
     public class DeletePrintJobFilesResponse

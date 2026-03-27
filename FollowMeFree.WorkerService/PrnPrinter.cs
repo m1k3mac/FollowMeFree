@@ -111,7 +111,7 @@ namespace FollowMeFree.WorkerService
                                 Directory.CreateDirectory(Path.Combine(directoryPath,"Printed"));
                             }
 
-                            File.Move(filePath, Path.Combine(directoryPath, "Printed", Path.GetFileName(filePath)));
+                            File.Move(filePath, Path.Combine(directoryPath, "Printed", Path.GetFileName(filePath)),true);
 
                             // Get the filename and split by ';'. Then map to PrintJobSnapshot
                             var fileName = Path.GetFileName(filePath);
