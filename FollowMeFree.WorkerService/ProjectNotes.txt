@@ -166,8 +166,8 @@ customer's computer.
     sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
       "CREATE DATABASE [FMFData] ON (FILENAME = N'C:\FollwMeFree\DB\FMFData.mdf') FOR ATTACH"
 
-  Alternatively, start the WorkerService first (its AttachDbFilename
-  will attach the file), then verify the logical name with:
+  ******* Alternatively, start the WorkerService first (its AttachDbFilename
+          will attach the file), then verify the logical name with:
 
     sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q "SELECT name FROM sys.databases"
 

@@ -69,9 +69,14 @@ namespace FollowMeFree.API.Controllers
         [HttpGet("GetPrinters")]
         public async Task<ActionResult<IEnumerable<Printer>>> GetPrinters()
         {
-            var results = await _db.Printers.OrderBy(p => p.Printer1).ToListAsync();
+            var printers = await _db.Printers.OrderBy(p => p.Printer1).ToListAsync();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            var printerIds = user.AllowedPrinterIds?.Split(',').Select(id => int.Parse(id)).ToList();
+            var allowedPrinters = printerIds == null
+                ? new List<Printer>()
+                : printers.Where(p => printerIds.Contains(p.Id)).ToList();
 
-            return Ok(results);
+            return Ok(allowedPrinters);
         }
     }
 
