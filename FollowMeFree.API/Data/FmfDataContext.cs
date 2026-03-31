@@ -29,6 +29,9 @@ public partial class FmfDataContext : DbContext
         {
             entity.ToTable("Config");
 
+            entity.Property(e => e.ApiallowedNetwork)
+                .IsUnicode(false)
+                .HasColumnName("APIAllowedNetwork");
             entity.Property(e => e.FmfprinterName)
                 .IsUnicode(false)
                 .HasColumnName("FMFPrinterName");

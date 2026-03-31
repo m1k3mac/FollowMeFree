@@ -1,5 +1,6 @@
 using System.Text;
 using FollowMeFree.API.Data;
+using FollowMeFree.API.Middleware;
 using FollowMeFree.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Listen on all network interfaces so other devices on the LAN can connect.
-builder.WebHost.UseUrls("http://0.0.0.0:5224", "https://0.0.0.0:7178");
+// For Debug: Listen on all network interfaces so other devices on the LAN can connect.
+//builder.WebHost.UseUrls("http://0.0.0.0:5224", "https://0.0.0.0:7178");
 
 // Add services to the container.
 
@@ -55,8 +56,29 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<PipeClient>();
 builder.Services.AddSingleton<ILoggerProvider, DbLoggerProvider>();
+builder.Services.AddSingleton<IpWhitelistOptions>();
 
 var app = builder.Build();
+
+// Load allowed network from database Config table
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<FmfDataContext>();
+    var config = db.Configs.OrderBy(o => o.Id).FirstOrDefault();
+    if (!string.IsNullOrWhiteSpace(config?.ApiallowedNetwork))
+    {
+        var options = app.Services.GetRequiredService<IpWhitelistOptions>();
+        options.SetNetwork(config.ApiallowedNetwork);
+        app.Logger.LogInformation("IP whitelist configured: {Network}", config.ApiallowedNetwork);
+    }
+    else
+    {
+        app.Logger.LogWarning("No APIAllowedNetwork configured – all IPs are allowed");
+    }
+}
+
+// Restrict access to the configured allowed network
+app.UseMiddleware<IpWhitelistMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

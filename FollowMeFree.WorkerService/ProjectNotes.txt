@@ -383,3 +383,71 @@ Notes:
   - The helper ParseDatatypeFromFileName() in PrintJobExtractor extracts
     parts[5] from a filename and falls back to "RAW" if it is missing.
   - Built in ExtractJobsByUsername() and ExtractAllJobs().
+
+--------------------------------------------------------------------------------
+API - IP Whitelist (Network Restriction)
+--------------------------------------------------------------------------------
+
+The API restricts incoming connections to a specific IP subnet. The allowed
+network is stored in the database rather than being hardcoded, so it can be
+changed without redeploying.
+
+Database field:
+  Table:   Config
+  Column:  APIAllowedNetwork   (varchar, nullable)
+  Format:  CIDR notation, e.g. "10.1.1.0/24"
+
+How the config is retrieved at startup (FollowMeFree.API\Program.cs):
+
+  1. An IpWhitelistOptions singleton is registered in the DI container
+     before the app is built.
+
+  2. After WebApplication.Build(), the app creates a DI scope and
+     resolves FmfDataContext to query the Config table:
+
+       using (var scope = app.Services.CreateScope())
+       {
+           var db = scope.ServiceProvider.GetRequiredService<FmfDataContext>();
+           var config = db.Configs.FirstOrDefault();
+           if (!string.IsNullOrWhiteSpace(config?.ApiallowedNetwork))
+           {
+               var options = app.Services.GetRequiredService<IpWhitelistOptions>();
+               options.SetNetwork(config.ApiallowedNetwork);
+           }
+       }
+
+  3. IpWhitelistOptions.SetNetwork() parses the CIDR string (e.g.
+     "10.1.1.0/24") into a System.Net.IPNetwork that the middleware
+     uses for address matching.
+
+  4. IpWhitelistMiddleware runs early in the HTTP pipeline (before
+     CORS, auth, and routing). For every request it checks
+     HttpContext.Connection.RemoteIpAddress against the allowed network:
+
+       - Loopback addresses (127.0.0.1 / ::1) are always allowed so
+         localhost access continues to work.
+       - IPv4-mapped IPv6 addresses (e.g. ::ffff:10.1.1.5) are mapped
+         back to IPv4 before comparison.
+       - Requests from outside the allowed network receive 403 Forbidden.
+       - If APIAllowedNetwork is NULL or empty in the database, the
+         middleware allows all IPs (no restriction).
+
+Files involved:
+  - FollowMeFree.API\Middleware\IpWhitelistOptions.cs
+      Holds the parsed IPNetwork. Exposes SetNetwork(string cidr).
+  - FollowMeFree.API\Middleware\IpWhitelistMiddleware.cs
+      ASP.NET Core middleware that checks RemoteIpAddress against the
+      allowed network on every request.
+  - FollowMeFree.API\Program.cs
+      Registers IpWhitelistOptions, reads Config from the database at
+      startup, and adds the middleware to the pipeline.
+  - FollowMeFree.API\Data\Config.cs
+      Entity class with the ApiallowedNetwork property (mapped to the
+      APIAllowedNetwork column).
+
+To change the allowed network:
+  Update the APIAllowedNetwork value in the Config table and restart
+  the API. Example values:
+    10.1.1.0/24      – allows 10.1.1.0 to 10.1.1.255
+    192.168.1.0/24   – allows 192.168.1.0 to 192.168.1.255
+    NULL or empty    – disables the restriction (all IPs allowed)

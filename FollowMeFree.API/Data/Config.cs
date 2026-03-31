@@ -10,4 +10,6 @@ public partial class Config
     public string JobFilePath { get; set; } = null!;
 
     public string FmfprinterName { get; set; } = null!;
+
+    public string? ApiallowedNetwork { get; set; }
 }
