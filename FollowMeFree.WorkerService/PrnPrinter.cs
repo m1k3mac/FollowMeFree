@@ -58,6 +58,8 @@ namespace FollowMeFree.WorkerService
             if (string.IsNullOrEmpty(datatype))
                 datatype = "RAW";
 
+            logger?.LogInformation("[PrnPrinter] Using datatype '{Datatype}' for file '{FilePath}'", datatype, filePath);
+
             byte[] fileData = File.ReadAllBytes(filePath);
 
             IntPtr hPrinter = IntPtr.Zero;
@@ -83,8 +85,8 @@ namespace FollowMeFree.WorkerService
                 if (!StartDocPrinter(hPrinter, 1, ref docInfo))
                 {
                     int error = Marshal.GetLastWin32Error();
-                    logger?.LogError("[PrnPrinter] StartDocPrinter failed for '{PrinterName}' (Win32 error {Error})",
-                        printerName, error);
+                    logger?.LogError("[PrnPrinter] StartDocPrinter failed for '{PrinterName}', file '{FilePath}', datatype '{Datatype}' (Win32 error {Error})",
+                        printerName, filePath, datatype, error);
                     return false;
                 }
 
@@ -93,8 +95,8 @@ namespace FollowMeFree.WorkerService
                     if (!StartPagePrinter(hPrinter))
                     {
                         int error = Marshal.GetLastWin32Error();
-                        logger?.LogError("[PrnPrinter] StartPagePrinter failed for '{PrinterName}' (Win32 error {Error})",
-                            printerName, error);
+                        logger?.LogError("[PrnPrinter] StartPagePrinter failed for '{PrinterName}', file '{FilePath}' (Win32 error {Error})",
+                            printerName, filePath, error);
                         return false;
                     }
 
@@ -104,57 +106,23 @@ namespace FollowMeFree.WorkerService
                         Marshal.Copy(fileData, 0, pUnmanagedBytes, fileData.Length);
                         if (WritePrinter(hPrinter, pUnmanagedBytes, fileData.Length, out int bytesWritten))
                         {
-                            success = bytesWritten == fileData.Length;
-                            logger?.LogInformation("[PrnPrinter] Sent {BytesWritten:N0} bytes to '{PrinterName}'",
-                                bytesWritten, printerName);
-
-                            // Move the processed file to a "Printed" subdirectory
-                            var directoryPath = Path.GetDirectoryName(filePath);
-                            if(!Directory.Exists(Path.Combine(directoryPath,"Printed")))
+                            if (bytesWritten == fileData.Length)
                             {
-                                Directory.CreateDirectory(Path.Combine(directoryPath,"Printed"));
+                                logger?.LogInformation("[PrnPrinter] Sent {BytesWritten:N0} of {TotalBytes:N0} bytes to '{PrinterName}' for file '{FilePath}'",
+                                    bytesWritten, fileData.Length, printerName, filePath);
+                                success = true;
                             }
-
-                            File.Move(filePath, Path.Combine(directoryPath, "Printed", Path.GetFileName(filePath)),true);
-
-                            // Get the filename and split by ';'. Then map to PrintJobSnapshot
-                            var fileName = Path.GetFileName(filePath);
-                            var parts = fileName.Split(';');
-                            PrintJobSnapshot snapshot = new PrintJobSnapshot
+                            else
                             {
-                                JobId = int.Parse(parts[4]),
-                                JobName = parts[1],
-                                Submitter = parts[0],
-                                TimeSubmitted = DateTime.UtcNow,
-                                NumberOfPages = int.Parse(parts[2]),
-                                Datatype = parts[5]
-                            };
-
-                            // Write the snapshot to the PrintJob table in the database
-                            if (db != null)
-                            {
-                                var user = db.Users.Where(u => u.UserName == snapshot.Submitter).OrderBy(o => o.UserName).FirstOrDefault();
-
-                                var printJob = new PrintJob
-                                {
-                                    UserName = snapshot.Submitter,
-                                    DepartmentId = user.DepartmentId,
-                                    DocumentName = snapshot.JobName,
-                                    JobId = snapshot.JobId,
-                                    Pages = snapshot.NumberOfPages,
-                                    DateTimePrinted = snapshot.TimeSubmitted,
-                                    DataType = snapshot.Datatype
-                                };
-                                db.PrintJobs.Add(printJob);
-                                db.SaveChanges();
+                                logger?.LogError("[PrnPrinter] WritePrinter partial write for '{PrinterName}': sent {BytesWritten:N0} of {TotalBytes:N0} bytes for file '{FilePath}'",
+                                    printerName, bytesWritten, fileData.Length, filePath);
                             }
-
                         }
                         else
                         {
                             int error = Marshal.GetLastWin32Error();
-                            logger?.LogError("[PrnPrinter] WritePrinter failed for '{PrinterName}' (Win32 error {Error})",
-                                printerName, error);
+                            logger?.LogError("[PrnPrinter] WritePrinter failed for '{PrinterName}', file '{FilePath}', {TotalBytes:N0} bytes (Win32 error {Error})",
+                                printerName, filePath, fileData.Length, error);
                         }
                     }
                     finally
@@ -162,16 +130,82 @@ namespace FollowMeFree.WorkerService
                         Marshal.FreeCoTaskMem(pUnmanagedBytes);
                     }
 
-                    EndPagePrinter(hPrinter);
+                    if (!EndPagePrinter(hPrinter))
+                    {
+                        int error = Marshal.GetLastWin32Error();
+                        logger?.LogError("[PrnPrinter] EndPagePrinter failed for '{PrinterName}', file '{FilePath}' (Win32 error {Error})",
+                            printerName, filePath, error);
+                        success = false;
+                    }
                 }
                 finally
                 {
-                    EndDocPrinter(hPrinter);
+                    if (!EndDocPrinter(hPrinter))
+                    {
+                        int error = Marshal.GetLastWin32Error();
+                        logger?.LogError("[PrnPrinter] EndDocPrinter failed for '{PrinterName}', file '{FilePath}' (Win32 error {Error})",
+                            printerName, filePath, error);
+                        success = false;
+                    }
+                }
+
+                if (success)
+                {
+                    // Move the processed file to a "Printed" subdirectory
+                    var directoryPath = Path.GetDirectoryName(filePath);
+                    var printedDir = Path.Combine(directoryPath, "Printed");
+                    if (!Directory.Exists(printedDir))
+                        Directory.CreateDirectory(printedDir);
+
+                    File.Move(filePath, Path.Combine(printedDir, Path.GetFileName(filePath)), true);
+
+                    // Get the filename and split by ';'. Then map to PrintJobSnapshot
+                    var fileName = Path.GetFileName(filePath);
+                    var parts = fileName.Split(';');
+                    if (parts.Length < 6)
+                    {
+                        logger?.LogWarning("[PrnPrinter] File name '{FileName}' does not contain the expected 6 ';'-delimited parts. Snapshot will not be written to the database.",
+                            fileName);
+                    }
+                    else
+                    {
+                        PrintJobSnapshot snapshot = new PrintJobSnapshot
+                        {
+                            JobId = int.Parse(parts[4]),
+                            JobName = parts[1],
+                            Submitter = parts[0],
+                            TimeSubmitted = DateTime.UtcNow,
+                            NumberOfPages = int.Parse(parts[2]),
+                            Datatype = parts[5]
+                        };
+
+                        // Write the snapshot to the PrintJob table in the database
+                        if (db != null)
+                        {
+                            var user = db.Users.Where(u => u.UserName == snapshot.Submitter).OrderBy(o => o.UserName).FirstOrDefault();
+                            if (user == null)
+                                logger?.LogWarning("[PrnPrinter] User '{Submitter}' not found in the database. PrintJob will be recorded without a DepartmentId.",
+                                    snapshot.Submitter);
+
+                            var printJob = new PrintJob
+                            {
+                                UserName = snapshot.Submitter,
+                                DepartmentId = user?.DepartmentId,
+                                DocumentName = snapshot.JobName,
+                                JobId = snapshot.JobId,
+                                Pages = snapshot.NumberOfPages,
+                                DateTimePrinted = snapshot.TimeSubmitted,
+                                DataType = snapshot.Datatype
+                            };
+                            db.PrintJobs.Add(printJob);
+                            db.SaveChanges();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "[PrnPrinter] Error sending to printer '{PrinterName}'", printerName);
+                logger?.LogError(ex, "[PrnPrinter] Unexpected error sending file '{FilePath}' to printer '{PrinterName}'", filePath, printerName);
                 return false;
             }
             finally
