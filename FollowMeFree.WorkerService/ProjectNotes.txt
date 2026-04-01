@@ -596,3 +596,210 @@ All tooling used is free and open-source.
 
   License text:
     Edit FollowMeFree.Installer\License.rtf with any RTF editor.
+
+================================================================================
+API INSTALLER (FollowMeFree.API.Installer)
+================================================================================
+
+The solution includes a WinForms-based GUI installer for deploying the
+FollowMeFree API to IIS on a target machine. Unlike the WiX/MSI installer
+used for the WorkerService, this is a self-contained Windows executable that
+copies pre-published API files and optionally configures IIS.
+
+The end user does NOT need Visual Studio, the .NET SDK, or access to the
+source code. Everything needed is bundled into the distributable folder.
+
+--------------------------------------------------------------------------------
+1. HOW IT WORKS (OVERVIEW)
+--------------------------------------------------------------------------------
+
+  Developer machine (build time):
+    1. Run the build script to publish the API and package the installer.
+    2. Distribute the output folder to the target machine.
+
+  Target machine (install time):
+    1. The end user runs FollowMeFree.API.Installer.exe.
+    2. The wizard checks prerequisites (IIS, Hosting Bundle, admin rights).
+    3. The user configures the install path, IIS site, and connection string.
+    4. The installer copies the pre-published API files to the target
+       directory and optionally creates the IIS website and app pool.
+
+--------------------------------------------------------------------------------
+2. PROJECT STRUCTURE
+--------------------------------------------------------------------------------
+
+  FollowMeFree.API.Installer\
+    FollowMeFree.API.Installer.csproj  – .NET 8 WinForms project
+    Program.cs                         – Application entry point
+    InstallerForm.cs                   – Wizard logic (prerequisite checks,
+                                         file copy, IIS configuration)
+    InstallerForm.Designer.cs          – Form layout (3-step wizard UI)
+    app.manifest                       – Requests "requireAdministrator"
+                                         elevation via UAC
+    api-publish\                       – Pre-published API files (generated
+                                         by build-api-installer.ps1, not
+                                         committed to source control)
+
+  build-api-installer.ps1              – Build automation script (solution root)
+
+--------------------------------------------------------------------------------
+3. BUILDING THE DISTRIBUTABLE INSTALLER
+--------------------------------------------------------------------------------
+
+  Step 1 — Run the build script
+
+    Open a PowerShell terminal at the solution root and run:
+
+      .\build-api-installer.ps1
+
+    Or for a Debug build:
+
+      .\build-api-installer.ps1 -Configuration Debug
+
+  Step 2 — What the script does
+
+    The script performs three steps automatically:
+
+      a. Publish the API
+         Runs "dotnet publish" on FollowMeFree.API.csproj (Release, no PDBs).
+         Output goes to: FollowMeFree.API.Installer\api-publish\
+
+      b. Publish the Installer
+         Runs "dotnet publish" on the installer project as a self-contained
+         Windows executable (win-x64). No .NET runtime needed on the target.
+         Output goes to: FollowMeFree.API.Installer\bin\installer-output\
+
+      c. Bundle API files
+         Copies the api-publish\ folder into the installer output so the
+         final distributable folder contains everything:
+
+           FollowMeFree.API.Installer\bin\installer-output\
+             FollowMeFree.API.Installer.exe   – The installer (self-contained)
+             api-publish\                      – Pre-published API files
+               FollowMeFree.API.dll
+               appsettings.json
+               web.config
+               ... (all published files)
+
+  Step 3 — Distribute
+
+    Copy or zip the entire "installer-output" folder and send it to the
+    target machine. The end user only needs this folder — nothing else.
+
+--------------------------------------------------------------------------------
+4. DEPLOYING ON THE TARGET MACHINE (END USER STEPS)
+--------------------------------------------------------------------------------
+
+  Prerequisites (must be done BEFORE running the installer):
+
+    [ ] IIS is enabled via "Turn Windows features on or off":
+        - Internet Information Services > Web Management Tools
+            > IIS Management Console
+        - Internet Information Services > World Wide Web Services
+            > Application Development Features
+
+    [ ] ASP.NET Core 8.0 Hosting Bundle is installed:
+        Download: https://dotnet.microsoft.com/download/dotnet/8.0
+        (Look for "Hosting Bundle" under the ASP.NET Core Runtime section)
+        After installing, run "iisreset" from an elevated command prompt.
+
+    [ ] The .NET SDK is NOT required. The Hosting Bundle provides
+        everything needed to run ASP.NET Core apps behind IIS.
+
+  Installation steps:
+
+    1. Copy the distributable folder to the target machine.
+
+    2. Right-click FollowMeFree.API.Installer.exe and run as Administrator.
+       (The app.manifest requests elevation automatically via UAC.)
+
+    3. Step 1 — Welcome screen:
+       - Review the prerequisite checks (IIS, Hosting Bundle, Admin).
+       - Green checkmarks indicate everything is ready.
+       - Red crosses indicate missing prerequisites — install them first
+         and click "Re-check".
+
+    4. Step 2 — Configuration:
+       - Installation Path: Where the API files will be copied.
+         Default: C:\inetpub\wwwroot\FollowMeFreeAPI
+       - Create IIS Website: Check this to have the installer create the
+         IIS site and app pool automatically.
+           Site Name:        Default "FollowMeFreeAPI"
+           Application Pool: Default "FollowMeFreeAPIPool"
+                             (configured as "No Managed Code" / Integrated)
+           Port:             Default 80 (change if Default Web Site uses 80)
+       - Connection String: Pre-filled from the bundled appsettings.json.
+         Update this to match the target database server. The installer
+         writes it to appsettings.json in the deployed output.
+
+    5. Step 3 — Progress:
+       - The installer copies files, updates appsettings.json, and
+         configures IIS (if selected).
+       - A real-time log shows every action taken.
+       - On success, the API URL is displayed (e.g. http://localhost:80).
+
+    6. Click "Finish" to close the installer.
+
+  Post-installation verification:
+
+    - Open a browser and navigate to the API URL shown in the log.
+    - Check IIS Manager to verify the site and app pool were created.
+    - If the site fails to start, check:
+        * Port conflicts (stop Default Web Site if using port 80)
+        * Hosting Bundle installed correctly (run "iisreset")
+        * Application pool is set to "No Managed Code"
+
+--------------------------------------------------------------------------------
+5. TARGET MACHINE PREREQUISITES CHECKLIST
+--------------------------------------------------------------------------------
+
+  [ ] IIS enabled (Web Management Tools + Application Development Features)
+  [ ] ASP.NET Core 8.0 Hosting Bundle installed
+  [ ] "iisreset" run after Hosting Bundle installation
+  [ ] Database accessible (see PRODUCTION DEPLOYMENT GUIDE sections 1-5)
+  [ ] Connection string correct for the target environment
+  [ ] Port not in use by another IIS site (if using port 80, stop Default
+      Web Site first, or choose a different port e.g. 8080)
+  [ ] Firewall rules allow inbound traffic on the chosen port
+
+--------------------------------------------------------------------------------
+6. RE-DEPLOYING / UPDATING THE API
+--------------------------------------------------------------------------------
+
+  To deploy an updated version of the API:
+
+    1. On the developer machine, run build-api-installer.ps1 again to
+       produce a fresh distributable folder with the latest API build.
+
+    2. On the target machine, stop the IIS site in IIS Manager.
+
+    3. Run the installer again. It will overwrite the existing files in
+       the installation directory.
+
+    4. Start the IIS site in IIS Manager.
+
+  Alternatively, you can manually copy the updated api-publish\ files
+  to the installation directory (e.g. C:\inetpub\wwwroot\FollowMeFreeAPI)
+  after stopping the site.
+
+--------------------------------------------------------------------------------
+7. DEVELOPER NOTES
+--------------------------------------------------------------------------------
+
+  Debugging the installer in Visual Studio:
+    The app.manifest requests "requireAdministrator". To debug in VS:
+      Option A: Run Visual Studio as Administrator.
+      Option B: Temporarily change the manifest level to "asInvoker"
+                in app.manifest for debugging, then change it back.
+
+  The api-publish\ folder:
+    - Generated by build-api-installer.ps1
+    - Listed in .gitignore (not committed to source control)
+    - If present at build time, the .csproj includes it as content
+      via a conditional ItemGroup so it copies to the output directory
+      for local debugging.
+
+  Self-contained publish:
+    The build script publishes the installer as self-contained (win-x64).
+    This means the target machine does not need any .NET runtime to run
+    the installer itself. The API runs under IIS via the Hosting Bundle.

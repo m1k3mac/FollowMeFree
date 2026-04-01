@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyTitle>FollowMeFree API Installer</AssemblyTitle>
+    <Description>Installer for publishing and deploying the FollowMeFree API to IIS</Description>
+  </PropertyGroup>
+
+  <!-- Bundle pre-published API files when present (created by build-api-installer.ps1) -->
+  <ItemGroup Condition="Exists('api-publish')">
+    <None Include="api-publish\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>api-publish\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
+
+</Project>
