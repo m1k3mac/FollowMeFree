@@ -46,7 +46,7 @@ namespace FollowMeFree.WorkerService
 
         #endregion
         
-        public static bool SendToPrinterByName(string printerName, string filePath, string datatype = "RAW", FollowMeFreeDbContext db = null)
+        public static bool SendToPrinterByName(string printerName, string filePath, string datatype = "RAW", FollowMeFreeDbContext? db = null, ILogger? logger = null)
         {
             if (string.IsNullOrEmpty(printerName))
                 throw new ArgumentNullException(nameof(printerName));
@@ -68,7 +68,8 @@ namespace FollowMeFree.WorkerService
                 if (!OpenPrinter(printerName, out hPrinter, IntPtr.Zero))
                 {
                     int error = Marshal.GetLastWin32Error();
-                    Console.WriteLine($"[PrnPrinter] OpenPrinter failed for '{printerName}' (Win32 error {error})");
+                    logger?.LogError("[PrnPrinter] OpenPrinter failed for '{PrinterName}' (Win32 error {Error}). Verify the printer name matches exactly as shown in Windows Print Management and that the service account has access.",
+                        printerName, error);
                     return false;
                 }
 
@@ -82,7 +83,8 @@ namespace FollowMeFree.WorkerService
                 if (!StartDocPrinter(hPrinter, 1, ref docInfo))
                 {
                     int error = Marshal.GetLastWin32Error();
-                    Console.WriteLine($"[PrnPrinter] StartDocPrinter failed (Win32 error {error})");
+                    logger?.LogError("[PrnPrinter] StartDocPrinter failed for '{PrinterName}' (Win32 error {Error})",
+                        printerName, error);
                     return false;
                 }
 
@@ -91,7 +93,8 @@ namespace FollowMeFree.WorkerService
                     if (!StartPagePrinter(hPrinter))
                     {
                         int error = Marshal.GetLastWin32Error();
-                        Console.WriteLine($"[PrnPrinter] StartPagePrinter failed (Win32 error {error})");
+                        logger?.LogError("[PrnPrinter] StartPagePrinter failed for '{PrinterName}' (Win32 error {Error})",
+                            printerName, error);
                         return false;
                     }
 
@@ -102,7 +105,8 @@ namespace FollowMeFree.WorkerService
                         if (WritePrinter(hPrinter, pUnmanagedBytes, fileData.Length, out int bytesWritten))
                         {
                             success = bytesWritten == fileData.Length;
-                            Console.WriteLine($"[PrnPrinter] Sent {bytesWritten:N0} bytes to '{printerName}'");
+                            logger?.LogInformation("[PrnPrinter] Sent {BytesWritten:N0} bytes to '{PrinterName}'",
+                                bytesWritten, printerName);
 
                             // Move the processed file to a "Printed" subdirectory
                             var directoryPath = Path.GetDirectoryName(filePath);
@@ -129,10 +133,12 @@ namespace FollowMeFree.WorkerService
                             // Write the snapshot to the PrintJob table in the database
                             if (db != null)
                             {
+                                var user = db.Users.Where(u => u.UserName == snapshot.Submitter).OrderBy(o => o.UserName).FirstOrDefault();
+
                                 var printJob = new PrintJob
                                 {
                                     UserName = snapshot.Submitter,
-                                    DepartmentId = 6,
+                                    DepartmentId = user.DepartmentId,
                                     DocumentName = snapshot.JobName,
                                     JobId = snapshot.JobId,
                                     Pages = snapshot.NumberOfPages,
@@ -147,7 +153,8 @@ namespace FollowMeFree.WorkerService
                         else
                         {
                             int error = Marshal.GetLastWin32Error();
-                            Console.WriteLine($"[PrnPrinter] WritePrinter failed (Win32 error {error})");
+                            logger?.LogError("[PrnPrinter] WritePrinter failed for '{PrinterName}' (Win32 error {Error})",
+                                printerName, error);
                         }
                     }
                     finally
@@ -164,7 +171,7 @@ namespace FollowMeFree.WorkerService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PrnPrinter] Error sending to printer '{printerName}': {ex.Message}");
+                logger?.LogError(ex, "[PrnPrinter] Error sending to printer '{PrinterName}'", printerName);
                 return false;
             }
             finally
@@ -192,7 +199,7 @@ namespace FollowMeFree.WorkerService
                     logger.LogInformation("[PrnPrinter] Printing '{FilePath}' to '{Printer}'",
                         job.FilePath, job.TargetPrinterName);
 
-                    bool success = SendToPrinterByName(job.TargetPrinterName, fullPath, datatype, db);
+                    bool success = SendToPrinterByName(job.TargetPrinterName, fullPath, datatype, db, logger);
 
                     results.Add(new PrintJobResult
                     {

@@ -1,4 +1,6 @@
 using System.IO.Pipes;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using FollowMeFree_Shared;
@@ -36,12 +38,21 @@ namespace FollowMeFree.WorkerService
             {
                 try
                 {
-                    using var pipeServer = new NamedPipeServerStream(
+                    var pipeSecurity = new PipeSecurity();
+                    pipeSecurity.AddAccessRule(new PipeAccessRule(
+                        new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null),
+                        PipeAccessRights.ReadWrite,
+                        AccessControlType.Allow));
+
+                    using var pipeServer = NamedPipeServerStreamAcl.Create(
                         PipeName,
                         PipeDirection.InOut,
                         NamedPipeServerStream.MaxAllowedServerInstances,
                         PipeTransmissionMode.Byte,
-                        PipeOptions.Asynchronous);
+                        PipeOptions.Asynchronous,
+                        inBufferSize: 0,
+                        outBufferSize: 0,
+                        pipeSecurity);
 
                     await pipeServer.WaitForConnectionAsync(stoppingToken);
                     _logger.LogInformation("PipeServer: client connected");
@@ -150,7 +161,7 @@ namespace FollowMeFree.WorkerService
                 string datatype = !string.IsNullOrEmpty(request.Datatype)
                     ? request.Datatype
                     : PrintJobExtractor.ParseDatatypeFromFileName(request.FilePath);
-                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath, datatype, db);
+                bool result = PrnPrinter.SendToPrinterByName(request.TargetPrinterName, fullPath, datatype, db, _logger);
 
                 if (result && File.Exists(fullPath))
                 {
