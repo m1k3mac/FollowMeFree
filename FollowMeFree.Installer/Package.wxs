@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="FollowMeFree Service"
+           Manufacturer="FollowMeFree"
+           Version="1.0.0.0"
+           UpgradeCode="a7c3e5b1-4d2f-4e89-b6a1-8c3d5f7e9a2b"
+           Compressed="yes"
+           InstallerVersion="500"
+           Scope="perMachine">
+
+    <SummaryInformation Description="FollowMeFree print management Windows service installer" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Standard install-directory UI wizard (Welcome, License, InstallDir, Progress, Finish) -->
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+    <!-- Directory layout -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="FollowMeFree Service" />
+    </StandardDirectory>
+
+    <!-- Service executable component -->
+    <ComponentGroup Id="ServiceComponent" Directory="INSTALLFOLDER">
+      <Component Id="ServiceExecutable" Guid="*">
+        <File Id="ServiceExe"
+              Source="$(var.PublishDir)\FollowMeFree.WorkerService.exe"
+              KeyPath="yes" />
+
+        <ServiceInstall Id="FollowMeFreeServiceInstall"
+                        Name="FollowMeFreeService"
+                        DisplayName="FollowMeFree Service"
+                        Description="FollowMeFree print management Windows service"
+                        Start="auto"
+                        Type="ownProcess"
+                        ErrorControl="normal"
+                        Account="LocalSystem" />
+
+        <ServiceControl Id="FollowMeFreeServiceControl"
+                        Name="FollowMeFreeService"
+                        Start="install"
+                        Stop="both"
+                        Remove="uninstall"
+                        Wait="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <!-- Feature -->
+    <Feature Id="ProductFeature" Title="FollowMeFree Service" Level="1">
+      <ComponentGroupRef Id="ServiceComponent" />
+      <ComponentGroupRef Id="SupportFiles" />
+    </Feature>
+
+  </Package>
+</Wix>
