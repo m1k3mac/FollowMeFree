@@ -34,7 +34,37 @@ namespace FollowMeFree.WorkerService
                         continue;
                     }
 
-                    var printJobExtractor = new PrintJobExtractor(config.FmfprinterName);
+                    if (!Directory.Exists(config.JobFilePath))
+                    {
+                        _logger.LogError(
+                            "Job file path directory '{JobFilePath}' does not exist. Please create the directory or update the configuration.",
+                            config.JobFilePath);
+                        await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                        continue;
+                    }
+
+                    PrintJobExtractor printJobExtractor;
+                    try
+                    {
+                        printJobExtractor = new PrintJobExtractor(config.FmfprinterName);
+                    }
+                    catch (System.Printing.PrintQueueException)
+                    {
+                        _logger.LogError(
+                            "Printer '{PrinterName}' was not found. Please add a printer with this exact name and ensure it is accessible to the service account.",
+                            config.FmfprinterName);
+                        await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                        continue;
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        _logger.LogError(ex,
+                            "Printer '{PrinterName}' is not paused and could not be paused automatically. Please pause the printer manually before the service can use it.",
+                            config.FmfprinterName);
+                        await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                        continue;
+                    }
+
                     var extractedJobs = await printJobExtractor.ExtractAllJobsAsync(config.JobFilePath);
                     if (extractedJobs.Count > 0)
                     {
