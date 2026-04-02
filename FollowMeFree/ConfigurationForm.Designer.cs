@@ -79,11 +79,11 @@ namespace FollowMeFree
             // 
             // txtJobFilePath
             // 
-            this.txtJobFilePath.Location = new System.Drawing.Point(137, 12);
+            this.txtJobFilePath.Location = new System.Drawing.Point(124, 12);
             this.txtJobFilePath.Name = "txtJobFilePath";
-            this.txtJobFilePath.Properties.NullValuePrompt = "e.g. C:\\FollowMeFree\\JobFiles";
-            this.txtJobFilePath.Properties.NullValuePromptShowForEmptyValue = true;
-            this.txtJobFilePath.Size = new System.Drawing.Size(311, 20);
+            this.txtJobFilePath.Properties.NullValuePrompt = "eg. C:\\FollowMeFree\\JobFiles";
+            this.txtJobFilePath.Properties.ReadOnly = true;
+            this.txtJobFilePath.Size = new System.Drawing.Size(324, 20);
             this.txtJobFilePath.StyleController = this.layoutControl1;
             this.txtJobFilePath.TabIndex = 0;
             // 
@@ -91,7 +91,7 @@ namespace FollowMeFree
             // 
             this.btnBrowseJobFilePath.Location = new System.Drawing.Point(452, 12);
             this.btnBrowseJobFilePath.Name = "btnBrowseJobFilePath";
-            this.btnBrowseJobFilePath.Size = new System.Drawing.Size(66, 20);
+            this.btnBrowseJobFilePath.Size = new System.Drawing.Size(66, 22);
             this.btnBrowseJobFilePath.StyleController = this.layoutControl1;
             this.btnBrowseJobFilePath.TabIndex = 6;
             this.btnBrowseJobFilePath.Text = "Browse";
@@ -99,29 +99,39 @@ namespace FollowMeFree
             // 
             // txtFMFPrinterName
             // 
-            this.txtFMFPrinterName.Location = new System.Drawing.Point(137, 36);
+            this.txtFMFPrinterName.Location = new System.Drawing.Point(124, 38);
             this.txtFMFPrinterName.Name = "txtFMFPrinterName";
-            this.txtFMFPrinterName.Size = new System.Drawing.Size(381, 20);
+            this.txtFMFPrinterName.Size = new System.Drawing.Size(394, 20);
             this.txtFMFPrinterName.StyleController = this.layoutControl1;
             this.txtFMFPrinterName.TabIndex = 1;
             // 
             // txtAPIAllowedNetwork
             // 
-            this.txtAPIAllowedNetwork.Location = new System.Drawing.Point(137, 60);
+            this.txtAPIAllowedNetwork.Location = new System.Drawing.Point(124, 62);
             this.txtAPIAllowedNetwork.Name = "txtAPIAllowedNetwork";
-            this.txtAPIAllowedNetwork.Size = new System.Drawing.Size(325, 20);
+            this.txtAPIAllowedNetwork.Size = new System.Drawing.Size(338, 20);
             this.txtAPIAllowedNetwork.StyleController = this.layoutControl1;
             this.txtAPIAllowedNetwork.TabIndex = 2;
             // 
             // btnClearAPIAllowedNetwork
             // 
-            this.btnClearAPIAllowedNetwork.Location = new System.Drawing.Point(466, 60);
+            this.btnClearAPIAllowedNetwork.Location = new System.Drawing.Point(466, 62);
             this.btnClearAPIAllowedNetwork.Name = "btnClearAPIAllowedNetwork";
-            this.btnClearAPIAllowedNetwork.Size = new System.Drawing.Size(52, 20);
+            this.btnClearAPIAllowedNetwork.Size = new System.Drawing.Size(52, 22);
             this.btnClearAPIAllowedNetwork.StyleController = this.layoutControl1;
             this.btnClearAPIAllowedNetwork.TabIndex = 5;
             this.btnClearAPIAllowedNetwork.Text = "Clear";
             this.btnClearAPIAllowedNetwork.Click += new System.EventHandler(this.btnClearAPIAllowedNetwork_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(12, 196);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(506, 22);
+            this.btnSave.StyleController = this.layoutControl1;
+            this.btnSave.TabIndex = 4;
+            this.btnSave.Text = "Save";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // lblAPINote
             // 
@@ -129,23 +139,14 @@ namespace FollowMeFree
             this.lblAPINote.Appearance.ForeColor = System.Drawing.Color.Gray;
             this.lblAPINote.Appearance.Options.UseForeColor = true;
             this.lblAPINote.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            this.lblAPINote.Location = new System.Drawing.Point(12, 84);
+            this.lblAPINote.Location = new System.Drawing.Point(12, 88);
             this.lblAPINote.Name = "lblAPINote";
             this.lblAPINote.Size = new System.Drawing.Size(506, 26);
             this.lblAPINote.StyleController = this.layoutControl1;
             this.lblAPINote.TabIndex = 3;
             this.lblAPINote.Text = "Note: It is recommended to use IIS IP address and port configuration instead. Ena" +
-    "bling this adds a second layer of IP/port filtering. Leave blank to keep unconfigured.";
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(12, 140);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(506, 22);
-            this.btnSave.StyleController = this.layoutControl1;
-            this.btnSave.TabIndex = 4;
-            this.btnSave.Text = "Save";
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+    "bling this adds a second layer of IP/port filtering. Leave blank to keep unconfi" +
+    "gured.";
             // 
             // layoutControlGroup1
             // 
@@ -169,50 +170,50 @@ namespace FollowMeFree
             this.layoutControlItemJobFilePath.Control = this.txtJobFilePath;
             this.layoutControlItemJobFilePath.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItemJobFilePath.Name = "layoutControlItemJobFilePath";
-            this.layoutControlItemJobFilePath.Size = new System.Drawing.Size(440, 24);
+            this.layoutControlItemJobFilePath.Size = new System.Drawing.Size(440, 26);
             this.layoutControlItemJobFilePath.Text = "Job File Path";
-            this.layoutControlItemJobFilePath.TextSize = new System.Drawing.Size(113, 13);
+            this.layoutControlItemJobFilePath.TextSize = new System.Drawing.Size(100, 13);
             // 
             // layoutControlItemBrowseJobFilePath
             // 
             this.layoutControlItemBrowseJobFilePath.Control = this.btnBrowseJobFilePath;
             this.layoutControlItemBrowseJobFilePath.Location = new System.Drawing.Point(440, 0);
             this.layoutControlItemBrowseJobFilePath.Name = "layoutControlItemBrowseJobFilePath";
-            this.layoutControlItemBrowseJobFilePath.Size = new System.Drawing.Size(70, 24);
+            this.layoutControlItemBrowseJobFilePath.Size = new System.Drawing.Size(70, 26);
             this.layoutControlItemBrowseJobFilePath.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItemBrowseJobFilePath.TextVisible = false;
             // 
             // layoutControlItemFMFPrinterName
             // 
             this.layoutControlItemFMFPrinterName.Control = this.txtFMFPrinterName;
-            this.layoutControlItemFMFPrinterName.Location = new System.Drawing.Point(0, 24);
+            this.layoutControlItemFMFPrinterName.Location = new System.Drawing.Point(0, 26);
             this.layoutControlItemFMFPrinterName.Name = "layoutControlItemFMFPrinterName";
             this.layoutControlItemFMFPrinterName.Size = new System.Drawing.Size(510, 24);
             this.layoutControlItemFMFPrinterName.Text = "FMF Printer Name";
-            this.layoutControlItemFMFPrinterName.TextSize = new System.Drawing.Size(113, 13);
+            this.layoutControlItemFMFPrinterName.TextSize = new System.Drawing.Size(100, 13);
             // 
             // layoutControlItemAPIAllowedNetwork
             // 
             this.layoutControlItemAPIAllowedNetwork.Control = this.txtAPIAllowedNetwork;
-            this.layoutControlItemAPIAllowedNetwork.Location = new System.Drawing.Point(0, 48);
+            this.layoutControlItemAPIAllowedNetwork.Location = new System.Drawing.Point(0, 50);
             this.layoutControlItemAPIAllowedNetwork.Name = "layoutControlItemAPIAllowedNetwork";
-            this.layoutControlItemAPIAllowedNetwork.Size = new System.Drawing.Size(454, 24);
+            this.layoutControlItemAPIAllowedNetwork.Size = new System.Drawing.Size(454, 26);
             this.layoutControlItemAPIAllowedNetwork.Text = "API Allowed Network";
-            this.layoutControlItemAPIAllowedNetwork.TextSize = new System.Drawing.Size(113, 13);
+            this.layoutControlItemAPIAllowedNetwork.TextSize = new System.Drawing.Size(100, 13);
             // 
             // layoutControlItemClearAPIAllowedNetwork
             // 
             this.layoutControlItemClearAPIAllowedNetwork.Control = this.btnClearAPIAllowedNetwork;
-            this.layoutControlItemClearAPIAllowedNetwork.Location = new System.Drawing.Point(454, 48);
+            this.layoutControlItemClearAPIAllowedNetwork.Location = new System.Drawing.Point(454, 50);
             this.layoutControlItemClearAPIAllowedNetwork.Name = "layoutControlItemClearAPIAllowedNetwork";
-            this.layoutControlItemClearAPIAllowedNetwork.Size = new System.Drawing.Size(56, 24);
+            this.layoutControlItemClearAPIAllowedNetwork.Size = new System.Drawing.Size(56, 26);
             this.layoutControlItemClearAPIAllowedNetwork.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItemClearAPIAllowedNetwork.TextVisible = false;
             // 
             // layoutControlItemAPINote
             // 
             this.layoutControlItemAPINote.Control = this.lblAPINote;
-            this.layoutControlItemAPINote.Location = new System.Drawing.Point(0, 72);
+            this.layoutControlItemAPINote.Location = new System.Drawing.Point(0, 76);
             this.layoutControlItemAPINote.Name = "layoutControlItemAPINote";
             this.layoutControlItemAPINote.Size = new System.Drawing.Size(510, 30);
             this.layoutControlItemAPINote.TextSize = new System.Drawing.Size(0, 0);
@@ -221,17 +222,17 @@ namespace FollowMeFree
             // emptySpaceItem1
             // 
             this.emptySpaceItem1.AllowHotTrack = false;
-            this.emptySpaceItem1.Location = new System.Drawing.Point(0, 102);
+            this.emptySpaceItem1.Location = new System.Drawing.Point(0, 106);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(510, 26);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(510, 78);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItemSave
             // 
             this.layoutControlItemSave.Control = this.btnSave;
-            this.layoutControlItemSave.Location = new System.Drawing.Point(0, 128);
+            this.layoutControlItemSave.Location = new System.Drawing.Point(0, 184);
             this.layoutControlItemSave.Name = "layoutControlItemSave";
-            this.layoutControlItemSave.Size = new System.Drawing.Size(510, 82);
+            this.layoutControlItemSave.Size = new System.Drawing.Size(510, 26);
             this.layoutControlItemSave.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItemSave.TextVisible = false;
             // 
