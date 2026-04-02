@@ -26,6 +26,8 @@ namespace FollowMeFree
             var query = _dbContext.PrintJobs.Include(i => i.Department).OrderByDescending(p => p.DateTimePrinted).Take(500).ToList();
             printJobBindingSource.DataSource = query;
             gridView1.BestFitColumns();
+
+
         }
 
         private void barButtonItem_Refresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
