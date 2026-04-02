@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainControl));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
-            this.gaugeControl1 = new DevExpress.XtraGauges.Win.GaugeControl();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.printJobBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -44,7 +43,6 @@
             this.colDateTimePrinted = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.barButtonItem_Refresh = new DevExpress.XtraBars.BarButtonItem();
@@ -52,6 +50,13 @@
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            this.layoutControl2 = new DevExpress.XtraLayout.LayoutControl();
+            this.chartControlByDepartment = new DevExpress.XtraCharts.ChartControl();
+            this.chartControlOverTime = new DevExpress.XtraCharts.ChartControl();
+            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItemChartDept = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItemChartTime = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
@@ -59,13 +64,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControl2)).BeginInit();
+            this.layoutControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartControlByDepartment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartControlOverTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemChartDept)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemChartTime)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
             // 
-            this.layoutControl1.Controls.Add(this.gaugeControl1);
+            this.layoutControl1.Controls.Add(this.layoutControl2);
             this.layoutControl1.Controls.Add(this.gridControl1);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutControl1.Location = new System.Drawing.Point(0, 24);
@@ -75,20 +87,13 @@
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
-            // gaugeControl1
-            // 
-            this.gaugeControl1.Location = new System.Drawing.Point(12, 12);
-            this.gaugeControl1.Name = "gaugeControl1";
-            this.gaugeControl1.Size = new System.Drawing.Size(149, 529);
-            this.gaugeControl1.TabIndex = 5;
-            // 
             // gridControl1
             // 
             this.gridControl1.DataSource = this.printJobBindingSource;
-            this.gridControl1.Location = new System.Drawing.Point(165, 12);
+            this.gridControl1.Location = new System.Drawing.Point(193, 12);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(664, 529);
+            this.gridControl1.Size = new System.Drawing.Size(636, 529);
             this.gridControl1.TabIndex = 4;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -181,20 +186,11 @@
             // layoutControlItem1
             // 
             this.layoutControlItem1.Control = this.gridControl1;
-            this.layoutControlItem1.Location = new System.Drawing.Point(153, 0);
+            this.layoutControlItem1.Location = new System.Drawing.Point(181, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(668, 533);
+            this.layoutControlItem1.Size = new System.Drawing.Size(640, 533);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
-            // 
-            // layoutControlItem2
-            // 
-            this.layoutControlItem2.Control = this.gaugeControl1;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(153, 533);
-            this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem2.TextVisible = false;
             // 
             // barManager1
             // 
@@ -267,6 +263,71 @@
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 553);
             // 
+            // layoutControl2
+            // 
+            this.layoutControl2.Controls.Add(this.chartControlByDepartment);
+            this.layoutControl2.Controls.Add(this.chartControlOverTime);
+            this.layoutControl2.Location = new System.Drawing.Point(12, 12);
+            this.layoutControl2.Name = "layoutControl2";
+            this.layoutControl2.Root = this.layoutControlGroup1;
+            this.layoutControl2.Size = new System.Drawing.Size(177, 529);
+            this.layoutControl2.TabIndex = 5;
+            this.layoutControl2.Text = "layoutControl2";
+            // 
+            // chartControlByDepartment
+            // 
+            this.chartControlByDepartment.Location = new System.Drawing.Point(12, 12);
+            this.chartControlByDepartment.Name = "chartControlByDepartment";
+            this.chartControlByDepartment.SeriesSerializable = new DevExpress.XtraCharts.Series[0];
+            this.chartControlByDepartment.Size = new System.Drawing.Size(153, 249);
+            this.chartControlByDepartment.TabIndex = 6;
+            // 
+            // chartControlOverTime
+            // 
+            this.chartControlOverTime.Location = new System.Drawing.Point(12, 265);
+            this.chartControlOverTime.Name = "chartControlOverTime";
+            this.chartControlOverTime.SeriesSerializable = new DevExpress.XtraCharts.Series[0];
+            this.chartControlOverTime.Size = new System.Drawing.Size(153, 252);
+            this.chartControlOverTime.TabIndex = 7;
+            // 
+            // layoutControlItem2
+            // 
+            this.layoutControlItem2.Control = this.layoutControl2;
+            this.layoutControlItem2.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem2.Name = "layoutControlItem2";
+            this.layoutControlItem2.Size = new System.Drawing.Size(181, 533);
+            this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem2.TextVisible = false;
+            // 
+            // layoutControlItemChartDept
+            // 
+            this.layoutControlItemChartDept.Control = this.chartControlByDepartment;
+            this.layoutControlItemChartDept.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItemChartDept.Name = "layoutControlItemChartDept";
+            this.layoutControlItemChartDept.Size = new System.Drawing.Size(157, 253);
+            this.layoutControlItemChartDept.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItemChartDept.TextVisible = false;
+            // 
+            // layoutControlItemChartTime
+            // 
+            this.layoutControlItemChartTime.Control = this.chartControlOverTime;
+            this.layoutControlItemChartTime.Location = new System.Drawing.Point(0, 253);
+            this.layoutControlItemChartTime.Name = "layoutControlItemChartTime";
+            this.layoutControlItemChartTime.Size = new System.Drawing.Size(157, 256);
+            this.layoutControlItemChartTime.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItemChartTime.TextVisible = false;
+            // 
+            // layoutControlGroup1
+            // 
+            this.layoutControlGroup1.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            this.layoutControlGroup1.GroupBordersVisible = false;
+            this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
+            this.layoutControlItemChartDept,
+            this.layoutControlItemChartTime});
+            this.layoutControlGroup1.Name = "layoutControlGroup1";
+            this.layoutControlGroup1.Size = new System.Drawing.Size(177, 529);
+            this.layoutControlGroup1.TextVisible = false;
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,8 +347,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControl2)).EndInit();
+            this.layoutControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartControlByDepartment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartControlOverTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemChartDept)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemChartTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,11 +365,9 @@
 
         private DevExpress.XtraLayout.LayoutControl layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup Root;
-        private DevExpress.XtraGauges.Win.GaugeControl gaugeControl1;
         private DevExpress.XtraGrid.GridControl gridControl1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private System.Windows.Forms.BindingSource printJobBindingSource;
         private DevExpress.XtraGrid.Columns.GridColumn colUserName;
         private DevExpress.XtraGrid.Columns.GridColumn colDocumentName;
@@ -317,5 +383,12 @@
         private DevExpress.XtraBars.BarDockControl barDockControlLeft;
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Refresh;
+        private DevExpress.XtraLayout.LayoutControl layoutControl2;
+        private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
+        private DevExpress.XtraCharts.ChartControl chartControlByDepartment;
+        private DevExpress.XtraCharts.ChartControl chartControlOverTime;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemChartDept;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItemChartTime;
     }
 }
