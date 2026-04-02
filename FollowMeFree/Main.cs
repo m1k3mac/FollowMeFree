@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -22,6 +23,14 @@ namespace FollowMeFree
 
         private void Main_Load(object sender, EventArgs e)
         {
+            if (ConfigurationForm.IsConfigurationRequired())
+            {
+                using (var form = new ConfigurationForm())
+                {
+                    form.ShowDialog(this);
+                }
+            }
+
             ShowControl(new MainControl());
         }
 
@@ -82,6 +91,16 @@ namespace FollowMeFree
         private void barButtonItem_Logs_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowControl(new LogViewerControl());
+        }
+
+        private void barButtonItem_Config_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            using (var form = new ConfigurationForm())
+            {
+                form.ShowDialog(this);
+            }
+            Cursor = Cursors.Default;
         }
     }
 }
