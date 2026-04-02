@@ -7,12 +7,19 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>FMFappIcon.ico</ApplicationIcon>
     <AssemblyTitle>FollowMeFree Installer</AssemblyTitle>
     <Description>Installer for deploying the FollowMeFree WinForms application</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="FMFappIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <!-- Bundle pre-published app files when present (created by build-app-installer.ps1) -->

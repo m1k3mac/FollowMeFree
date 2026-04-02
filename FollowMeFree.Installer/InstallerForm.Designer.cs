@@ -313,6 +313,7 @@ partial class InstallerForm
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(700, 560);
         FormBorderStyle = FormBorderStyle.FixedSingle;
+        Icon = new Icon(Path.Combine(AppContext.BaseDirectory, "FMFappIcon.ico"));
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
         Text = "FollowMeFree Installer";

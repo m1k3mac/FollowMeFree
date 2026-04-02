@@ -13,180 +13,246 @@ partial class InstallerForm
 
     private void InitializeComponent()
     {
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallerForm));
         pnlBanner = new Panel();
-        lblBannerTitle = new Label();
         lblBannerSubtitle = new Label();
+        lblBannerTitle = new Label();
         pnlSepTop = new Panel();
         pnlSepBottom = new Panel();
         pnlButtons = new Panel();
-        btnBack = new Button();
-        btnNext = new Button();
         btnCancel = new Button();
-
+        btnNext = new Button();
+        btnBack = new Button();
         pnlWelcome = new Panel();
-        lblWelcomeTitle = new Label();
-        lblWelcomeDesc = new Label();
-        grpPrereqs = new GroupBox();
-        lblIisStatus = new Label();
-        lblHostingStatus = new Label();
-        lblSdkStatus = new Label();
-        btnRecheck = new Button();
         grpTips = new GroupBox();
         lblTips = new Label();
-
+        grpPrereqs = new GroupBox();
+        btnRecheck = new Button();
+        lblSdkStatus = new Label();
+        lblHostingStatus = new Label();
+        lblIisStatus = new Label();
+        lblWelcomeDesc = new Label();
+        lblWelcomeTitle = new Label();
         pnlConfig = new Panel();
-        lblInstallPathLabel = new Label();
-        txtInstallPath = new TextBox();
-        btnBrowse = new Button();
-        chkCreateIisSite = new CheckBox();
-        lblSiteNameLabel = new Label();
-        txtSiteName = new TextBox();
-        lblAppPoolLabel = new Label();
-        txtAppPool = new TextBox();
-        lblPortLabel = new Label();
-        txtPort = new TextBox();
-        lblConnStrLabel = new Label();
-        txtConnectionString = new TextBox();
         lblConfigNote = new Label();
-
+        txtConnectionString = new TextBox();
+        lblConnStrLabel = new Label();
+        txtPort = new TextBox();
+        lblPortLabel = new Label();
+        txtAppPool = new TextBox();
+        lblAppPoolLabel = new Label();
+        txtSiteName = new TextBox();
+        lblSiteNameLabel = new Label();
+        chkCreateIisSite = new CheckBox();
+        btnBrowse = new Button();
+        txtInstallPath = new TextBox();
+        lblInstallPathLabel = new Label();
         pnlProgress = new Panel();
-        lblProgressTitle = new Label();
-        progressBar = new ProgressBar();
         txtLog = new TextBox();
-
+        progressBar = new ProgressBar();
+        lblProgressTitle = new Label();
         pnlBanner.SuspendLayout();
         pnlButtons.SuspendLayout();
         pnlWelcome.SuspendLayout();
-        grpPrereqs.SuspendLayout();
         grpTips.SuspendLayout();
+        grpPrereqs.SuspendLayout();
         pnlConfig.SuspendLayout();
         pnlProgress.SuspendLayout();
         SuspendLayout();
-
-        // ── Banner ──────────────────────────────────────────────────
+        // 
+        // pnlBanner
+        // 
         pnlBanner.BackColor = Color.White;
-        pnlBanner.Dock = DockStyle.Top;
-        pnlBanner.Size = new Size(700, 70);
         pnlBanner.Controls.Add(lblBannerSubtitle);
         pnlBanner.Controls.Add(lblBannerTitle);
-
-        lblBannerTitle.AutoSize = true;
-        lblBannerTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-        lblBannerTitle.Location = new Point(18, 10);
-        lblBannerTitle.Text = "FollowMeFree API Installer";
-
+        pnlBanner.Dock = DockStyle.Top;
+        pnlBanner.Location = new Point(0, 0);
+        pnlBanner.Name = "pnlBanner";
+        pnlBanner.Size = new Size(700, 70);
+        pnlBanner.TabIndex = 6;
+        // 
+        // lblBannerSubtitle
+        // 
         lblBannerSubtitle.AutoSize = true;
         lblBannerSubtitle.Font = new Font("Segoe UI", 9F);
         lblBannerSubtitle.ForeColor = Color.Gray;
         lblBannerSubtitle.Location = new Point(20, 42);
+        lblBannerSubtitle.Name = "lblBannerSubtitle";
+        lblBannerSubtitle.Size = new Size(114, 15);
+        lblBannerSubtitle.TabIndex = 0;
         lblBannerSubtitle.Text = "Deploy the API to IIS";
-
-        // ── Separators ──────────────────────────────────────────────
+        // 
+        // lblBannerTitle
+        // 
+        lblBannerTitle.AutoSize = true;
+        lblBannerTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+        lblBannerTitle.Location = new Point(18, 10);
+        lblBannerTitle.Name = "lblBannerTitle";
+        lblBannerTitle.Size = new Size(289, 30);
+        lblBannerTitle.TabIndex = 1;
+        lblBannerTitle.Text = "FollowMeFree API Installer";
+        // 
+        // pnlSepTop
+        // 
         pnlSepTop.BackColor = SystemColors.ControlDark;
         pnlSepTop.Dock = DockStyle.Top;
+        pnlSepTop.Location = new Point(0, 70);
+        pnlSepTop.Name = "pnlSepTop";
         pnlSepTop.Size = new Size(700, 1);
-
+        pnlSepTop.TabIndex = 5;
+        // 
+        // pnlSepBottom
+        // 
         pnlSepBottom.BackColor = SystemColors.ControlDark;
         pnlSepBottom.Dock = DockStyle.Bottom;
+        pnlSepBottom.Location = new Point(0, 509);
+        pnlSepBottom.Name = "pnlSepBottom";
         pnlSepBottom.Size = new Size(700, 1);
-
-        // ── Buttons ─────────────────────────────────────────────────
-        pnlButtons.Dock = DockStyle.Bottom;
-        pnlButtons.Size = new Size(700, 50);
+        pnlSepBottom.TabIndex = 3;
+        // 
+        // pnlButtons
+        // 
         pnlButtons.Controls.Add(btnCancel);
         pnlButtons.Controls.Add(btnNext);
         pnlButtons.Controls.Add(btnBack);
-
-        btnBack.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        btnBack.Location = new Point(420, 12);
-        btnBack.Size = new Size(85, 28);
-        btnBack.Text = "< &Back";
-        btnBack.UseVisualStyleBackColor = true;
-        btnBack.Click += btnBack_Click;
-
-        btnNext.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        btnNext.Location = new Point(510, 12);
-        btnNext.Size = new Size(85, 28);
-        btnNext.Text = "&Next >";
-        btnNext.UseVisualStyleBackColor = true;
-        btnNext.Click += btnNext_Click;
-
+        pnlButtons.Dock = DockStyle.Bottom;
+        pnlButtons.Location = new Point(0, 510);
+        pnlButtons.Name = "pnlButtons";
+        pnlButtons.Size = new Size(700, 50);
+        pnlButtons.TabIndex = 4;
+        // 
+        // btnCancel
+        // 
         btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
         btnCancel.Location = new Point(602, 12);
+        btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(85, 28);
+        btnCancel.TabIndex = 0;
         btnCancel.Text = "&Cancel";
         btnCancel.UseVisualStyleBackColor = true;
         btnCancel.Click += btnCancel_Click;
-
-        // ── Step 1 – Welcome ────────────────────────────────────────
-        pnlWelcome.Location = new Point(15, 82);
-        pnlWelcome.Size = new Size(670, 420);
+        // 
+        // btnNext
+        // 
+        btnNext.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        btnNext.Location = new Point(510, 12);
+        btnNext.Name = "btnNext";
+        btnNext.Size = new Size(85, 28);
+        btnNext.TabIndex = 1;
+        btnNext.Text = "&Next >";
+        btnNext.UseVisualStyleBackColor = true;
+        btnNext.Click += btnNext_Click;
+        // 
+        // btnBack
+        // 
+        btnBack.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        btnBack.Location = new Point(420, 12);
+        btnBack.Name = "btnBack";
+        btnBack.Size = new Size(85, 28);
+        btnBack.TabIndex = 2;
+        btnBack.Text = "< &Back";
+        btnBack.UseVisualStyleBackColor = true;
+        btnBack.Click += btnBack_Click;
+        // 
+        // pnlWelcome
+        // 
         pnlWelcome.Controls.Add(grpTips);
         pnlWelcome.Controls.Add(grpPrereqs);
         pnlWelcome.Controls.Add(lblWelcomeDesc);
         pnlWelcome.Controls.Add(lblWelcomeTitle);
-
-        lblWelcomeTitle.AutoSize = true;
-        lblWelcomeTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-        lblWelcomeTitle.Location = new Point(0, 0);
-        lblWelcomeTitle.Text = "Welcome";
-
-        lblWelcomeDesc.Location = new Point(0, 32);
-        lblWelcomeDesc.Size = new Size(660, 36);
-        lblWelcomeDesc.Text = "This wizard will deploy the FollowMeFree API and optionally " +
-            "configure an IIS website to host it. Review the prerequisites below before continuing.";
-
-        // Prerequisites group
-        grpPrereqs.Location = new Point(0, 75);
-        grpPrereqs.Size = new Size(660, 130);
-        grpPrereqs.Text = "System Prerequisites";
+        pnlWelcome.Location = new Point(15, 82);
+        pnlWelcome.Name = "pnlWelcome";
+        pnlWelcome.Size = new Size(670, 420);
+        pnlWelcome.TabIndex = 2;
+        // 
+        // grpTips
+        // 
+        grpTips.Controls.Add(lblTips);
+        grpTips.Location = new Point(0, 215);
+        grpTips.Name = "grpTips";
+        grpTips.Size = new Size(660, 200);
+        grpTips.TabIndex = 0;
+        grpTips.TabStop = false;
+        grpTips.Text = "Important Tips";
+        // 
+        // lblTips
+        // 
+        lblTips.Location = new Point(15, 22);
+        lblTips.Name = "lblTips";
+        lblTips.Size = new Size(630, 170);
+        lblTips.TabIndex = 0;
+        lblTips.Text = resources.GetString("lblTips.Text");
+        // 
+        // grpPrereqs
+        // 
         grpPrereqs.Controls.Add(btnRecheck);
         grpPrereqs.Controls.Add(lblSdkStatus);
         grpPrereqs.Controls.Add(lblHostingStatus);
         grpPrereqs.Controls.Add(lblIisStatus);
-
-        lblIisStatus.AutoSize = true;
-        lblIisStatus.Location = new Point(20, 30);
-        lblIisStatus.Text = "Checking IIS...";
-
-        lblHostingStatus.AutoSize = true;
-        lblHostingStatus.Location = new Point(20, 55);
-        lblHostingStatus.Text = "Checking Hosting Bundle...";
-
-        lblSdkStatus.AutoSize = true;
-        lblSdkStatus.Location = new Point(20, 80);
-        lblSdkStatus.Text = "Checking privileges...";
-
+        grpPrereqs.Location = new Point(0, 75);
+        grpPrereqs.Name = "grpPrereqs";
+        grpPrereqs.Size = new Size(660, 130);
+        grpPrereqs.TabIndex = 1;
+        grpPrereqs.TabStop = false;
+        grpPrereqs.Text = "System Prerequisites";
+        // 
+        // btnRecheck
+        // 
         btnRecheck.Location = new Point(560, 95);
+        btnRecheck.Name = "btnRecheck";
         btnRecheck.Size = new Size(82, 26);
+        btnRecheck.TabIndex = 0;
         btnRecheck.Text = "Re-check";
         btnRecheck.UseVisualStyleBackColor = true;
         btnRecheck.Click += btnRecheck_Click;
-
-        // Tips group
-        grpTips.Location = new Point(0, 215);
-        grpTips.Size = new Size(660, 200);
-        grpTips.Text = "Important Tips";
-        grpTips.Controls.Add(lblTips);
-
-        lblTips.Location = new Point(15, 22);
-        lblTips.Size = new Size(630, 170);
-        lblTips.Text =
-            "Before running this installer, please ensure:\r\n\r\n" +
-            "1. Enable IIS via 'Turn Windows features on or off':\r\n" +
-            "   - Internet Information Services > Web Management Tools > IIS Management Console\r\n" +
-            "   - Internet Information Services > World Wide Web Services > Application Development Features\r\n\r\n" +
-            "2. Install the ASP.NET Core 8.0 Hosting Bundle from:\r\n" +
-            "   https://dotnet.microsoft.com/download/dotnet/8.0\r\n" +
-            "   (Run 'iisreset' from an elevated command prompt after installation)\r\n\r\n" +
-            "3. Run this installer as Administrator for IIS site creation.\r\n\r\n" +
-            "The .NET SDK is NOT required on the target machine. The Hosting Bundle\r\n" +
-            "provides everything needed to run ASP.NET Core apps behind IIS.";
-
-        // ── Step 2 – Configuration ──────────────────────────────────
-        pnlConfig.Location = new Point(15, 82);
-        pnlConfig.Size = new Size(670, 420);
-        pnlConfig.Visible = false;
+        // 
+        // lblSdkStatus
+        // 
+        lblSdkStatus.AutoSize = true;
+        lblSdkStatus.Location = new Point(20, 80);
+        lblSdkStatus.Name = "lblSdkStatus";
+        lblSdkStatus.Size = new Size(119, 15);
+        lblSdkStatus.TabIndex = 1;
+        lblSdkStatus.Text = "Checking privileges...";
+        // 
+        // lblHostingStatus
+        // 
+        lblHostingStatus.AutoSize = true;
+        lblHostingStatus.Location = new Point(20, 55);
+        lblHostingStatus.Name = "lblHostingStatus";
+        lblHostingStatus.Size = new Size(151, 15);
+        lblHostingStatus.TabIndex = 2;
+        lblHostingStatus.Text = "Checking Hosting Bundle...";
+        // 
+        // lblIisStatus
+        // 
+        lblIisStatus.AutoSize = true;
+        lblIisStatus.Location = new Point(20, 30);
+        lblIisStatus.Name = "lblIisStatus";
+        lblIisStatus.Size = new Size(81, 15);
+        lblIisStatus.TabIndex = 3;
+        lblIisStatus.Text = "Checking IIS...";
+        // 
+        // lblWelcomeDesc
+        // 
+        lblWelcomeDesc.Location = new Point(0, 32);
+        lblWelcomeDesc.Name = "lblWelcomeDesc";
+        lblWelcomeDesc.Size = new Size(660, 36);
+        lblWelcomeDesc.TabIndex = 2;
+        lblWelcomeDesc.Text = "This wizard will deploy the FollowMeFree API and optionally configure an IIS website to host it. Review the prerequisites below before continuing.";
+        // 
+        // lblWelcomeTitle
+        // 
+        lblWelcomeTitle.AutoSize = true;
+        lblWelcomeTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+        lblWelcomeTitle.Location = new Point(0, 0);
+        lblWelcomeTitle.Name = "lblWelcomeTitle";
+        lblWelcomeTitle.Size = new Size(91, 25);
+        lblWelcomeTitle.TabIndex = 3;
+        lblWelcomeTitle.Text = "Welcome";
+        // 
+        // pnlConfig
+        // 
         pnlConfig.Controls.Add(lblConfigNote);
         pnlConfig.Controls.Add(txtConnectionString);
         pnlConfig.Controls.Add(lblConnStrLabel);
@@ -200,104 +266,173 @@ partial class InstallerForm
         pnlConfig.Controls.Add(btnBrowse);
         pnlConfig.Controls.Add(txtInstallPath);
         pnlConfig.Controls.Add(lblInstallPathLabel);
-
-        lblInstallPathLabel.AutoSize = true;
-        lblInstallPathLabel.Location = new Point(0, 0);
-        lblInstallPathLabel.Text = "Installation Path:";
-
-        txtInstallPath.Location = new Point(0, 22);
-        txtInstallPath.Size = new Size(572, 23);
-        txtInstallPath.Text = @"C:\inetpub\wwwroot\FollowMeFreeAPI";
-
-        btnBrowse.Location = new Point(580, 21);
-        btnBrowse.Size = new Size(80, 25);
-        btnBrowse.Text = "Browse...";
-        btnBrowse.UseVisualStyleBackColor = true;
-        btnBrowse.Click += btnBrowse_Click;
-
+        pnlConfig.Location = new Point(15, 82);
+        pnlConfig.Name = "pnlConfig";
+        pnlConfig.Size = new Size(670, 420);
+        pnlConfig.TabIndex = 1;
+        pnlConfig.Visible = false;
+        // 
+        // lblConfigNote
+        // 
+        lblConfigNote.ForeColor = SystemColors.GrayText;
+        lblConfigNote.Location = new Point(0, 270);
+        lblConfigNote.Name = "lblConfigNote";
+        lblConfigNote.Size = new Size(660, 140);
+        lblConfigNote.TabIndex = 0;
+        lblConfigNote.Text = resources.GetString("lblConfigNote.Text");
+        // 
+        // txtConnectionString
+        // 
+        txtConnectionString.Location = new Point(0, 232);
+        txtConnectionString.Name = "txtConnectionString";
+        txtConnectionString.Size = new Size(660, 23);
+        txtConnectionString.TabIndex = 1;
+        // 
+        // lblConnStrLabel
+        // 
+        lblConnStrLabel.AutoSize = true;
+        lblConnStrLabel.Location = new Point(0, 210);
+        lblConnStrLabel.Name = "lblConnStrLabel";
+        lblConnStrLabel.Size = new Size(157, 15);
+        lblConnStrLabel.TabIndex = 2;
+        lblConnStrLabel.Text = "Database Connection String:";
+        // 
+        // txtPort
+        // 
+        txtPort.Location = new Point(20, 168);
+        txtPort.Name = "txtPort";
+        txtPort.Size = new Size(100, 23);
+        txtPort.TabIndex = 3;
+        txtPort.Text = "80";
+        // 
+        // lblPortLabel
+        // 
+        lblPortLabel.AutoSize = true;
+        lblPortLabel.Location = new Point(20, 148);
+        lblPortLabel.Name = "lblPortLabel";
+        lblPortLabel.Size = new Size(32, 15);
+        lblPortLabel.TabIndex = 4;
+        lblPortLabel.Text = "Port:";
+        // 
+        // txtAppPool
+        // 
+        txtAppPool.Location = new Point(340, 112);
+        txtAppPool.Name = "txtAppPool";
+        txtAppPool.Size = new Size(320, 23);
+        txtAppPool.TabIndex = 5;
+        txtAppPool.Text = "FollowMeFreeAPIPool";
+        // 
+        // lblAppPoolLabel
+        // 
+        lblAppPoolLabel.AutoSize = true;
+        lblAppPoolLabel.Location = new Point(340, 92);
+        lblAppPoolLabel.Name = "lblAppPoolLabel";
+        lblAppPoolLabel.Size = new Size(98, 15);
+        lblAppPoolLabel.TabIndex = 6;
+        lblAppPoolLabel.Text = "Application Pool:";
+        // 
+        // txtSiteName
+        // 
+        txtSiteName.Location = new Point(20, 112);
+        txtSiteName.Name = "txtSiteName";
+        txtSiteName.Size = new Size(300, 23);
+        txtSiteName.TabIndex = 7;
+        txtSiteName.Text = "FollowMeFreeAPI";
+        // 
+        // lblSiteNameLabel
+        // 
+        lblSiteNameLabel.AutoSize = true;
+        lblSiteNameLabel.Location = new Point(20, 92);
+        lblSiteNameLabel.Name = "lblSiteNameLabel";
+        lblSiteNameLabel.Size = new Size(64, 15);
+        lblSiteNameLabel.TabIndex = 8;
+        lblSiteNameLabel.Text = "Site Name:";
+        // 
+        // chkCreateIisSite
+        // 
         chkCreateIisSite.AutoSize = true;
         chkCreateIisSite.Checked = true;
         chkCreateIisSite.CheckState = CheckState.Checked;
         chkCreateIisSite.Location = new Point(0, 60);
+        chkCreateIisSite.Name = "chkCreateIisSite";
+        chkCreateIisSite.Size = new Size(234, 19);
+        chkCreateIisSite.TabIndex = 9;
         chkCreateIisSite.Text = "Create IIS Website and Application Pool";
         chkCreateIisSite.CheckedChanged += chkCreateIisSite_CheckedChanged;
-
-        lblSiteNameLabel.AutoSize = true;
-        lblSiteNameLabel.Location = new Point(20, 92);
-        lblSiteNameLabel.Text = "Site Name:";
-
-        txtSiteName.Location = new Point(20, 112);
-        txtSiteName.Size = new Size(300, 23);
-        txtSiteName.Text = "FollowMeFreeAPI";
-
-        lblAppPoolLabel.AutoSize = true;
-        lblAppPoolLabel.Location = new Point(340, 92);
-        lblAppPoolLabel.Text = "Application Pool:";
-
-        txtAppPool.Location = new Point(340, 112);
-        txtAppPool.Size = new Size(320, 23);
-        txtAppPool.Text = "FollowMeFreeAPIPool";
-
-        lblPortLabel.AutoSize = true;
-        lblPortLabel.Location = new Point(20, 148);
-        lblPortLabel.Text = "Port:";
-
-        txtPort.Location = new Point(20, 168);
-        txtPort.Size = new Size(100, 23);
-        txtPort.Text = "80";
-
-        lblConnStrLabel.AutoSize = true;
-        lblConnStrLabel.Location = new Point(0, 210);
-        lblConnStrLabel.Text = "Database Connection String:";
-
-        txtConnectionString.Location = new Point(0, 232);
-        txtConnectionString.Size = new Size(660, 23);
-
-        lblConfigNote.Location = new Point(0, 270);
-        lblConfigNote.Size = new Size(660, 140);
-        lblConfigNote.ForeColor = SystemColors.GrayText;
-        lblConfigNote.Text =
-            "Note: The connection string above will be written to appsettings.json in the\r\n" +
-            "published output. You can also edit it manually after installation.\r\n\r\n" +
-            "If 'Create IIS Website' is unchecked, files will only be published to the\r\n" +
-            "specified directory and you can configure IIS manually afterwards.\r\n\r\n" +
-            "If port 80 is already in use by the Default Web Site, either stop that site\r\n" +
-            "first or choose a different port here (e.g. 8080).";
-
-        // ── Step 3 – Progress ───────────────────────────────────────
-        pnlProgress.Location = new Point(15, 82);
-        pnlProgress.Size = new Size(670, 420);
-        pnlProgress.Visible = false;
+        // 
+        // btnBrowse
+        // 
+        btnBrowse.Location = new Point(580, 21);
+        btnBrowse.Name = "btnBrowse";
+        btnBrowse.Size = new Size(80, 25);
+        btnBrowse.TabIndex = 10;
+        btnBrowse.Text = "Browse...";
+        btnBrowse.UseVisualStyleBackColor = true;
+        btnBrowse.Click += btnBrowse_Click;
+        // 
+        // txtInstallPath
+        // 
+        txtInstallPath.Location = new Point(0, 22);
+        txtInstallPath.Name = "txtInstallPath";
+        txtInstallPath.Size = new Size(572, 23);
+        txtInstallPath.TabIndex = 11;
+        txtInstallPath.Text = "C:\\inetpub\\wwwroot\\FollowMeFreeAPI";
+        // 
+        // lblInstallPathLabel
+        // 
+        lblInstallPathLabel.AutoSize = true;
+        lblInstallPathLabel.Location = new Point(0, 0);
+        lblInstallPathLabel.Name = "lblInstallPathLabel";
+        lblInstallPathLabel.Size = new Size(95, 15);
+        lblInstallPathLabel.TabIndex = 12;
+        lblInstallPathLabel.Text = "Installation Path:";
+        // 
+        // pnlProgress
+        // 
         pnlProgress.Controls.Add(txtLog);
         pnlProgress.Controls.Add(progressBar);
         pnlProgress.Controls.Add(lblProgressTitle);
-
+        pnlProgress.Location = new Point(15, 82);
+        pnlProgress.Name = "pnlProgress";
+        pnlProgress.Size = new Size(670, 420);
+        pnlProgress.TabIndex = 0;
+        pnlProgress.Visible = false;
+        // 
+        // txtLog
+        // 
+        txtLog.BackColor = SystemColors.Window;
+        txtLog.Font = new Font("Consolas", 9F);
+        txtLog.Location = new Point(0, 72);
+        txtLog.Multiline = true;
+        txtLog.Name = "txtLog";
+        txtLog.ReadOnly = true;
+        txtLog.ScrollBars = ScrollBars.Vertical;
+        txtLog.Size = new Size(660, 342);
+        txtLog.TabIndex = 0;
+        txtLog.WordWrap = false;
+        // 
+        // progressBar
+        // 
+        progressBar.Location = new Point(0, 35);
+        progressBar.Name = "progressBar";
+        progressBar.Size = new Size(660, 25);
+        progressBar.TabIndex = 1;
+        // 
+        // lblProgressTitle
+        // 
         lblProgressTitle.AutoSize = true;
         lblProgressTitle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
         lblProgressTitle.Location = new Point(0, 0);
+        lblProgressTitle.Name = "lblProgressTitle";
+        lblProgressTitle.Size = new Size(89, 20);
+        lblProgressTitle.TabIndex = 2;
         lblProgressTitle.Text = "Preparing...";
-
-        progressBar.Location = new Point(0, 35);
-        progressBar.Size = new Size(660, 25);
-
-        txtLog.Location = new Point(0, 72);
-        txtLog.Size = new Size(660, 342);
-        txtLog.Font = new Font("Consolas", 9F);
-        txtLog.Multiline = true;
-        txtLog.ReadOnly = true;
-        txtLog.ScrollBars = ScrollBars.Vertical;
-        txtLog.BackColor = SystemColors.Window;
-        txtLog.WordWrap = false;
-
-        // ── Form ────────────────────────────────────────────────────
+        // 
+        // InstallerForm
+        // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(700, 560);
-        FormBorderStyle = FormBorderStyle.FixedSingle;
-        MaximizeBox = false;
-        StartPosition = FormStartPosition.CenterScreen;
-        Text = "FollowMeFree API Installer";
-
         Controls.Add(pnlProgress);
         Controls.Add(pnlConfig);
         Controls.Add(pnlWelcome);
@@ -305,15 +440,20 @@ partial class InstallerForm
         Controls.Add(pnlButtons);
         Controls.Add(pnlSepTop);
         Controls.Add(pnlBanner);
-
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        Icon = (Icon)resources.GetObject("$this.Icon");
+        MaximizeBox = false;
+        Name = "InstallerForm";
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "FollowMeFree API Installer";
         pnlBanner.ResumeLayout(false);
         pnlBanner.PerformLayout();
         pnlButtons.ResumeLayout(false);
         pnlWelcome.ResumeLayout(false);
         pnlWelcome.PerformLayout();
+        grpTips.ResumeLayout(false);
         grpPrereqs.ResumeLayout(false);
         grpPrereqs.PerformLayout();
-        grpTips.ResumeLayout(false);
         pnlConfig.ResumeLayout(false);
         pnlConfig.PerformLayout();
         pnlProgress.ResumeLayout(false);

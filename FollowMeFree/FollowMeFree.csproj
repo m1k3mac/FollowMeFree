@@ -233,6 +233,7 @@
       <DependentUpon>EFModel.edmx</DependentUpon>
       <LastGenOutput>EFModel.cs</LastGenOutput>
     </Content>
+    <None Include="FMFappIcon.ico" />
     <None Include="FMFappIcon.png" />
   </ItemGroup>
   <ItemGroup>

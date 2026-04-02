@@ -213,7 +213,7 @@
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
-            this.IconOptions.Image = global::FollowMeFree.Properties.Resources.FMFappIcon;
+            this.IconOptions.Image = global::FollowMeFree.Properties.Resources.FMFappIcon1;
             this.Name = "Main";
             this.Ribbon = this.ribbonControl1;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
