@@ -31,5 +31,6 @@ namespace FollowMeFree
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Config> Configs { get; set; }
         public virtual DbSet<Printer> Printers { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

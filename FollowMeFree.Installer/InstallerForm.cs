@@ -1,4 +1,4 @@
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Xml;
 
 namespace FollowMeFree.Installer;
@@ -161,12 +161,15 @@ public partial class InstallerForm : Form
 
         try
         {
-            string connStr = BuildSqlConnectionString();
-            using var connection = new SqlConnection(connStr);
+            // Connect to 'master' to test server connectivity and credentials.
+            // The target database does not exist yet — it will be created during installation.
+            var builder = new SqlConnectionStringBuilder(BuildSqlConnectionString());
+            builder.InitialCatalog = "master";
+            using var connection = new SqlConnection(builder.ConnectionString);
             await connection.OpenAsync();
 
             _connectionTested = true;
-            lblTestResult.Text = "\u2713  Connection successful!";
+            lblTestResult.Text = "\u2713  Connection to server successful!";
             lblTestResult.ForeColor = Color.DarkGreen;
         }
         catch (Exception ex)
@@ -322,7 +325,7 @@ public partial class InstallerForm : Form
                 AppendLog("Creating desktop shortcut...");
                 CreateDesktopShortcut(installPath);
             }
-            SetProgress(90);
+            SetProgress(75);
 
             // 5 ?? Create Start Menu shortcut (optional)
             if (chkStartMenu.Checked)
@@ -330,9 +333,35 @@ public partial class InstallerForm : Form
                 AppendLog("Creating Start Menu shortcut...");
                 CreateStartMenuShortcut(installPath);
             }
+            SetProgress(80);
+
+            _cts.Token.ThrowIfCancellationRequested();
+
+            // 6 ?? Create the database (last step)
+            AppendLog("");
+            AppendLog("Creating database...");
+            string sqlConnStr = BuildSqlConnectionString();
+            await Task.Run(() => CreateDatabase(sqlConnStr), _cts.Token);
+            SetProgress(95);
+
+            _cts.Token.ThrowIfCancellationRequested();
+
+            // 7 ?? Verify the database was created successfully
+            AppendLog("Verifying database...");
+            bool dbVerified = await Task.Run(() => VerifyDatabase(sqlConnStr), _cts.Token);
             SetProgress(100);
 
-            // 6 ?? Done
+            if (!dbVerified)
+            {
+                AppendLog("");
+                AppendLog("WARNING: Database verification found issues. Please check the log above.");
+                AppendLog("The application may not function correctly until the database is fixed.");
+                lblProgressTitle.Text = "Installation Complete (with warnings)";
+                _installComplete = true;
+                return;
+            }
+
+            // 8 ?? Done
             AppendLog("");
             AppendLog("============================================");
             AppendLog("   Installation completed successfully!");
@@ -474,5 +503,215 @@ public partial class InstallerForm : Form
         {
             System.Runtime.InteropServices.Marshal.ReleaseComObject(shell);
         }
+    }
+
+    // ══ Database creation ═════════════════════════════════════════════════════════
+
+    private void CreateDatabase(string sqlConnectionString)
+    {
+        var builder = new SqlConnectionStringBuilder(sqlConnectionString);
+        string databaseName = builder.InitialCatalog;
+
+        // Connect to 'master' to check/create the database
+        builder.InitialCatalog = "master";
+        string masterConnStr = builder.ConnectionString;
+
+        bool isNewDatabase = false;
+
+        using var masterConn = new SqlConnection(masterConnStr);
+        masterConn.Open();
+
+        // Check if the database already exists
+        using (var checkCmd = new SqlCommand(
+            "SELECT COUNT(*) FROM sys.databases WHERE name = @name", masterConn))
+        {
+            checkCmd.Parameters.AddWithValue("@name", databaseName);
+            int exists = (int)checkCmd.ExecuteScalar();
+            if (exists > 0)
+            {
+                AppendLog($"Database '{databaseName}' already exists. Ensuring schema is up to date...");
+            }
+            else
+            {
+                AppendLog($"Creating database '{databaseName}'...");
+                using var createCmd = new SqlCommand(
+                    $"CREATE DATABASE [{databaseName}]", masterConn);
+                createCmd.ExecuteNonQuery();
+                AppendLog($"Database '{databaseName}' created.");
+                isNewDatabase = true;
+            }
+        }
+
+        masterConn.Close();
+
+        // Connect to the target database and create tables if they don't exist
+        builder.InitialCatalog = databaseName;
+        using var conn = new SqlConnection(builder.ConnectionString);
+        conn.Open();
+
+        string createTablesSql = GetCreateTablesSql();
+        using var cmd = new SqlCommand(createTablesSql, conn);
+        cmd.ExecuteNonQuery();
+
+        AppendLog("Database schema created/verified successfully.");
+
+        // Seed default data only for a newly created database
+        if (isNewDatabase)
+        {
+            AppendLog("Seeding default data...");
+            SeedDatabase(conn);
+        }
+        else
+        {
+            AppendLog("Skipping data seed (database already existed).");
+        }
+    }
+
+    private void SeedDatabase(SqlConnection conn)
+    {
+        string seedSql = @"
+INSERT INTO [dbo].[Config] ([FMFPrinterName])
+VALUES ('FMF Print Queue');
+
+INSERT INTO [dbo].[Departments] ([DepartmentName])
+VALUES ('IT');
+
+INSERT INTO [dbo].[Users] ([UserName], [FirstName], [Surname], [DepartmentId], [PIN], [AllowedPrinterIds])
+VALUES ('joesoap', 'Joe', 'Soap', 1, 12345, NULL);
+";
+        using var cmd = new SqlCommand(seedSql, conn);
+        cmd.ExecuteNonQuery();
+
+        AppendLog("  Seeded Config: FMFPrinterName = 'FMF Print Queue'");
+        AppendLog("  Seeded Department: 'IT'");
+        AppendLog("  Seeded User: 'joesoap' (Joe Soap, Department: IT)");
+    }
+
+    private static string GetCreateTablesSql()
+    {
+        return @"
+-- Departments table
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Departments' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+    CREATE TABLE [dbo].[Departments] (
+        [Id]             INT           IDENTITY(1,1) NOT NULL,
+        [DepartmentName] VARCHAR(100)  NOT NULL,
+        CONSTRAINT [PK_Departments] PRIMARY KEY CLUSTERED ([Id] ASC)
+    );
+END;
+
+-- Config table
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Config' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+    CREATE TABLE [dbo].[Config] (
+        [Id]                INT            IDENTITY(1,1) NOT NULL,
+        [JobFilePath]       VARCHAR(MAX)   NULL,
+        [FMFPrinterName]    VARCHAR(MAX)   NOT NULL,
+        [APIAllowedNetwork] VARCHAR(MAX)   NULL,
+        CONSTRAINT [PK_Config] PRIMARY KEY CLUSTERED ([Id] ASC)
+    );
+END;
+
+-- Logs table
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Logs' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+    CREATE TABLE [dbo].[Logs] (
+        [Id]        INT            IDENTITY(1,1) NOT NULL,
+        [Timestamp] DATETIME2(7)   NOT NULL,
+        [LogLevel]  NVARCHAR(20)   NOT NULL,
+        [Source]    NVARCHAR(50)   NOT NULL,
+        [Category]  NVARCHAR(256)  NOT NULL,
+        [Message]   NVARCHAR(MAX)  NOT NULL,
+        [Exception] NVARCHAR(MAX)  NULL,
+        CONSTRAINT [PK_Logs] PRIMARY KEY CLUSTERED ([Id] ASC)
+    );
+END;
+
+-- Printers table
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Printers' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+    CREATE TABLE [dbo].[Printers] (
+        [Id]      INT           IDENTITY(1,1) NOT NULL,
+        [Printer] VARCHAR(MAX)  NOT NULL,
+        CONSTRAINT [PK_Printers] PRIMARY KEY CLUSTERED ([Id] ASC)
+    );
+END;
+
+-- PrintJobs table
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrintJobs' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+    CREATE TABLE [dbo].[PrintJobs] (
+        [Id]               INT           IDENTITY(1,1) NOT NULL,
+        [UserName]         VARCHAR(100)  NOT NULL,
+        [DocumentName]     VARCHAR(MAX)  NOT NULL,
+        [JobId]            INT           NOT NULL,
+        [Pages]            INT           NOT NULL,
+        [DateTimePrinted]  DATETIME2(0)  NOT NULL,
+        [DataType]         VARCHAR(MAX)  NOT NULL,
+        [DepartmentId]     INT           NULL,
+        CONSTRAINT [PK_PrintJobs] PRIMARY KEY CLUSTERED ([Id] ASC),
+        CONSTRAINT [FK_PrintJobs_Departments] FOREIGN KEY ([DepartmentId])
+            REFERENCES [dbo].[Departments] ([Id])
+    );
+END;
+
+-- Users table
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+    CREATE TABLE [dbo].[Users] (
+        [Id]                INT           IDENTITY(1,1) NOT NULL,
+        [UserName]          VARCHAR(100)  NOT NULL,
+        [FirstName]         VARCHAR(100)  NOT NULL,
+        [Surname]           VARCHAR(100)  NOT NULL,
+        [DepartmentId]      INT           NOT NULL,
+        [PIN]               INT           NOT NULL,
+        [AllowedPrinterIds] VARCHAR(MAX)  NULL,
+        CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC),
+        CONSTRAINT [FK_Users_Departments] FOREIGN KEY ([DepartmentId])
+            REFERENCES [dbo].[Departments] ([Id])
+    );
+END;
+";
+    }
+
+    private bool VerifyDatabase(string sqlConnectionString)
+    {
+        string[] expectedTables = ["Config", "Departments", "Logs", "Printers", "PrintJobs", "Users"];
+        bool allGood = true;
+
+        try
+        {
+            using var conn = new SqlConnection(sqlConnectionString);
+            conn.Open();
+
+            foreach (string table in expectedTables)
+            {
+                using var cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM sys.tables WHERE name = @name AND schema_id = SCHEMA_ID('dbo')",
+                    conn);
+                cmd.Parameters.AddWithValue("@name", table);
+                int exists = (int)cmd.ExecuteScalar();
+
+                if (exists > 0)
+                {
+                    AppendLog($"  \u2713 Table [dbo].[{table}] exists.");
+                }
+                else
+                {
+                    AppendLog($"  \u2717 Table [dbo].[{table}] is MISSING!");
+                    allGood = false;
+                }
+            }
+
+            if (allGood)
+                AppendLog("Database verification passed. All tables are present.");
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"Database verification failed: {ex.Message}");
+            allGood = false;
+        }
+
+        return allGood;
     }
 }

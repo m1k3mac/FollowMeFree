@@ -182,11 +182,11 @@ partial class InstallerForm
         lblWelcomeTips.Text =
             "Before running this installer, please ensure:\r\n\r\n" +
             "1. A SQL Server instance is available and accessible from this machine.\r\n\r\n" +
-            "2. The FMFData database has been created on the SQL Server.\r\n\r\n" +
-            "3. You have valid credentials (SQL Server or Windows Authentication)\r\n" +
-            "   to connect to the database.\r\n\r\n" +
-            "4. Run this installer as Administrator if installing to Program Files.\r\n\r\n" +
-            "On the next step you will configure and test the database connection.";
+            "2. You have valid credentials (SQL Server or Windows Authentication)\r\n" +
+            "   with permission to create databases on the server.\r\n\r\n" +
+            "3. Run this installer as Administrator if installing to Program Files.\r\n\r\n" +
+            "On the next step you will configure and test the database connection.\r\n" +
+            "The installer will automatically create the FMFData database and schema.";
 
         // ?? Step 2 – Database Connection ????????????????????????????
         pnlConnection.Location = new Point(15, 82);
