@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37111.16 d17.14
+VisualStudioVersion = 17.14.37111.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowMeFree", "FollowMeFree\FollowMeFree.csproj", "{78E19C3F-28C8-4A7B-A292-FE0537484804}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "FollowMeFree.Service.Installer", "FollowMeFree.Service.Installer\FollowMeFree.Service.Installer.wixproj", "{87A960B0-2E75-4F5B-914F-E45B5F848467}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowMeFree.API.Installer", "FollowMeFree.API.Installer\FollowMeFree.API.Installer.csproj", "{FE39F3FB-88F6-4FB4-BAF9-56DB371088F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowMeFree.Installer", "FollowMeFree.Installer\FollowMeFree.Installer.csproj", "{083187E6-59C7-4872-8705-A8BFC2BF73B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,18 @@ Global
 		{FE39F3FB-88F6-4FB4-BAF9-56DB371088F8}.Release|x64.Build.0 = Release|Any CPU
 		{FE39F3FB-88F6-4FB4-BAF9-56DB371088F8}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE39F3FB-88F6-4FB4-BAF9-56DB371088F8}.Release|x86.Build.0 = Release|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Debug|x64.Build.0 = Debug|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Debug|x86.Build.0 = Debug|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Release|x64.ActiveCfg = Release|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Release|x64.Build.0 = Release|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Release|x86.ActiveCfg = Release|Any CPU
+		{083187E6-59C7-4872-8705-A8BFC2BF73B9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
