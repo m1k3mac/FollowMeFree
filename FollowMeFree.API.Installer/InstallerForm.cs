@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.Data.SqlClient;
 
 namespace FollowMeFree.API.Installer;
 
@@ -10,11 +11,12 @@ public partial class InstallerForm : Form
     private readonly Panel[] _steps;
     private CancellationTokenSource? _cts;
     private bool _installComplete;
+    private bool _connectionTested;
 
     public InstallerForm()
     {
         InitializeComponent();
-        _steps = [pnlWelcome, pnlConfig, pnlProgress];
+        _steps = [pnlWelcome, pnlConfig, pnlDatabase, pnlProgress];
         CheckPrerequisites();
         LoadDefaultConnectionString();
         ShowStep(0);
@@ -37,10 +39,14 @@ public partial class InstallerForm : Form
                 btnNext.Enabled = true;
                 break;
             case 1:
-                btnNext.Text = "&Install";
+                btnNext.Text = "&Next >";
                 btnNext.Enabled = true;
                 break;
             case 2:
+                btnNext.Text = "&Install";
+                btnNext.Enabled = _connectionTested;
+                break;
+            case 3:
                 if (_installComplete)
                 {
                     btnNext.Text = "&Finish";
@@ -155,10 +161,54 @@ public partial class InstallerForm : Form
         string? connStr = doc?["ConnectionStrings"]?["DefaultConnection"]?.GetValue<string>();
         if (!string.IsNullOrEmpty(connStr))
         {
-            txtConnectionString.Text = connStr;
+            ApplyConnectionString(connStr);
             return true;
         }
         return false;
+    }
+
+    private void ApplyConnectionString(string connStr)
+    {
+        try
+        {
+            var builder = new SqlConnectionStringBuilder(connStr);
+            txtServer.Text = builder.DataSource;
+            txtDatabase.Text = string.IsNullOrEmpty(builder.InitialCatalog) ? "FMFData" : builder.InitialCatalog;
+
+            if (builder.IntegratedSecurity)
+            {
+                chkWindowsAuth.Checked = true;
+            }
+            else
+            {
+                chkWindowsAuth.Checked = false;
+                txtUsername.Text = builder.UserID;
+                txtPassword.Text = builder.Password;
+            }
+        }
+        catch { /* leave defaults if parsing fails */ }
+    }
+
+    private string BuildConnectionString()
+    {
+        var builder = new SqlConnectionStringBuilder
+        {
+            DataSource = txtServer.Text.Trim(),
+            InitialCatalog = txtDatabase.Text.Trim(),
+            TrustServerCertificate = true
+        };
+
+        if (chkWindowsAuth.Checked)
+        {
+            builder.IntegratedSecurity = true;
+        }
+        else
+        {
+            builder.UserID = txtUsername.Text.Trim();
+            builder.Password = txtPassword.Text;
+        }
+
+        return builder.ConnectionString;
     }
 
     private static string? FindSolutionDirectory()
@@ -208,6 +258,66 @@ public partial class InstallerForm : Form
         txtPort.Enabled = enabled;
     }
 
+    private void chkWindowsAuth_CheckedChanged(object? sender, EventArgs e)
+    {
+        bool sqlAuth = !chkWindowsAuth.Checked;
+        lblUsernameLabel.Enabled = sqlAuth;
+        txtUsername.Enabled = sqlAuth;
+        lblPasswordLabel.Enabled = sqlAuth;
+        txtPassword.Enabled = sqlAuth;
+        OnDbFieldChanged(sender, e);
+    }
+
+    private void OnDbFieldChanged(object? sender, EventArgs e)
+    {
+        _connectionTested = false;
+        if (_currentStep == 2)
+            btnNext.Enabled = false;
+    }
+
+    private async void btnTestConnection_Click(object? sender, EventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(txtServer.Text))
+        {
+            MessageBox.Show("Please enter a server name.",
+                "Test Connection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        string connStr = BuildConnectionString();
+
+        btnTestConnection.Enabled = false;
+        btnTestConnection.Text = "Testing...";
+        Cursor = Cursors.WaitCursor;
+
+        try
+        {
+            await Task.Run(() =>
+            {
+                using var connection = new SqlConnection(connStr);
+                connection.Open();
+            });
+
+            _connectionTested = true;
+            btnNext.Enabled = true;
+            MessageBox.Show("Connection successful!",
+                "Test Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            _connectionTested = false;
+            btnNext.Enabled = false;
+            MessageBox.Show($"Connection failed:\n\n{ex.Message}",
+                "Test Connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            btnTestConnection.Text = "Test Connection";
+            btnTestConnection.Enabled = true;
+            Cursor = Cursors.Default;
+        }
+    }
+
     private async void btnNext_Click(object? sender, EventArgs e)
     {
         if (_installComplete)
@@ -226,6 +336,10 @@ public partial class InstallerForm : Form
                 return;
 
             ShowStep(2);
+        }
+        else if (_currentStep == 2)
+        {
+            ShowStep(3);
             await RunInstallation();
         }
     }
@@ -352,10 +466,11 @@ public partial class InstallerForm : Form
             _cts.Token.ThrowIfCancellationRequested();
 
             // 3 ── Update connection string
-            if (!string.IsNullOrWhiteSpace(txtConnectionString.Text))
+            string connectionString = BuildConnectionString();
+            if (!string.IsNullOrWhiteSpace(connectionString))
             {
                 AppendLog("Updating connection string in published appsettings.json...");
-                UpdateConnectionString(installPath, txtConnectionString.Text.Trim());
+                UpdateConnectionString(installPath, connectionString);
             }
             SetProgress(70);
 
@@ -413,7 +528,7 @@ public partial class InstallerForm : Form
         {
             _cts = null;
             btnCancel.Text = "&Close";
-            ShowStep(2);
+            ShowStep(3);
         }
     }
 

@@ -35,8 +35,6 @@ partial class InstallerForm
         lblWelcomeTitle = new Label();
         pnlConfig = new Panel();
         lblConfigNote = new Label();
-        txtConnectionString = new TextBox();
-        lblConnStrLabel = new Label();
         txtPort = new TextBox();
         lblPortLabel = new Label();
         txtAppPool = new TextBox();
@@ -47,6 +45,22 @@ partial class InstallerForm
         btnBrowse = new Button();
         txtInstallPath = new TextBox();
         lblInstallPathLabel = new Label();
+        pnlDatabase = new Panel();
+        lblDbTitle = new Label();
+        lblDbDesc = new Label();
+        grpSqlConnection = new GroupBox();
+        lblServerLabel = new Label();
+        txtServer = new TextBox();
+        lblDatabaseLabel = new Label();
+        txtDatabase = new TextBox();
+        chkWindowsAuth = new CheckBox();
+        lblUsernameLabel = new Label();
+        txtUsername = new TextBox();
+        lblPasswordLabel = new Label();
+        txtPassword = new TextBox();
+        btnTestConnection = new Button();
+        lblDbNote = new Label();
+        lblDbInstallNote = new Label();
         pnlProgress = new Panel();
         txtLog = new TextBox();
         progressBar = new ProgressBar();
@@ -57,6 +71,8 @@ partial class InstallerForm
         grpTips.SuspendLayout();
         grpPrereqs.SuspendLayout();
         pnlConfig.SuspendLayout();
+        pnlDatabase.SuspendLayout();
+        grpSqlConnection.SuspendLayout();
         pnlProgress.SuspendLayout();
         SuspendLayout();
         // 
@@ -254,8 +270,6 @@ partial class InstallerForm
         // pnlConfig
         // 
         pnlConfig.Controls.Add(lblConfigNote);
-        pnlConfig.Controls.Add(txtConnectionString);
-        pnlConfig.Controls.Add(lblConnStrLabel);
         pnlConfig.Controls.Add(txtPort);
         pnlConfig.Controls.Add(lblPortLabel);
         pnlConfig.Controls.Add(txtAppPool);
@@ -275,27 +289,11 @@ partial class InstallerForm
         // lblConfigNote
         // 
         lblConfigNote.ForeColor = SystemColors.GrayText;
-        lblConfigNote.Location = new Point(0, 270);
+        lblConfigNote.Location = new Point(0, 210);
         lblConfigNote.Name = "lblConfigNote";
-        lblConfigNote.Size = new Size(660, 140);
+        lblConfigNote.Size = new Size(660, 200);
         lblConfigNote.TabIndex = 0;
         lblConfigNote.Text = resources.GetString("lblConfigNote.Text");
-        // 
-        // txtConnectionString
-        // 
-        txtConnectionString.Location = new Point(0, 232);
-        txtConnectionString.Name = "txtConnectionString";
-        txtConnectionString.Size = new Size(660, 23);
-        txtConnectionString.TabIndex = 1;
-        // 
-        // lblConnStrLabel
-        // 
-        lblConnStrLabel.AutoSize = true;
-        lblConnStrLabel.Location = new Point(0, 210);
-        lblConnStrLabel.Name = "lblConnStrLabel";
-        lblConnStrLabel.Size = new Size(157, 15);
-        lblConnStrLabel.TabIndex = 2;
-        lblConnStrLabel.Text = "Database Connection String:";
         // 
         // txtPort
         // 
@@ -387,6 +385,163 @@ partial class InstallerForm
         lblInstallPathLabel.TabIndex = 12;
         lblInstallPathLabel.Text = "Installation Path:";
         // 
+        // pnlDatabase
+        // 
+        pnlDatabase.Controls.Add(lblDbInstallNote);
+        pnlDatabase.Controls.Add(lblDbNote);
+        pnlDatabase.Controls.Add(grpSqlConnection);
+        pnlDatabase.Controls.Add(lblDbDesc);
+        pnlDatabase.Controls.Add(lblDbTitle);
+        pnlDatabase.Location = new Point(15, 82);
+        pnlDatabase.Name = "pnlDatabase";
+        pnlDatabase.Size = new Size(670, 420);
+        pnlDatabase.TabIndex = 7;
+        pnlDatabase.Visible = false;
+        // 
+        // lblDbTitle
+        // 
+        lblDbTitle.AutoSize = true;
+        lblDbTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+        lblDbTitle.Location = new Point(0, 0);
+        lblDbTitle.Name = "lblDbTitle";
+        lblDbTitle.Size = new Size(196, 25);
+        lblDbTitle.TabIndex = 0;
+        lblDbTitle.Text = "Database Connection";
+        // 
+        // lblDbDesc
+        // 
+        lblDbDesc.Location = new Point(0, 32);
+        lblDbDesc.Name = "lblDbDesc";
+        lblDbDesc.Size = new Size(660, 36);
+        lblDbDesc.TabIndex = 1;
+        lblDbDesc.Text = "Enter the SQL Server connection details for the FMFData database. You must test the connection before proceeding with the installation.";
+        // 
+        // grpSqlConnection
+        // 
+        grpSqlConnection.Controls.Add(btnTestConnection);
+        grpSqlConnection.Controls.Add(txtPassword);
+        grpSqlConnection.Controls.Add(lblPasswordLabel);
+        grpSqlConnection.Controls.Add(txtUsername);
+        grpSqlConnection.Controls.Add(lblUsernameLabel);
+        grpSqlConnection.Controls.Add(chkWindowsAuth);
+        grpSqlConnection.Controls.Add(txtDatabase);
+        grpSqlConnection.Controls.Add(lblDatabaseLabel);
+        grpSqlConnection.Controls.Add(txtServer);
+        grpSqlConnection.Controls.Add(lblServerLabel);
+        grpSqlConnection.Location = new Point(0, 75);
+        grpSqlConnection.Name = "grpSqlConnection";
+        grpSqlConnection.Size = new Size(660, 215);
+        grpSqlConnection.TabIndex = 2;
+        grpSqlConnection.TabStop = false;
+        grpSqlConnection.Text = "SQL Server Connection";
+        // 
+        // lblServerLabel
+        // 
+        lblServerLabel.AutoSize = true;
+        lblServerLabel.Location = new Point(15, 25);
+        lblServerLabel.Name = "lblServerLabel";
+        lblServerLabel.Size = new Size(42, 15);
+        lblServerLabel.TabIndex = 0;
+        lblServerLabel.Text = "Server:";
+        // 
+        // txtServer
+        // 
+        txtServer.Location = new Point(15, 45);
+        txtServer.Name = "txtServer";
+        txtServer.Size = new Size(300, 23);
+        txtServer.TabIndex = 1;
+        txtServer.TextChanged += OnDbFieldChanged;
+        // 
+        // lblDatabaseLabel
+        // 
+        lblDatabaseLabel.AutoSize = true;
+        lblDatabaseLabel.Location = new Point(340, 25);
+        lblDatabaseLabel.Name = "lblDatabaseLabel";
+        lblDatabaseLabel.Size = new Size(58, 15);
+        lblDatabaseLabel.TabIndex = 2;
+        lblDatabaseLabel.Text = "Database:";
+        // 
+        // txtDatabase
+        // 
+        txtDatabase.Location = new Point(340, 45);
+        txtDatabase.Name = "txtDatabase";
+        txtDatabase.Size = new Size(300, 23);
+        txtDatabase.TabIndex = 3;
+        txtDatabase.Text = "FMFData";
+        txtDatabase.TextChanged += OnDbFieldChanged;
+        // 
+        // chkWindowsAuth
+        // 
+        chkWindowsAuth.AutoSize = true;
+        chkWindowsAuth.Location = new Point(15, 80);
+        chkWindowsAuth.Name = "chkWindowsAuth";
+        chkWindowsAuth.Size = new Size(167, 19);
+        chkWindowsAuth.TabIndex = 4;
+        chkWindowsAuth.Text = "Use Windows Authentication";
+        chkWindowsAuth.CheckedChanged += chkWindowsAuth_CheckedChanged;
+        // 
+        // lblUsernameLabel
+        // 
+        lblUsernameLabel.AutoSize = true;
+        lblUsernameLabel.Location = new Point(15, 110);
+        lblUsernameLabel.Name = "lblUsernameLabel";
+        lblUsernameLabel.Size = new Size(63, 15);
+        lblUsernameLabel.TabIndex = 5;
+        lblUsernameLabel.Text = "Username:";
+        // 
+        // txtUsername
+        // 
+        txtUsername.Location = new Point(15, 130);
+        txtUsername.Name = "txtUsername";
+        txtUsername.Size = new Size(300, 23);
+        txtUsername.TabIndex = 6;
+        txtUsername.TextChanged += OnDbFieldChanged;
+        // 
+        // lblPasswordLabel
+        // 
+        lblPasswordLabel.AutoSize = true;
+        lblPasswordLabel.Location = new Point(340, 110);
+        lblPasswordLabel.Name = "lblPasswordLabel";
+        lblPasswordLabel.Size = new Size(60, 15);
+        lblPasswordLabel.TabIndex = 7;
+        lblPasswordLabel.Text = "Password:";
+        // 
+        // txtPassword
+        // 
+        txtPassword.Location = new Point(340, 130);
+        txtPassword.Name = "txtPassword";
+        txtPassword.Size = new Size(300, 23);
+        txtPassword.TabIndex = 8;
+        txtPassword.UseSystemPasswordChar = true;
+        txtPassword.TextChanged += OnDbFieldChanged;
+        // 
+        // btnTestConnection
+        // 
+        btnTestConnection.Location = new Point(15, 170);
+        btnTestConnection.Name = "btnTestConnection";
+        btnTestConnection.Size = new Size(120, 28);
+        btnTestConnection.TabIndex = 9;
+        btnTestConnection.Text = "Test Connection";
+        btnTestConnection.UseVisualStyleBackColor = true;
+        btnTestConnection.Click += btnTestConnection_Click;
+        // 
+        // lblDbNote
+        // 
+        lblDbNote.ForeColor = Color.DarkRed;
+        lblDbNote.Location = new Point(0, 300);
+        lblDbNote.Name = "lblDbNote";
+        lblDbNote.Size = new Size(660, 35);
+        lblDbNote.TabIndex = 3;
+        lblDbNote.Text = "Note: The connection string will be written to the application\u2019s configuration file (appsettings.json) in the installation directory.";
+        // 
+        // lblDbInstallNote
+        // 
+        lblDbInstallNote.Location = new Point(0, 340);
+        lblDbInstallNote.Name = "lblDbInstallNote";
+        lblDbInstallNote.Size = new Size(660, 70);
+        lblDbInstallNote.TabIndex = 4;
+        lblDbInstallNote.Text = "The Install button will be enabled only after a successful connection test.\nYou can change the connection string later by editing the config file manually.";
+        // 
         // pnlProgress
         // 
         pnlProgress.Controls.Add(txtLog);
@@ -434,6 +589,7 @@ partial class InstallerForm
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(700, 560);
         Controls.Add(pnlProgress);
+        Controls.Add(pnlDatabase);
         Controls.Add(pnlConfig);
         Controls.Add(pnlWelcome);
         Controls.Add(pnlSepBottom);
@@ -456,6 +612,10 @@ partial class InstallerForm
         grpPrereqs.PerformLayout();
         pnlConfig.ResumeLayout(false);
         pnlConfig.PerformLayout();
+        pnlDatabase.ResumeLayout(false);
+        pnlDatabase.PerformLayout();
+        grpSqlConnection.ResumeLayout(false);
+        grpSqlConnection.PerformLayout();
         pnlProgress.ResumeLayout(false);
         pnlProgress.PerformLayout();
         ResumeLayout(false);
@@ -498,11 +658,27 @@ partial class InstallerForm
     private TextBox txtAppPool;
     private Label lblPortLabel;
     private TextBox txtPort;
-    private Label lblConnStrLabel;
-    private TextBox txtConnectionString;
     private Label lblConfigNote;
 
-    // ── Step 3 – Progress ───────────────────────────────────────────
+    // ── Step 3 – Database Connection ────────────────────────────────
+    private Panel pnlDatabase;
+    private Label lblDbTitle;
+    private Label lblDbDesc;
+    private GroupBox grpSqlConnection;
+    private Label lblServerLabel;
+    private TextBox txtServer;
+    private Label lblDatabaseLabel;
+    private TextBox txtDatabase;
+    private CheckBox chkWindowsAuth;
+    private Label lblUsernameLabel;
+    private TextBox txtUsername;
+    private Label lblPasswordLabel;
+    private TextBox txtPassword;
+    private Button btnTestConnection;
+    private Label lblDbNote;
+    private Label lblDbInstallNote;
+
+    // ── Step 4 – Progress ───────────────────────────────────────────
     private Panel pnlProgress;
     private Label lblProgressTitle;
     private ProgressBar progressBar;
