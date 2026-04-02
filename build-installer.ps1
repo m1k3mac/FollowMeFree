@@ -25,8 +25,8 @@ $ErrorActionPreference = "Stop"
 $root        = $PSScriptRoot
 $workerProj  = Join-Path $root "FollowMeFree.WorkerService\FollowMeFree.WorkerService.csproj"
 $publishDir  = Join-Path $root "FollowMeFree.WorkerService\bin\publish"
-$installerDir = Join-Path $root "FollowMeFree.Installer"
-$installerProj = Join-Path $installerDir "FollowMeFree.Installer.wixproj"
+$installerDir = Join-Path $root "FollowMeFree.Service.Installer"
+$installerProj = Join-Path $installerDir "FollowMeFree.Service.Installer.wixproj"
 $supportWxs  = Join-Path $installerDir "SupportFiles.wxs"
 $exeName     = "FollowMeFree.WorkerService.exe"
 
