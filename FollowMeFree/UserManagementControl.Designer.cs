@@ -48,10 +48,12 @@
             this.Department = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPIN = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colAllowedPrinterIds = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -101,7 +103,7 @@
             // 
             this.barButtonItem_EditUser.Caption = "Edit";
             this.barButtonItem_EditUser.Id = 1;
-            this.barButtonItem_EditUser.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Edit.ImageOptions.SvgImage")));
+            this.barButtonItem_EditUser.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_EditUser.ImageOptions.SvgImage")));
             this.barButtonItem_EditUser.Name = "barButtonItem_EditUser";
             this.barButtonItem_EditUser.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barButtonItem_EditUser.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Edit_ItemClick);
@@ -159,6 +161,7 @@
             this.gridControl1.TabIndex = 4;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
+            this.gridControl1.DoubleClick += new System.EventHandler(this.gridControl1_DoubleClick);
             // 
             // userBindingSource
             // 
@@ -179,10 +182,13 @@
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.False;
             this.gridView1.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.False;
+            this.gridView1.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click;
             this.gridView1.OptionsBehavior.ReadOnly = true;
             this.gridView1.OptionsFind.AlwaysVisible = true;
             this.gridView1.OptionsLayout.Columns.AddNewColumns = false;
+            this.gridView1.OptionsSelection.EnableAppearanceFocusedCell = false;
             this.gridView1.OptionsView.EnableAppearanceEvenRow = true;
+            this.gridView1.RowClick += new DevExpress.XtraGrid.Views.Grid.RowClickEventHandler(this.gridView1_RowClick);
             // 
             // colUserName
             // 
@@ -227,6 +233,15 @@
             this.colAllowedPrinterIds.Visible = true;
             this.colAllowedPrinterIds.VisibleIndex = 5;
             // 
+            // popupMenu1
+            // 
+            this.popupMenu1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_ChangePIN),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_EditUser),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_New)});
+            this.popupMenu1.Manager = this.barManager1;
+            this.popupMenu1.Name = "popupMenu1";
+            // 
             // UserManagementControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,6 +258,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.userBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -268,5 +284,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn colPIN;
         private DevExpress.XtraGrid.Columns.GridColumn colAllowedPrinterIds;
         private DevExpress.XtraGrid.Columns.GridColumn Department;
+        private DevExpress.XtraBars.PopupMenu popupMenu1;
     }
 }

@@ -17,5 +17,6 @@ namespace FollowMeFree
         public int Id { get; set; }
         public string JobFilePath { get; set; }
         public string FMFPrinterName { get; set; }
+        public string APIAllowedNetwork { get; set; }
     }
 }

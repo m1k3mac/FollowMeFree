@@ -12,6 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="JobFilePath" Type="varchar(max)" Nullable="false" />
           <Property Name="FMFPrinterName" Type="varchar(max)" Nullable="false" />
+          <Property Name="APIAllowedNetwork" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Departments">
           <Key>
@@ -163,6 +164,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="JobFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FMFPrinterName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="APIAllowedNetwork" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Printer">
           <Key>
@@ -268,6 +270,7 @@
           <EntitySetMapping Name="Configs">
             <EntityTypeMapping TypeName="FMFDataModel.Config">
               <MappingFragment StoreEntitySet="Config">
+                <ScalarProperty Name="APIAllowedNetwork" ColumnName="APIAllowedNetwork" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="JobFilePath" ColumnName="JobFilePath" />
                 <ScalarProperty Name="FMFPrinterName" ColumnName="FMFPrinterName" />

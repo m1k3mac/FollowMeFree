@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraEditors;
+using DevExpress.XtraGrid.Views.Grid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -87,6 +88,19 @@ namespace FollowMeFree
             var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();
             userBindingSource.DataSource = query;
             gridView1.BestFitColumns();
+        }
+
+        private void gridControl1_DoubleClick(object sender, EventArgs e)
+        {            
+            barButtonItem_Edit_ItemClick(sender, null);
+        }
+
+        private void gridView1_RowClick(object sender, RowClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                popupMenu1.ShowPopup(MousePosition);
+            }
         }
     }
 }
