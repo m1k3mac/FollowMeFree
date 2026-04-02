@@ -76,12 +76,6 @@
     <Compile Include="Config.cs">
       <DependentUpon>EFModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ConfigurationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigurationForm.Designer.cs">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Department.cs">
       <DependentUpon>EFModel.tt</DependentUpon>
     </Compile>
@@ -169,9 +163,6 @@
     <EmbeddedResource Include="ChangePINForm.resx">
       <DependentUpon>ChangePINForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigurationForm.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="DepartmentManagementForm.resx">
       <DependentUpon>DepartmentManagementForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -239,6 +230,7 @@
       <DependentUpon>EFModel.edmx</DependentUpon>
       <LastGenOutput>EFModel.cs</LastGenOutput>
     </Content>
+    <None Include="FMFappIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

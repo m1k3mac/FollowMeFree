@@ -23,9 +23,9 @@ namespace FollowMeFree
 
         private void Main_Load(object sender, EventArgs e)
         {
-            if (ConfigurationForm.IsConfigurationRequired())
+            if (AdvancedSettingsForm.IsConfigurationRequired())
             {
-                using (var form = new ConfigurationForm())
+                using (var form = new AdvancedSettingsForm())
                 {
                     form.ShowDialog(this);
                 }
@@ -91,16 +91,6 @@ namespace FollowMeFree
         private void barButtonItem_Logs_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowControl(new LogViewerControl());
-        }
-
-        private void barButtonItem_Config_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            Cursor = Cursors.WaitCursor;
-            using (var form = new ConfigurationForm())
-            {
-                form.ShowDialog(this);
-            }
-            Cursor = Cursors.Default;
-        }
+        }        
     }
 }

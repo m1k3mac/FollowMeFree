@@ -1,26 +1,20 @@
+using DevExpress.XtraEditors;
 using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using DevExpress.XtraEditors;
 
 namespace FollowMeFree
 {
     public partial class AdvancedSettingsForm : DevExpress.XtraEditors.XtraForm
     {
         private FMFDataEntities _dbContext;
-        private Config _config;
-        private Timer _savedIndicatorTimer;
+        private Config _config;        
 
         public AdvancedSettingsForm()
         {
-            InitializeComponent();
-            _savedIndicatorTimer = new Timer { Interval = 2000 };
-            _savedIndicatorTimer.Tick += (s, e) =>
-            {
-                lblSavedIndicator.Text = string.Empty;
-                _savedIndicatorTimer.Stop();
-            };
+            InitializeComponent();            
             LoadData();
         }
 
@@ -36,34 +30,8 @@ namespace FollowMeFree
             }
             txtJobFilePath.Text = _config.JobFilePath ?? string.Empty;
             txtFMFPrinterName.Text = _config.FMFPrinterName ?? string.Empty;
-        }
-
-        private void SaveConfig()
-        {
-            try
-            {
-                _dbContext.SaveChanges();
-                lblSavedIndicator.Text = "? Saved";
-                _savedIndicatorTimer.Stop();
-                _savedIndicatorTimer.Start();
-            }
-            catch (Exception ex)
-            {
-                XtraMessageBox.Show("Error saving changes: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void txtJobFilePath_EditValueChanged(object sender, EventArgs e)
-        {
-            _config.JobFilePath = txtJobFilePath.Text;
-            SaveConfig();
-        }
-
-        private void txtFMFPrinterName_EditValueChanged(object sender, EventArgs e)
-        {
-            _config.FMFPrinterName = txtFMFPrinterName.Text;
-            SaveConfig();
-        }
+            textEdit_APIAllowedNetwork.Text = _config.APIAllowedNetwork ?? string.Empty;
+        }        
 
         private void btnClearLogs_Click(object sender, EventArgs e)
         {
@@ -136,16 +104,100 @@ namespace FollowMeFree
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            base.OnFormClosed(e);
-            if (_savedIndicatorTimer != null)
-            {
-                _savedIndicatorTimer.Stop();
-                _savedIndicatorTimer.Dispose();
-            }
+        {            
             if (_dbContext != null)
             {
                 _dbContext.Dispose();
+            }
+        }
+
+        private void simpleButton_Browse_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Select Job File Path folder";
+                if (!string.IsNullOrWhiteSpace(txtJobFilePath.Text) && Directory.Exists(txtJobFilePath.Text))
+                {
+                    dialog.SelectedPath = txtJobFilePath.Text;
+                }
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    txtJobFilePath.Text = dialog.SelectedPath;
+                }
+            }
+        }
+
+        private void simpleButton_Clear_Click(object sender, EventArgs e)
+        {
+            textEdit_APIAllowedNetwork.Text = string.Empty;
+        }
+
+        private void simpleButton_Save_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtJobFilePath.Text))
+            {
+                XtraMessageBox.Show("Job File Path is required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtJobFilePath.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtFMFPrinterName.Text))
+            {
+                XtraMessageBox.Show("FMF Printer Name is required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtFMFPrinterName.Focus();
+                return;
+            }
+
+            var jobFilePath = txtJobFilePath.Text.Trim();
+
+            try
+            {
+                if (!Directory.Exists(jobFilePath))
+                {
+                    Directory.CreateDirectory(jobFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show("Unable to create the Job File Path directory: " + ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtJobFilePath.Focus();
+                return;
+            }
+
+            _config.JobFilePath = jobFilePath;
+            _config.FMFPrinterName = txtFMFPrinterName.Text.Trim();
+            var apiNetwork = textEdit_APIAllowedNetwork.Text.Trim();
+            _config.APIAllowedNetwork = string.IsNullOrEmpty(apiNetwork) ? null : apiNetwork;
+
+            try
+            {
+                _dbContext.SaveChanges();
+
+                XtraMessageBox.Show("Configuration saved successfully.", "Configuration", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show("Error saving configuration: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static bool IsConfigurationRequired()
+        {
+            using (var dbContext = new FMFDataEntities())
+            {
+                var config = dbContext.Configs.FirstOrDefault();
+                if (config == null)
+                    return true;
+
+                if (string.IsNullOrWhiteSpace(config.JobFilePath) || string.IsNullOrWhiteSpace(config.FMFPrinterName))
+                    return true;
+
+                if (!Directory.Exists(config.JobFilePath))
+                    return true;
+
+                return false;
             }
         }
     }

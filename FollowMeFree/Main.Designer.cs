@@ -46,7 +46,6 @@
             this.barButtonItem_Logs = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.barButtonItem_Config = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             this.SuspendLayout();
@@ -114,8 +113,7 @@
             this.barButtonItem_DepartmentManagement,
             this.barButtonItem_Stats,
             this.barButtonItem_Advanced,
-            this.barButtonItem_Logs,
-            this.barButtonItem_Config});
+            this.barButtonItem_Logs});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl1.MaxItemId = 11;
             this.ribbonControl1.Name = "ribbonControl1";
@@ -200,19 +198,9 @@
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_DepartmentManagement);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Stats, true);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Logs, true);
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Config, true);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Advanced, true);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "ribbonPageGroup2";
-            // 
-            // barButtonItem_Config
-            // 
-            this.barButtonItem_Config.Caption = "Config";
-            this.barButtonItem_Config.Id = 10;
-            this.barButtonItem_Config.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem_Config.ImageOptions.Image")));
-            this.barButtonItem_Config.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem_Config.ImageOptions.LargeImage")));
-            this.barButtonItem_Config.Name = "barButtonItem_Config";
-            this.barButtonItem_Config.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Config_ItemClick);
             // 
             // Main
             // 
@@ -225,10 +213,11 @@
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
+            this.IconOptions.Image = global::FollowMeFree.Properties.Resources.FMFappIcon;
             this.Name = "Main";
             this.Ribbon = this.ribbonControl1;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FollowMeFree";
+            this.Text = "Follow Me Free Commander";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
@@ -256,7 +245,6 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Stats;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Advanced;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Logs;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem_Config;
     }
 }
 
