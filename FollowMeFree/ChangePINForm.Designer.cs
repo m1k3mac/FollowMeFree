@@ -59,7 +59,7 @@ namespace FollowMeFree
             this.layoutControl1.Location = new System.Drawing.Point(0, 24);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
-            this.layoutControl1.Size = new System.Drawing.Size(350, 62);
+            this.layoutControl1.Size = new System.Drawing.Size(350, 90);
             this.layoutControl1.TabIndex = 0;
             // 
             // textEditPIN
@@ -80,7 +80,7 @@ namespace FollowMeFree
             this.layoutControlItemPIN,
             this.emptySpaceItem1});
             this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(350, 62);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(350, 90);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItemPIN
@@ -97,7 +97,7 @@ namespace FollowMeFree
             this.emptySpaceItem1.AllowHotTrack = false;
             this.emptySpaceItem1.Location = new System.Drawing.Point(0, 24);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(330, 18);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(330, 46);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // barManager1
@@ -162,7 +162,7 @@ namespace FollowMeFree
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 86);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 114);
             this.barDockControlBottom.Manager = this.barManager1;
             this.barDockControlBottom.Size = new System.Drawing.Size(350, 0);
             // 
@@ -172,7 +172,7 @@ namespace FollowMeFree
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 62);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 90);
             // 
             // barDockControlRight
             // 
@@ -180,13 +180,13 @@ namespace FollowMeFree
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.barDockControlRight.Location = new System.Drawing.Point(350, 24);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 62);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 90);
             // 
             // ChangePINForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 86);
+            this.ClientSize = new System.Drawing.Size(350, 114);
             this.Controls.Add(this.layoutControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
