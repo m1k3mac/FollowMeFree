@@ -30,6 +30,7 @@ namespace FollowMeFree
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedSettingsForm));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            this.simpleButtonServiceConfig = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.simpleButton_Save = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton_Clear = new DevExpress.XtraEditors.SimpleButton();
@@ -41,24 +42,23 @@ namespace FollowMeFree
             this.btnClearPrintJobs = new DevExpress.XtraEditors.SimpleButton();
             this.btnResetDatabase = new DevExpress.XtraEditors.SimpleButton();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
+            this.emptySpaceItem2 = new DevExpress.XtraLayout.EmptySpaceItem();
+            this.layoutControlGroup2 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItemJobFilePath = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItemFMFPrinterName = new DevExpress.XtraLayout.LayoutControlItem();
-            this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
-            this.layoutControlItemClearLogs = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItemClearPrintJobs = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItemResetDatabase = new DevExpress.XtraLayout.LayoutControlItem();
-            this.emptySpaceItem2 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlGroup2 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem3 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlGroup3 = new DevExpress.XtraLayout.LayoutControlGroup();
-            this.simpleButtonServiceConfig = new DevExpress.XtraEditors.SimpleButton();
-            this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItemResetDatabase = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItemClearPrintJobs = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItemClearLogs = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlGroup4 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem4 = new DevExpress.XtraLayout.EmptySpaceItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
@@ -66,23 +66,23 @@ namespace FollowMeFree
             ((System.ComponentModel.ISupportInitialize)(this.txtJobFilePath.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtFMFPrinterName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemJobFilePath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemFMFPrinterName)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearLogs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearPrintJobs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemResetDatabase)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemResetDatabase)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearPrintJobs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearLogs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem4)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,6 +105,16 @@ namespace FollowMeFree
             this.layoutControl1.Root = this.layoutControlGroup1;
             this.layoutControl1.Size = new System.Drawing.Size(485, 563);
             this.layoutControl1.TabIndex = 0;
+            // 
+            // simpleButtonServiceConfig
+            // 
+            this.simpleButtonServiceConfig.Location = new System.Drawing.Point(24, 282);
+            this.simpleButtonServiceConfig.Name = "simpleButtonServiceConfig";
+            this.simpleButtonServiceConfig.Size = new System.Drawing.Size(437, 22);
+            this.simpleButtonServiceConfig.StyleController = this.layoutControl1;
+            this.simpleButtonServiceConfig.TabIndex = 11;
+            this.simpleButtonServiceConfig.Text = "Configure";
+            this.simpleButtonServiceConfig.Click += new System.EventHandler(this.simpleButtonServiceConfig_Click);
             // 
             // labelControl1
             // 
@@ -222,24 +232,6 @@ namespace FollowMeFree
             this.layoutControlGroup1.Size = new System.Drawing.Size(485, 563);
             this.layoutControlGroup1.TextVisible = false;
             // 
-            // layoutControlItemJobFilePath
-            // 
-            this.layoutControlItemJobFilePath.Control = this.txtJobFilePath;
-            this.layoutControlItemJobFilePath.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItemJobFilePath.Name = "layoutControlItemJobFilePath";
-            this.layoutControlItemJobFilePath.Size = new System.Drawing.Size(379, 26);
-            this.layoutControlItemJobFilePath.Text = "Job File Path";
-            this.layoutControlItemJobFilePath.TextSize = new System.Drawing.Size(100, 13);
-            // 
-            // layoutControlItemFMFPrinterName
-            // 
-            this.layoutControlItemFMFPrinterName.Control = this.txtFMFPrinterName;
-            this.layoutControlItemFMFPrinterName.Location = new System.Drawing.Point(0, 26);
-            this.layoutControlItemFMFPrinterName.Name = "layoutControlItemFMFPrinterName";
-            this.layoutControlItemFMFPrinterName.Size = new System.Drawing.Size(441, 24);
-            this.layoutControlItemFMFPrinterName.Text = "FMF Printer Name";
-            this.layoutControlItemFMFPrinterName.TextSize = new System.Drawing.Size(100, 13);
-            // 
             // emptySpaceItem1
             // 
             this.emptySpaceItem1.AllowHotTrack = false;
@@ -248,33 +240,6 @@ namespace FollowMeFree
             this.emptySpaceItem1.Size = new System.Drawing.Size(465, 37);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
-            // layoutControlItemClearLogs
-            // 
-            this.layoutControlItemClearLogs.Control = this.btnClearLogs;
-            this.layoutControlItemClearLogs.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItemClearLogs.Name = "layoutControlItemClearLogs";
-            this.layoutControlItemClearLogs.Size = new System.Drawing.Size(441, 26);
-            this.layoutControlItemClearLogs.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItemClearLogs.TextVisible = false;
-            // 
-            // layoutControlItemClearPrintJobs
-            // 
-            this.layoutControlItemClearPrintJobs.Control = this.btnClearPrintJobs;
-            this.layoutControlItemClearPrintJobs.Location = new System.Drawing.Point(0, 26);
-            this.layoutControlItemClearPrintJobs.Name = "layoutControlItemClearPrintJobs";
-            this.layoutControlItemClearPrintJobs.Size = new System.Drawing.Size(441, 26);
-            this.layoutControlItemClearPrintJobs.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItemClearPrintJobs.TextVisible = false;
-            // 
-            // layoutControlItemResetDatabase
-            // 
-            this.layoutControlItemResetDatabase.Control = this.btnResetDatabase;
-            this.layoutControlItemResetDatabase.Location = new System.Drawing.Point(0, 52);
-            this.layoutControlItemResetDatabase.Name = "layoutControlItemResetDatabase";
-            this.layoutControlItemResetDatabase.Size = new System.Drawing.Size(441, 26);
-            this.layoutControlItemResetDatabase.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItemResetDatabase.TextVisible = false;
-            // 
             // emptySpaceItem2
             // 
             this.emptySpaceItem2.AllowHotTrack = false;
@@ -282,57 +247,6 @@ namespace FollowMeFree
             this.emptySpaceItem2.Name = "emptySpaceItem2";
             this.emptySpaceItem2.Size = new System.Drawing.Size(465, 70);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
-            // 
-            // layoutControlItem1
-            // 
-            this.layoutControlItem1.Control = this.simpleButton_Browse;
-            this.layoutControlItem1.Location = new System.Drawing.Point(379, 0);
-            this.layoutControlItem1.MaxSize = new System.Drawing.Size(62, 26);
-            this.layoutControlItem1.MinSize = new System.Drawing.Size(62, 26);
-            this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(62, 26);
-            this.layoutControlItem1.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
-            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem1.TextVisible = false;
-            // 
-            // layoutControlItem2
-            // 
-            this.layoutControlItem2.Control = this.textEdit_APIAllowedNetwork;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 50);
-            this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(379, 26);
-            this.layoutControlItem2.Text = "API Allowed Network";
-            this.layoutControlItem2.TextSize = new System.Drawing.Size(100, 13);
-            // 
-            // layoutControlItem3
-            // 
-            this.layoutControlItem3.Control = this.simpleButton_Clear;
-            this.layoutControlItem3.Location = new System.Drawing.Point(379, 50);
-            this.layoutControlItem3.MaxSize = new System.Drawing.Size(62, 26);
-            this.layoutControlItem3.MinSize = new System.Drawing.Size(62, 26);
-            this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(62, 26);
-            this.layoutControlItem3.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
-            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem3.TextVisible = false;
-            // 
-            // layoutControlItem4
-            // 
-            this.layoutControlItem4.Control = this.simpleButton_Save;
-            this.layoutControlItem4.Location = new System.Drawing.Point(0, 129);
-            this.layoutControlItem4.Name = "layoutControlItem4";
-            this.layoutControlItem4.Size = new System.Drawing.Size(441, 26);
-            this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem4.TextVisible = false;
-            // 
-            // layoutControlItem5
-            // 
-            this.layoutControlItem5.Control = this.labelControl1;
-            this.layoutControlItem5.Location = new System.Drawing.Point(0, 76);
-            this.layoutControlItem5.Name = "layoutControlItem5";
-            this.layoutControlItem5.Size = new System.Drawing.Size(441, 30);
-            this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem5.TextVisible = false;
             // 
             // layoutControlGroup2
             // 
@@ -351,6 +265,75 @@ namespace FollowMeFree
             this.layoutControlGroup2.Name = "layoutControlGroup2";
             this.layoutControlGroup2.Size = new System.Drawing.Size(465, 200);
             this.layoutControlGroup2.Text = "Configuration";
+            // 
+            // layoutControlItemJobFilePath
+            // 
+            this.layoutControlItemJobFilePath.Control = this.txtJobFilePath;
+            this.layoutControlItemJobFilePath.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItemJobFilePath.Name = "layoutControlItemJobFilePath";
+            this.layoutControlItemJobFilePath.Size = new System.Drawing.Size(379, 26);
+            this.layoutControlItemJobFilePath.Text = "Job File Path";
+            this.layoutControlItemJobFilePath.TextSize = new System.Drawing.Size(100, 13);
+            // 
+            // layoutControlItemFMFPrinterName
+            // 
+            this.layoutControlItemFMFPrinterName.Control = this.txtFMFPrinterName;
+            this.layoutControlItemFMFPrinterName.Location = new System.Drawing.Point(0, 26);
+            this.layoutControlItemFMFPrinterName.Name = "layoutControlItemFMFPrinterName";
+            this.layoutControlItemFMFPrinterName.Size = new System.Drawing.Size(441, 24);
+            this.layoutControlItemFMFPrinterName.Text = "FMF Printer Name";
+            this.layoutControlItemFMFPrinterName.TextSize = new System.Drawing.Size(100, 13);
+            // 
+            // layoutControlItem1
+            // 
+            this.layoutControlItem1.Control = this.simpleButton_Browse;
+            this.layoutControlItem1.Location = new System.Drawing.Point(379, 0);
+            this.layoutControlItem1.MaxSize = new System.Drawing.Size(62, 26);
+            this.layoutControlItem1.MinSize = new System.Drawing.Size(62, 26);
+            this.layoutControlItem1.Name = "layoutControlItem1";
+            this.layoutControlItem1.Size = new System.Drawing.Size(62, 26);
+            this.layoutControlItem1.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem1.TextVisible = false;
+            // 
+            // layoutControlItem3
+            // 
+            this.layoutControlItem3.Control = this.simpleButton_Clear;
+            this.layoutControlItem3.Location = new System.Drawing.Point(379, 50);
+            this.layoutControlItem3.MaxSize = new System.Drawing.Size(62, 26);
+            this.layoutControlItem3.MinSize = new System.Drawing.Size(62, 26);
+            this.layoutControlItem3.Name = "layoutControlItem3";
+            this.layoutControlItem3.Size = new System.Drawing.Size(62, 26);
+            this.layoutControlItem3.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem3.TextVisible = false;
+            // 
+            // layoutControlItem2
+            // 
+            this.layoutControlItem2.Control = this.textEdit_APIAllowedNetwork;
+            this.layoutControlItem2.Location = new System.Drawing.Point(0, 50);
+            this.layoutControlItem2.Name = "layoutControlItem2";
+            this.layoutControlItem2.Size = new System.Drawing.Size(379, 26);
+            this.layoutControlItem2.Text = "API Allowed Network";
+            this.layoutControlItem2.TextSize = new System.Drawing.Size(100, 13);
+            // 
+            // layoutControlItem5
+            // 
+            this.layoutControlItem5.Control = this.labelControl1;
+            this.layoutControlItem5.Location = new System.Drawing.Point(0, 76);
+            this.layoutControlItem5.Name = "layoutControlItem5";
+            this.layoutControlItem5.Size = new System.Drawing.Size(441, 30);
+            this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem5.TextVisible = false;
+            // 
+            // layoutControlItem4
+            // 
+            this.layoutControlItem4.Control = this.simpleButton_Save;
+            this.layoutControlItem4.Location = new System.Drawing.Point(0, 129);
+            this.layoutControlItem4.Name = "layoutControlItem4";
+            this.layoutControlItem4.Size = new System.Drawing.Size(441, 26);
+            this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem4.TextVisible = false;
             // 
             // emptySpaceItem3
             // 
@@ -376,24 +359,32 @@ namespace FollowMeFree
             this.layoutControlGroup3.Size = new System.Drawing.Size(465, 123);
             this.layoutControlGroup3.Text = "Database";
             // 
-            // simpleButtonServiceConfig
+            // layoutControlItemResetDatabase
             // 
-            this.simpleButtonServiceConfig.Location = new System.Drawing.Point(24, 282);
-            this.simpleButtonServiceConfig.Name = "simpleButtonServiceConfig";
-            this.simpleButtonServiceConfig.Size = new System.Drawing.Size(437, 22);
-            this.simpleButtonServiceConfig.StyleController = this.layoutControl1;
-            this.simpleButtonServiceConfig.TabIndex = 11;
-            this.simpleButtonServiceConfig.Text = "Configure Connection String";
-            this.simpleButtonServiceConfig.Click += new System.EventHandler(this.simpleButtonServiceConfig_Click);
+            this.layoutControlItemResetDatabase.Control = this.btnResetDatabase;
+            this.layoutControlItemResetDatabase.Location = new System.Drawing.Point(0, 52);
+            this.layoutControlItemResetDatabase.Name = "layoutControlItemResetDatabase";
+            this.layoutControlItemResetDatabase.Size = new System.Drawing.Size(441, 26);
+            this.layoutControlItemResetDatabase.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItemResetDatabase.TextVisible = false;
             // 
-            // layoutControlItem6
+            // layoutControlItemClearPrintJobs
             // 
-            this.layoutControlItem6.Control = this.simpleButtonServiceConfig;
-            this.layoutControlItem6.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(441, 26);
-            this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem6.TextVisible = false;
+            this.layoutControlItemClearPrintJobs.Control = this.btnClearPrintJobs;
+            this.layoutControlItemClearPrintJobs.Location = new System.Drawing.Point(0, 26);
+            this.layoutControlItemClearPrintJobs.Name = "layoutControlItemClearPrintJobs";
+            this.layoutControlItemClearPrintJobs.Size = new System.Drawing.Size(441, 26);
+            this.layoutControlItemClearPrintJobs.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItemClearPrintJobs.TextVisible = false;
+            // 
+            // layoutControlItemClearLogs
+            // 
+            this.layoutControlItemClearLogs.Control = this.btnClearLogs;
+            this.layoutControlItemClearLogs.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItemClearLogs.Name = "layoutControlItemClearLogs";
+            this.layoutControlItemClearLogs.Size = new System.Drawing.Size(441, 26);
+            this.layoutControlItemClearLogs.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItemClearLogs.TextVisible = false;
             // 
             // layoutControlGroup4
             // 
@@ -405,6 +396,15 @@ namespace FollowMeFree
             this.layoutControlGroup4.Name = "layoutControlGroup4";
             this.layoutControlGroup4.Size = new System.Drawing.Size(465, 71);
             this.layoutControlGroup4.Text = "Windows Service";
+            // 
+            // layoutControlItem6
+            // 
+            this.layoutControlItem6.Control = this.simpleButtonServiceConfig;
+            this.layoutControlItem6.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem6.Name = "layoutControlItem6";
+            this.layoutControlItem6.Size = new System.Drawing.Size(441, 26);
+            this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem6.TextVisible = false;
             // 
             // emptySpaceItem4
             // 
@@ -435,23 +435,23 @@ namespace FollowMeFree
             ((System.ComponentModel.ISupportInitialize)(this.txtJobFilePath.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtFMFPrinterName.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemJobFilePath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemFMFPrinterName)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearLogs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearPrintJobs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemResetDatabase)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemResetDatabase)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearPrintJobs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemClearLogs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem4)).EndInit();
             this.ResumeLayout(false);
 

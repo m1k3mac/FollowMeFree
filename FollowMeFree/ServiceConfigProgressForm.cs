@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.IO;
 using System.ServiceProcess;
 using System.Text.RegularExpressions;
@@ -121,7 +122,11 @@ namespace FollowMeFree
                     UpdateAppSettingsConnectionString(appSettingsPath, sqlConnectionString);
                     worker.ReportProgress(0, "appsettings.json updated.");
 
-                    // Step 5 - Start the service
+                    // Step 5 - Grant database access to the Windows service account
+                    worker.ReportProgress(0, "Granting database access to NT AUTHORITY\\SYSTEM...");
+                    GrantServiceDatabaseAccess(sqlConnectionString, worker);
+
+                    // Step 6 - Start the service
                     worker.ReportProgress(0, "Starting the service...");
                     sc.Start();
                     sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30));
@@ -223,6 +228,89 @@ namespace FollowMeFree
             return result.Trim(';').Trim();
         }
 
+        private static void GrantServiceDatabaseAccess(string sqlConnectionString, BackgroundWorker worker)
+        {
+            string databaseName = ExtractDatabaseName(sqlConnectionString);
+            if (string.IsNullOrEmpty(databaseName))
+            {
+                worker.ReportProgress(0, "WARNING: Could not determine database name from connection string. Skipping database access grant.");
+                return;
+            }
+
+            // Build a connection string targeting 'master' for the server-level login
+            var builder = new SqlConnectionStringBuilder(sqlConnectionString);
+            builder.InitialCatalog = "master";
+
+            using (var connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                // Create login if it doesn't exist
+                string createLoginSql = @"
+                    IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'NT AUTHORITY\SYSTEM')
+                    BEGIN
+                        CREATE LOGIN [NT AUTHORITY\SYSTEM] FROM WINDOWS;
+                    END";
+                using (var cmd = new SqlCommand(createLoginSql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Check if login was already present or just created
+                string checkLoginSql = @"SELECT 1 FROM sys.server_principals WHERE name = N'NT AUTHORITY\SYSTEM'";
+                using (var cmd = new SqlCommand(checkLoginSql, connection))
+                {
+                    var result = cmd.ExecuteScalar();
+                    if (result != null)
+                        worker.ReportProgress(0, "Login [NT AUTHORITY\\SYSTEM] is present on the server.");
+                }
+
+                // Switch to the application database
+                connection.ChangeDatabase(databaseName);
+
+                // Create database user if it doesn't exist
+                string createUserSql = @"
+                    IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = N'NT AUTHORITY\SYSTEM')
+                    BEGIN
+                        CREATE USER [NT AUTHORITY\SYSTEM] FOR LOGIN [NT AUTHORITY\SYSTEM];
+                    END";
+                using (var cmd = new SqlCommand(createUserSql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                worker.ReportProgress(0, $"User [NT AUTHORITY\\SYSTEM] is present in database [{databaseName}].");
+
+                // Grant db_datareader and db_datawriter roles
+                string grantReaderSql = @"ALTER ROLE [db_datareader] ADD MEMBER [NT AUTHORITY\SYSTEM]";
+                using (var cmd = new SqlCommand(grantReaderSql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                string grantWriterSql = @"ALTER ROLE [db_datawriter] ADD MEMBER [NT AUTHORITY\SYSTEM]";
+                using (var cmd = new SqlCommand(grantWriterSql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                worker.ReportProgress(0, "Roles db_datareader and db_datawriter granted to [NT AUTHORITY\\SYSTEM].");
+            }
+
+            worker.ReportProgress(0, "Database access granted successfully.");
+        }
+
+        private static string ExtractDatabaseName(string sqlConnectionString)
+        {
+            try
+            {
+                var builder = new SqlConnectionStringBuilder(sqlConnectionString);
+                return builder.InitialCatalog;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private static void UpdateAppSettingsConnectionString(string appSettingsPath, string newConnectionString)
         {
             string json = File.ReadAllText(appSettingsPath);
@@ -231,9 +319,10 @@ namespace FollowMeFree
                 .Replace("\\", "\\\\")
                 .Replace("\"", "\\\"");
 
+            string pattern = @"(""DefaultConnection""\s*:\s*"")([^""]*)("")";
             string updatedJson = Regex.Replace(
                 json,
-                @"(""DefaultConnection""\s*:\s*"")([^""]*)("")",
+                pattern,
                 $"$1{escapedConnStr}$3");
 
             File.WriteAllText(appSettingsPath, updatedJson);
