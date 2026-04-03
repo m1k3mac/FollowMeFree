@@ -384,6 +384,7 @@ namespace FollowMeFree
             this.simpleButtonServiceConfig.StyleController = this.layoutControl1;
             this.simpleButtonServiceConfig.TabIndex = 11;
             this.simpleButtonServiceConfig.Text = "Configure Connection String";
+            this.simpleButtonServiceConfig.Click += new System.EventHandler(this.simpleButtonServiceConfig_Click);
             // 
             // layoutControlItem6
             // 

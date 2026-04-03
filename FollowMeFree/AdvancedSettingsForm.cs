@@ -200,5 +200,13 @@ namespace FollowMeFree
                 return false;
             }
         }
+
+        private void simpleButtonServiceConfig_Click(object sender, EventArgs e)
+        {
+            using (var progressForm = new ServiceConfigProgressForm())
+            {
+                progressForm.ShowDialog(this);
+            }
+        }
     }
 }
