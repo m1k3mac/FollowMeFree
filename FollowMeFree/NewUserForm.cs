@@ -19,7 +19,7 @@ namespace FollowMeFree
 
             if (!ValidateDepartmentAndPrinterSetup())
             {
-                barButtonItem_Save.Enabled = false;
+                barButtonItem_Save.Enabled = false;                
             }
         }
 
@@ -64,7 +64,7 @@ namespace FollowMeFree
             if (!hasDepartments)
             {
                 XtraMessageBox.Show("No Departments were found. Please create a Department first, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                return false;                
             }
 
             XtraMessageBox.Show("No Printers were found. Please create a Printer first, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);

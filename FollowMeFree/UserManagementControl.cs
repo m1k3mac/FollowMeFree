@@ -16,6 +16,8 @@ namespace FollowMeFree
     public partial class UserManagementControl : DevExpress.XtraEditors.XtraUserControl
     {
         private FMFDataEntities _dbContext;
+        private bool hasDepartments;
+        private bool hasPrinters;
         public UserManagementControl()
         {
             InitializeComponent();
@@ -28,11 +30,20 @@ namespace FollowMeFree
             var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();            
             userBindingSource.DataSource = query;
             gridView1.BestFitColumns();
+
+            LoadDepartments();
+            LoadPrinters();
         }
 
         private void barButtonItem_New_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+
+            if(!ValidateDepartmentAndPrinterSetup())
+            {
+                Cursor = Cursors.Default;
+                return;
+            }
 
             using (var form = new NewUserForm())
             {
@@ -100,6 +111,47 @@ namespace FollowMeFree
             if (e.Button == MouseButtons.Right)
             {
                 popupMenu1.ShowPopup(MousePosition);
+            }
+        }
+
+        private bool ValidateDepartmentAndPrinterSetup()
+        {
+            if (hasDepartments && hasPrinters)
+            {
+                return true;
+            }
+
+            if (!hasDepartments && !hasPrinters)
+            {
+                XtraMessageBox.Show("No Departments or Printers were found. Please create at least one Department and one Printer, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (!hasDepartments)
+            {
+                XtraMessageBox.Show("No Departments were found. Please create a Department first, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            XtraMessageBox.Show("No Printers were found. Please create a Printer first, then come back to create a new user.", "Setup Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        private void LoadDepartments()
+        {
+            using (var db = new FMFDataEntities())
+            {
+                var departments = db.Departments.ToList();
+                hasDepartments = departments.Any();                
+            }
+        }
+
+        private void LoadPrinters()
+        {
+            using (var db = new FMFDataEntities())
+            {
+                var printers = db.Printers.ToList();
+                hasPrinters = printers.Any();                
             }
         }
     }

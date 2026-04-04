@@ -229,7 +229,7 @@ partial class InstallerForm
 
         txtServer.Location = new Point(20, 50);
         txtServer.Size = new Size(300, 23);
-        txtServer.Text = "";
+        txtServer.Text = "localhost\\sqlexpress";
         txtServer.TextChanged += ConnectionField_TextChanged;
 
         lblDatabase.AutoSize = true;
@@ -244,6 +244,7 @@ partial class InstallerForm
         chkWindowsAuth.AutoSize = true;
         chkWindowsAuth.Location = new Point(20, 88);
         chkWindowsAuth.Text = "Use Windows Authentication";
+        chkWindowsAuth.CheckState = CheckState.Checked;
         chkWindowsAuth.CheckedChanged += chkWindowsAuth_CheckedChanged;
 
         lblUsername.AutoSize = true;

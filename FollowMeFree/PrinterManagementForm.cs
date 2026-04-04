@@ -41,6 +41,7 @@ namespace FollowMeFree
             {
                 _dbContext.SaveChanges();
                 XtraMessageBox.Show("Changes saved successfully.", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex)
             {

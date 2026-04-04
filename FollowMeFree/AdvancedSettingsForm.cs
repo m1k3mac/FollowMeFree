@@ -175,7 +175,7 @@ namespace FollowMeFree
 
                 XtraMessageBox.Show("Configuration saved successfully.", "Configuration", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
-                this.Close();
+                //this.Close();
             }
             catch (Exception ex)
             {

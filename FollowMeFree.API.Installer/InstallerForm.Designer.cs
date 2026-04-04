@@ -301,7 +301,7 @@ partial class InstallerForm
         txtPort.Name = "txtPort";
         txtPort.Size = new Size(100, 23);
         txtPort.TabIndex = 3;
-        txtPort.Text = "80";
+        txtPort.Text = "8080";
         // 
         // lblPortLabel
         // 
@@ -450,6 +450,7 @@ partial class InstallerForm
         txtServer.Name = "txtServer";
         txtServer.Size = new Size(300, 23);
         txtServer.TabIndex = 1;
+        txtServer.Text = "LOCALHOST\\SQLEXPRESS";
         txtServer.TextChanged += OnDbFieldChanged;
         // 
         // lblDatabaseLabel
@@ -478,6 +479,7 @@ partial class InstallerForm
         chkWindowsAuth.Size = new Size(167, 19);
         chkWindowsAuth.TabIndex = 4;
         chkWindowsAuth.Text = "Use Windows Authentication";
+        chkWindowsAuth.CheckState = CheckState.Checked;
         chkWindowsAuth.CheckedChanged += chkWindowsAuth_CheckedChanged;
         // 
         // lblUsernameLabel
