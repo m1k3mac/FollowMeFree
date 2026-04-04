@@ -1,0 +1,13 @@
+﻿Complete Project Build Notes: Build from Package Manager Console (PMC) in Visual Studio.
+
+(1) Desktop - Winforms App: FollowMeFree.Installer
+.\build-app-installer.ps1
+Output: FollowMeFree.Installer\bin\Release\net8.0-windows\
+
+(2) API: FollowMeFree.API.Installer
+.\build-api-installer.ps1
+Output: FollowMeFree.API.Installer\bin\installer-output
+
+(3) Worker Service: FollowMeFree.Service.Installer
+.\build-installer.ps1
+Output: FollowMeFree.Service.Installer\bin\x64\Release\FollowMeFree.Service.Installer.msi
