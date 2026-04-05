@@ -128,7 +128,7 @@
    https://dotnet.microsoft.com/download/dotnet/8.0
    (Run 'iisreset' from an elevated command prompt after installation)
 
-3. Run this installer as Administrator for IIS site creation.
+3. This installer should be run as Administrator for IIS site creation.
 
 The .NET SDK is NOT required on the target machine. The Hosting Bundle
 provides everything needed to run ASP.NET Core apps behind IIS.</value>
@@ -140,8 +140,8 @@ published output. You can also edit it manually after installation.
 If 'Create IIS Website' is unchecked, files will only be published to the
 specified directory and you can configure IIS manually afterwards.
 
-If port 80 is already in use by the Default Web Site, either stop that site
-first or choose a different port here (e.g. 8080).</value>
+NOTE that port 80 is already in use by the Default Web Site (with new IIS installation). If you wish to use port 80
+for this API you should stop the Default site manually after the installtion is complete.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
