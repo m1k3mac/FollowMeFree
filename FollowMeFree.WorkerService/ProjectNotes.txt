@@ -11,10 +11,14 @@ making changes to the FMFData database. Set the Default project dropdown in the
 Package Manager Console to "FollowMeFree.WorkerService" before running.
 
 WorkerService
-Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data -Context FollowMeFreeDbContext -NoOnConfiguring -Force
+Scaffold-DbContext "Server=YOUR_SERVER.database.windows.net;Database=FMFData;User ID=YOUR_USER;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data -Context FollowMeFreeDbContext -NoOnConfiguring -Force
 
 API
-Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -ContextDir Data -Context FmfDataContext -NoOnConfiguring -Force
+Scaffold-DbContext "Server=YOUR_SERVER.database.windows.net;Database=FMFData;User ID=YOUR_USER;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -ContextDir Data -Context FmfDataContext -NoOnConfiguring -Force
+
+NOTE: Replace YOUR_SERVER, YOUR_USER, and YOUR_PASSWORD with the actual
+hosted SQL Server credentials. The connection string must match the one
+configured in each project's appsettings.json or App.config.
 
 --------------------------------------------------------------------------------
 API - LAN Network Access Configuration
@@ -47,28 +51,17 @@ Notes:
   DATABASE and Connection String
   --------------------------------------------------------------------------------
 
-  The database files (FMFData.mdf, FMFData_log.ldf) live outside the
-  solution in a shared location:
-
-    C:\FollwMeFree\DB\FMFData.mdf
-    C:\FollwMeFree\DB\FMFData_log.ldf
-
-  The database is not mounted in SQL Server. Instead, LocalDB attaches
-  the .mdf file on demand at runtime via the AttachDbFilename connection
-  string parameter. Placing the files outside the solution avoids
-  per-project output copies and ensures all projects share the same
-  physical database.
-
-  Files changed:
-    - FollowMeFree.WorkerService\appsettings.json
-        Updated DefaultConnection to use AttachDbFilename with an
-        absolute path to C:\FollwMeFree\DB\FMFData.mdf.
+  The FMFData database is hosted on a remote Microsoft SQL Server
+  instance. All projects connect to the same hosted database using a
+  standard SQL Server connection string — there are no local .mdf
+  files or LocalDB dependencies.
 
   Shared database access architecture:
 
-    The WorkerService owns the physical database files and attaches them
-    to LocalDB on startup via AttachDbFilename. The API connects to the
-    same LocalDB database by name only (no AttachDbFilename).
+    All three projects (WorkerService, API, WinForms) connect directly
+    to the hosted SQL Server using the connection string configured in
+    each project's settings file. There is no startup-order dependency
+    for database attachment.
 
     Both the WorkerService and API retain direct database access for
     their own logging and configuration reads. This avoids a circular
@@ -83,106 +76,58 @@ Notes:
 PRODUCTION DEPLOYMENT GUIDE
 ================================================================================
 
-This application uses SQL Server LocalDB with a standalone .mdf file (never
-attached to a full SQL Server instance). All three projects share the same
-physical database. The following must be addressed when deploying to a
-customer's computer.
+This application uses a hosted Microsoft SQL Server instance. All three
+projects connect to the same remote FMFData database over the network.
+The following must be addressed when deploying to a customer's environment.
 
 --------------------------------------------------------------------------------
-1. PREREQUISITE: SQL Server LocalDB
+1. PREREQUISITE: Hosted SQL Server Access
 --------------------------------------------------------------------------------
 
-  LocalDB must be installed on the target machine. It is NOT installed by
-  default on Windows. It ships with:
+  The FMFData database must be provisioned on a hosted Microsoft SQL
+  Server instance (e.g. Azure SQL Database, a cloud-hosted SQL Server
+  VM, or any remotely accessible SQL Server).
 
-    - Visual Studio (any edition with the "Data storage and processing"
-      workload)
-    - SQL Server Express (as an optional feature)
-    - Standalone installer from Microsoft:
-      https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb
+  Requirements:
+    - The hosted SQL Server must be reachable from the deployment
+      machine(s) over the network (TCP port 1433 by default).
+    - A SQL Server login with appropriate permissions on the FMFData
+      database must be created for the application.
+    - If using Azure SQL Database, ensure the server firewall rules
+      allow connections from the deployment machine IP addresses.
 
-  Your installer / deployment package must include the LocalDB MSI or
-  require the customer to install it beforehand. The version used in
-  development is LocalDB 17.x (SQL Server 2022 Express LocalDB).
-
-  To obtain the standalone installer, you need to download the full SQL Server Express installer. Run it and select Download Media.Then select the LocalDB option to get the standalone installer for LocalDB.
-  To access localdb from SSMS use (localdb)\MSSQLLocalDB as the server name. You can also manage localdb instances from the command line using the SqlLocalDB utility (e.g. "SqlLocalDB info" to list instances).
-
---------------------------------------------------------------------------------
-2. LOCALDB INSTANCE CREATION
---------------------------------------------------------------------------------
-
-  The connection strings reference the instance name "MSSQLLocalDB".
-  After installing LocalDB, the instance must be created and started:
-
-    SqlLocalDB create MSSQLLocalDB
-    SqlLocalDB start  MSSQLLocalDB
-
-  If the instance already exists but is corrupt (common after
-  reinstalls), delete and recreate it:
-
-    SqlLocalDB stop   MSSQLLocalDB
-    SqlLocalDB delete MSSQLLocalDB
-    SqlLocalDB create MSSQLLocalDB
-    SqlLocalDB start  MSSQLLocalDB
-
-  NOTE: Recreating the instance wipes all login mappings. The database
-  file will need to be re-attached (see section 4).
+  No local SQL Server, LocalDB, or .mdf files are required on the
+  target machine.
 
 --------------------------------------------------------------------------------
-3. DATABASE FILE LOCATION
+2. DATABASE PROVISIONING
 --------------------------------------------------------------------------------
 
-  The .mdf and .ldf files must exist at the hardcoded path:
+  The FMFData database must exist on the hosted SQL Server before
+  deployment. Use SQL Server Management Studio (SSMS), Azure Data
+  Studio, or the Azure Portal to:
 
-    C:\FollwMeFree\DB\FMFData.mdf
-    C:\FollwMeFree\DB\FMFData_log.ldf
+    a. Create the FMFData database (if it does not already exist).
+    b. Run any required schema migration scripts.
+    c. Create a SQL login and database user for the application:
 
-  Deployment steps:
-    a. Create the directory   C:\FollwMeFree\DB\   if it does not exist.
-    b. Copy FMFData.mdf (and FMFData_log.ldf if available) into it.
-    c. Ensure the Windows user account that will run the services has
-       read/write permissions on this directory.
+       CREATE LOGIN [FollowMeFreeApp] WITH PASSWORD = 'YOUR_PASSWORD';
+       USE [FMFData];
+       CREATE USER [FollowMeFreeApp] FOR LOGIN [FollowMeFreeApp];
+       ALTER ROLE db_owner ADD MEMBER [FollowMeFreeApp];
 
-  IMPORTANT: If you change this path, you must update it in ALL THREE
-  project configuration files (see section 5).
+    d. Verify connectivity from the target machine(s) using SSMS or
+       sqlcmd:
 
---------------------------------------------------------------------------------
-4. DATABASE ATTACHMENT
---------------------------------------------------------------------------------
-
-  The WorkerService connection string uses AttachDbFilename, which tells
-  LocalDB to auto-attach the .mdf file on first connection. However,
-  there is a known issue: if the LocalDB instance is recreated (e.g.
-  after a Visual Studio reinstall), the database may be registered by
-  its file path instead of its logical name "FMFData".
-
-  If this happens the API (which connects by database name only) will
-  fail with:
-    "Cannot open database 'FMFData' requested by the login."
-
-  To fix, run the following from an elevated command prompt:
-
-    sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
-      "EXEC sp_detach_db @dbname = N'C:\FollwMeFree\DB\FMFDATA.MDF'"
-
-    sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
-      "CREATE DATABASE [FMFData] ON (FILENAME = N'C:\FollwMeFree\DB\FMFData.mdf') FOR ATTACH"
-
-  ******* Alternatively, start the WorkerService first (its AttachDbFilename
-          will attach the file), then verify the logical name with:
-
-    sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q "SELECT name FROM sys.databases"
-
-  The output should list "FMFData" (not a file path).
+       sqlcmd -S YOUR_SERVER.database.windows.net -U YOUR_USER -P YOUR_PASSWORD -d FMFData -Q "SELECT 1"
 
 --------------------------------------------------------------------------------
-5. CONNECTION STRINGS — ALL THREE PROJECTS
+3. CONNECTION STRINGS — ALL THREE PROJECTS
 --------------------------------------------------------------------------------
 
-  Each project has a hardcoded connection string referencing LocalDB and
-  the database path. If the path or instance name changes, update all of
-  them.
+  Each project has a connection string pointing to the hosted SQL
+  Server. If the server, credentials, or database name changes, update
+  all of them.
 
   Project                   | File                    | Key / Name
   ------------------------- | ----------------------- | -------------------------
@@ -193,69 +138,60 @@ customer's computer.
   Connection string details:
 
   WinForms (EF6, .NET Framework 4.8):
-    provider connection string="data source=(LocalDB)\MSSQLLocalDB;
-      attachdbfilename=C:\FollwMeFree\DB\FMFData.mdf;
-      integrated security=True;..."
+    provider connection string="data source=YOUR_SERVER.database.windows.net;
+      initial catalog=FMFData;
+      user id=YOUR_USER;password=YOUR_PASSWORD;
+      MultipleActiveResultSets=True;TrustServerCertificate=True;..."
 
   WorkerService (EF Core, .NET 8):
-    "Server=(localdb)\\MSSQLLocalDB;
-     AttachDbFilename=C:\\FollwMeFree\\DB\\FMFData.mdf;
-     Database=FMFData;Trusted_Connection=True;..."
+    "Server=YOUR_SERVER.database.windows.net;
+     Database=FMFData;
+     User ID=YOUR_USER;Password=YOUR_PASSWORD;
+     TrustServerCertificate=True;MultipleActiveResultSets=true"
 
   API (EF Core, .NET 8):
-    "Server=(localdb)\\MSSQLLocalDB;
-     Database=FMFData;Trusted_Connection=True;..."
+    "Server=YOUR_SERVER.database.windows.net;
+     Database=FMFData;
+     User ID=YOUR_USER;Password=YOUR_PASSWORD;
+     TrustServerCertificate=True;MultipleActiveResultSets=true"
 
-  NOTE: The API does NOT use AttachDbFilename. It relies on the database
-  already being attached (by the WorkerService or manually). This means
-  the WorkerService must start before the API on a fresh deployment, or
-  you must manually attach the database (see section 4).
+  NOTE: All three projects now use the same connection string format
+  (no AttachDbFilename, no Trusted_Connection). There is no startup-
+  order dependency for database availability — the hosted database is
+  always online.
+
+  SECURITY NOTE: Avoid committing credentials to source control. Use
+  environment variables, user secrets, or a secure vault for production
+  credentials.
 
 --------------------------------------------------------------------------------
-6. STARTUP ORDER
+4. STARTUP ORDER
 --------------------------------------------------------------------------------
 
-  Recommended startup order on a customer machine:
+  With a hosted SQL Server there is no database-attachment dependency.
+  The services can start in any order. The recommended order is:
 
-    1. WorkerService  — attaches the .mdf via AttachDbFilename and starts
-                        listening on the named pipe.
-    2. API            — connects to the already-attached "FMFData"
-                        database by name.
-    3. WinForms app   — attaches via AttachDbFilename (independent) and
+    1. WorkerService  — starts listening on the named pipe.
+    2. API            — connects to the hosted FMFData database and
+                        begins serving HTTP requests.
+    3. WinForms app   — connects to the hosted database directly and
                         communicates with the API over HTTP.
 
   If the WorkerService is installed as a Windows Service, set it to
   start automatically. The API can also be hosted as a Windows Service
-  or in IIS and should be configured to start after the WorkerService.
+  or in IIS.
 
 --------------------------------------------------------------------------------
-7. WINDOWS USER ACCOUNT CONSIDERATIONS
+5. FIREWALL / NETWORK RULES
 --------------------------------------------------------------------------------
 
-  All three projects use Windows Authentication (Trusted_Connection /
-  Integrated Security). This means:
+  Outbound (target machine → hosted SQL Server):
+    - Allow outbound TCP on port 1433 (or the custom port configured
+      on the hosted SQL Server).
+    - If using Azure SQL Database, add the target machine's public IP
+      to the Azure SQL Server firewall rules.
 
-    - The Windows account running each process must have a login on the
-      LocalDB instance.
-    - LocalDB automatically grants the instance owner (the user who ran
-      "SqlLocalDB create") full access.
-    - If the services run under a different account (e.g. LocalSystem,
-      NetworkService, or a service account), you must add a SQL login
-      for that account:
-
-        sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q ^
-          "CREATE LOGIN [NT AUTHORITY\LOCAL SERVICE] FROM WINDOWS"
-        sqlcmd -S "(localdb)\MSSQLLocalDB" -E -d FMFData -Q ^
-          "CREATE USER [NT AUTHORITY\LOCAL SERVICE] FOR LOGIN [NT AUTHORITY\LOCAL SERVICE]; ALTER ROLE db_owner ADD MEMBER [NT AUTHORITY\LOCAL SERVICE]"
-
-    - If multiple Windows accounts need access, repeat for each account.
-
---------------------------------------------------------------------------------
-8. FIREWALL RULES
---------------------------------------------------------------------------------
-
-  If the API serves clients on the LAN (Flutter app, other PCs):
-
+  Inbound (if the API serves clients on the LAN):
     - Allow inbound TCP on port 5224  (HTTP)
     - Allow inbound TCP on port 7178 (HTTPS)
 
@@ -267,56 +203,50 @@ customer's computer.
       -Direction Inbound -Protocol TCP -LocalPort 7178 -Action Allow
 
 --------------------------------------------------------------------------------
-9. DEPLOYMENT CHECKLIST
+6. DEPLOYMENT CHECKLIST
 --------------------------------------------------------------------------------
 
-  [ ] LocalDB installed (v17.x / SQL Server 2022 Express LocalDB)
-  [ ] MSSQLLocalDB instance created and started
-  [ ] C:\FollwMeFree\DB\ directory exists with correct permissions
-  [ ] FMFData.mdf (and _log.ldf) copied to C:\FollwMeFree\DB\
-  [ ] Database attached with logical name "FMFData"
-  [ ] Connection strings verified in all three projects
-  [ ] Windows service account has LocalDB login (if not running as owner)
+  [ ] Hosted SQL Server is provisioned and accessible
+  [ ] FMFData database exists on the hosted server
+  [ ] SQL login / user created with appropriate permissions
+  [ ] Network connectivity verified (target machine can reach SQL Server
+      on port 1433)
+  [ ] Connection strings updated in all three projects
   [ ] .NET 8 runtime installed (for API and WorkerService)
   [ ] .NET Framework 4.8 runtime installed (for WinForms app)
-  [ ] Firewall rules configured for API ports
-  [ ] WorkerService starts before API
+  [ ] Firewall rules configured for API ports (if serving LAN clients)
   [ ] HTTPS certificate installed (or use HTTP only on trusted LANs)
 
 --------------------------------------------------------------------------------
-10. KNOWN ISSUES
+7. KNOWN ISSUES
 --------------------------------------------------------------------------------
-
-  Issue: After reinstalling Visual Studio or LocalDB, the API throws:
-    "Cannot open database 'FMFData' requested by the login."
-  Cause: The MSSQLLocalDB instance was recreated, losing the database
-         registration. The .mdf file may auto-attach under its file
-         path instead of the logical name "FMFData".
-  Fix:   Detach and re-attach with the correct name (see section 4).
 
   Issue: EnableRetryOnFailure triggers retries but login still fails.
   Cause: The retry policy handles transient errors (network blips,
-         instance starting up). A missing login or database is NOT
-         transient — it requires manual intervention.
-  Fix:   Follow sections 2, 4, and 7 above.
+         server momentarily unavailable). Invalid credentials or a
+         missing database is NOT transient — it requires manual
+         intervention.
+  Fix:   Verify the connection string credentials and that the FMFData
+         database exists on the hosted server.
 
-    Startup order: The WorkerService must start before the API so the
-    database is attached and available when the API connects.
+  Issue: "A network-related or instance-specific error occurred while
+         establishing a connection to SQL Server."
+  Cause: The target machine cannot reach the hosted SQL Server. This
+         may be a firewall, DNS, or network routing issue.
+  Fix:   Verify outbound TCP port 1433 is open. If using Azure SQL,
+         ensure the client IP is allowed in the server firewall rules.
+         Test with: sqlcmd -S YOUR_SERVER -U YOUR_USER -P YOUR_PASSWORD -d FMFData -Q "SELECT 1"
 
-    Connection strings:
-      WorkerService (attaches .mdf):
-        Server=(localdb)\MSSQLLocalDB;
-        AttachDbFilename=C:\FollwMeFree\DB\FMFData.mdf;
-        Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true
-
-      API (connects by name):
-        Server=(localdb)\MSSQLLocalDB;
-        Database=FMFData;Trusted_Connection=True;MultipleActiveResultSets=true
+    Connection strings (all projects use the same hosted server):
+      Server=YOUR_SERVER.database.windows.net;
+      Database=FMFData;
+      User ID=YOUR_USER;Password=YOUR_PASSWORD;
+      TrustServerCertificate=True;MultipleActiveResultSets=true
 
     Diagram:
-      WinForms / Flutter  --HTTP-->  API  --direct DB--> LocalDB FMFData
+      WinForms / Flutter  --HTTP-->  API  --direct DB--> Hosted SQL Server (FMFData)
                                      API  --pipe-->      WorkerService
-                                                         WorkerService --direct DB--> (same LocalDB)
+                                                         WorkerService --direct DB--> (same hosted SQL Server)
 
 --------------------------------------------------------------------------------
 Logging Levels (appsettings.json)
@@ -572,8 +502,8 @@ All tooling used is free and open-source.
     [ ] .NET 8 Runtime (or ASP.NET Core Runtime if the API is also
         deployed on the same server)
         Download: https://dotnet.microsoft.com/download/dotnet/8.0
-    [ ] Database and LocalDB set up per the "PRODUCTION DEPLOYMENT
-        GUIDE" section above (sections 1–4)
+    [ ] Network connectivity to the hosted SQL Server (outbound TCP
+        port 1433) and valid connection string credentials
     [ ] Firewall rules configured if the API runs on the same server
 
   The MSI itself does NOT require the .NET SDK — only the runtime.
@@ -756,8 +686,7 @@ source code. Everything needed is bundled into the distributable folder.
   [ ] IIS enabled (Web Management Tools + Application Development Features)
   [ ] ASP.NET Core 8.0 Hosting Bundle installed
   [ ] "iisreset" run after Hosting Bundle installation
-  [ ] Database accessible (see PRODUCTION DEPLOYMENT GUIDE sections 1-5)
-  [ ] Connection string correct for the target environment
+  [ ] Hosted SQL Server accessible and connection string correct
   [ ] Port not in use by another IIS site (if using port 80, stop Default
       Web Site first, or choose a different port e.g. 8080)
   [ ] Firewall rules allow inbound traffic on the chosen port
@@ -952,7 +881,8 @@ launch because:
 
     4. Step 2 - Database Connection:
        - Server: The SQL Server instance name
-         (e.g. "SQLSERVER01", ".\SQLEXPRESS", "(localdb)\MSSQLLocalDB")
+         (e.g. "yourserver.database.windows.net", "SQLSERVER01",
+         ".\SQLEXPRESS")
        - Database: Pre-filled as "FMFData". Change if the database has
          a different name.
        - Use Windows Authentication: Check this to use the current
@@ -1053,3 +983,175 @@ launch because:
     The installer project references System.Data.SqlClient 4.9.0 for
     the Test Connection functionality. This is the same SQL client
     provider used by the WinForms app through Entity Framework 6.
+
+================================================================================
+API ON IIS WITH LOCAL SQL SERVER EXPRESS (Windows Authentication)
+================================================================================
+
+When the API is deployed to IIS on the same machine as SQL Server Express
+and the connection string uses Windows Authentication (Integrated Security),
+the API will fail to start with a SQL login error.
+
+  Connection string used:
+    Server=localhost\sqlexpress;Database=FMFData;
+    Integrated Security=True;MultipleActiveResultSets=true;
+    TrustServerCertificate=True
+
+  Error observed:
+    The API fails during startup when Program.cs attempts to query the
+    Config table (line 67: db.Configs.OrderBy(o => o.Id).FirstOrDefault()).
+    EF Core cannot connect to SQL Server because the IIS identity does
+    not have a SQL Server login.
+
+--------------------------------------------------------------------------------
+ROOT CAUSE
+--------------------------------------------------------------------------------
+
+  When the API runs under IIS, it does NOT run as the logged-in Windows
+  user. It runs as the IIS Application Pool virtual identity:
+
+    IIS AppPool\FollowMeFreeAPIPool
+
+  This is a low-privilege virtual account created automatically by IIS
+  for each application pool. SQL Server does not recognise this account
+  by default, so "Integrated Security=True" (Windows Authentication)
+  fails with a login error.
+
+  This differs from running the API directly (e.g. dotnet run, or
+  Kestrel from the command line), where the process runs as the
+  currently logged-in user — who likely already has SQL Server access.
+
+--------------------------------------------------------------------------------
+FIX: GRANT THE APP POOL IDENTITY ACCESS TO SQL SERVER EXPRESS
+--------------------------------------------------------------------------------
+
+  Option A — Create a SQL Server login for the App Pool virtual account
+  (Recommended)
+
+    Open SQL Server Management Studio (SSMS) or sqlcmd on the production
+    machine and run the following as a sysadmin:
+
+      USE [master];
+      GO
+      CREATE LOGIN [IIS AppPool\FollowMeFreeAPIPool] FROM WINDOWS;
+      GO
+      USE [FMFData];
+      GO
+      CREATE USER [IIS AppPool\FollowMeFreeAPIPool]
+        FOR LOGIN [IIS AppPool\FollowMeFreeAPIPool];
+      GO
+      ALTER ROLE db_owner ADD MEMBER [IIS AppPool\FollowMeFreeAPIPool];
+      GO
+
+    Notes:
+      - The login name must match the application pool name exactly.
+        If the app pool was named differently during installation,
+        replace "FollowMeFreeAPIPool" accordingly.
+      - "FROM WINDOWS" is required because this is a Windows / virtual
+        account, not a SQL Server login.
+      - db_owner grants full access to FMFData. For tighter security,
+        use db_datareader and db_datawriter instead, plus explicit
+        EXECUTE permissions on any stored procedures.
+
+    After creating the login, restart the IIS site (or run "iisreset")
+    and the API should connect successfully.
+
+  Option B — Change the App Pool identity to a Windows account that
+  already has SQL Server access
+
+    1. Open IIS Manager.
+    2. Click "Application Pools" in the left panel.
+    3. Select "FollowMeFreeAPIPool" and click "Advanced Settings".
+    4. Under "Process Model", click "Identity" and change it from
+       "ApplicationPoolIdentity" to "Custom account".
+    5. Enter the credentials of a Windows user that has a SQL Server
+       login with access to the FMFData database.
+    6. Click OK, then restart the app pool.
+
+    This approach is simpler but less secure — the app pool runs with
+    a real user's credentials instead of an isolated virtual account.
+
+  Option C — Switch to SQL Server Authentication (avoid Windows Auth)
+
+    Instead of Integrated Security, use a SQL Server login with a
+    username and password in the connection string:
+
+      Server=localhost\sqlexpress;Database=FMFData;
+      User ID=FollowMeFreeApp;Password=YOUR_PASSWORD;
+      MultipleActiveResultSets=true;TrustServerCertificate=True
+
+    This bypasses the IIS identity issue entirely because the
+    connection uses explicit SQL credentials rather than the Windows
+    process identity.
+
+    Create the SQL login if it does not exist:
+
+      USE [master];
+      GO
+      CREATE LOGIN [FollowMeFreeApp] WITH PASSWORD = 'YOUR_PASSWORD';
+      GO
+      USE [FMFData];
+      GO
+      CREATE USER [FollowMeFreeApp] FOR LOGIN [FollowMeFreeApp];
+      GO
+      ALTER ROLE db_owner ADD MEMBER [FollowMeFreeApp];
+      GO
+
+    Update the connection string in the deployed appsettings.json
+    (e.g. C:\inetpub\wwwroot\FollowMeFreeAPI\appsettings.json).
+
+--------------------------------------------------------------------------------
+VERIFYING THE FIX
+--------------------------------------------------------------------------------
+
+  After applying one of the options above:
+
+    1. Restart the IIS site or run "iisreset" from an elevated prompt.
+
+    2. Browse to the API URL (e.g. http://localhost:80) and verify it
+       responds.
+
+    3. If it still fails, check the Windows Event Viewer:
+         Event Viewer > Windows Logs > Application
+       Look for entries from "IIS AspNetCore Module V2" or the
+       application source for detailed error messages.
+
+    4. You can also enable ASP.NET Core stdout logging by editing
+       web.config in the deployed directory:
+
+         <aspNetCore ... stdoutLogEnabled="true"
+                        stdoutLogFile=".\logs\stdout" />
+
+       Create the "logs" folder in the install directory first. The
+       stdout log will contain the full startup exception.
+
+--------------------------------------------------------------------------------
+SQL SERVER EXPRESS NETWORK PROTOCOL NOTE
+--------------------------------------------------------------------------------
+
+  SQL Server Express 2025 may have TCP/IP and Named Pipes protocols
+  disabled by default. For localhost\sqlexpress connections using
+  Shared Memory, this is usually fine. However, if the connection
+  fails with a network-related error:
+
+    1. Open SQL Server Configuration Manager.
+    2. Expand "SQL Server Network Configuration".
+    3. Click "Protocols for SQLEXPRESS".
+    4. Ensure "Shared Memory" is Enabled (used for localhost).
+    5. If connecting from other machines, enable "TCP/IP" and set
+       the port (default 1433 or dynamic ports).
+    6. Restart the SQL Server (SQLEXPRESS) service after changes.
+
+--------------------------------------------------------------------------------
+DEPLOYMENT CHECKLIST — API ON IIS WITH LOCAL SQL SERVER EXPRESS
+--------------------------------------------------------------------------------
+
+  [ ] SQL Server Express 2025 installed and running
+  [ ] FMFData database exists on localhost\sqlexpress
+  [ ] IIS enabled with ASP.NET Core 8.0 Hosting Bundle installed
+  [ ] API deployed to IIS (via FollowMeFree.API.Installer or manually)
+  [ ] App Pool identity granted SQL Server login access (Option A above)
+      OR App Pool changed to a credentialed Windows account (Option B)
+      OR connection string changed to SQL Server Authentication (Option C)
+  [ ] API site started and responding at configured URL
+  [ ] Verified via browser or curl that endpoints return data
