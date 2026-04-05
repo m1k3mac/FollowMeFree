@@ -256,6 +256,10 @@ public partial class InstallerForm : Form
         txtAppPool.Enabled = enabled;
         lblPortLabel.Enabled = enabled;
         txtPort.Enabled = enabled;
+        chkGrantAppPoolAccess.Enabled = enabled;
+        lblGrantAppPoolNote.Enabled = enabled;
+        if (!enabled)
+            chkGrantAppPoolAccess.Checked = false;
     }
 
     private void chkWindowsAuth_CheckedChanged(object? sender, EventArgs e)
@@ -488,6 +492,16 @@ public partial class InstallerForm : Form
                     _cts.Token);
                 if (!iisOk)
                     AppendLog("WARNING: IIS configuration had errors. You may need to configure IIS manually.");
+
+                // 4b ── Grant App Pool identity access to SQL Server (optional)
+                if (chkGrantAppPoolAccess.Checked)
+                {
+                    _cts.Token.ThrowIfCancellationRequested();
+                    await GrantAppPoolSqlAccessAsync(
+                        connectionString,
+                        txtAppPool.Text.Trim(),
+                        txtDatabase.Text.Trim());
+                }
             }
             SetProgress(100);
 
@@ -619,6 +633,63 @@ public partial class InstallerForm : Form
         catch (Exception ex)
         {
             AppendLog($"WARNING: Failed to update connection string: {ex.Message}");
+        }
+    }
+
+    // ── Grant App Pool SQL Server access ─────────────────────────────
+
+    private async Task GrantAppPoolSqlAccessAsync(string connectionString, string appPoolName, string databaseName)
+    {
+        string loginName = $"IIS AppPool\\{appPoolName}";
+        AppendLog($"Granting SQL Server access to '{loginName}'...");
+
+        try
+        {
+            await Task.Run(() =>
+            {
+                // Create login in master
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    // Switch to master and create the Windows login
+                    ExecuteSqlIgnoreDuplicate(conn,
+                        $"USE [master]; CREATE LOGIN [{loginName}] FROM WINDOWS;",
+                        "Login");
+
+                    // Switch to the target database, create user and grant role
+                    ExecuteSqlIgnoreDuplicate(conn,
+                        $"USE [{databaseName}]; CREATE USER [{loginName}] FOR LOGIN [{loginName}];",
+                        "User");
+
+                    ExecuteSqlIgnoreDuplicate(conn,
+                        $"USE [{databaseName}]; ALTER ROLE db_owner ADD MEMBER [{loginName}];",
+                        "Role membership");
+                }
+            });
+
+            AppendLog($"SQL Server access granted to '{loginName}' on database '{databaseName}'.");
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"WARNING: Could not grant SQL Server access to App Pool identity: {ex.Message}");
+            AppendLog("You may need to grant access manually. See ProjectNotes.txt for the SQL script.");
+        }
+    }
+
+    private void ExecuteSqlIgnoreDuplicate(SqlConnection conn, string sql, string objectType)
+    {
+        try
+        {
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.ExecuteNonQuery();
+        }
+        catch (SqlException ex) when (ex.Number == 15025  // Login already exists
+                                   || ex.Number == 15023  // User/group/role already exists in the current database
+                                   || ex.Number == 15410  // Already a member of the role
+                                   || ex.Number == 15063) // Login already has an account under a different user name
+        {
+            AppendLog($"  {objectType} already exists – skipping.");
         }
     }
 

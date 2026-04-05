@@ -37,6 +37,8 @@ partial class InstallerForm
         lblConfigNote = new Label();
         txtPort = new TextBox();
         lblPortLabel = new Label();
+        chkGrantAppPoolAccess = new CheckBox();
+        lblGrantAppPoolNote = new Label();
         txtAppPool = new TextBox();
         lblAppPoolLabel = new Label();
         txtSiteName = new TextBox();
@@ -270,6 +272,8 @@ partial class InstallerForm
         // pnlConfig
         // 
         pnlConfig.Controls.Add(lblConfigNote);
+        pnlConfig.Controls.Add(lblGrantAppPoolNote);
+        pnlConfig.Controls.Add(chkGrantAppPoolAccess);
         pnlConfig.Controls.Add(txtPort);
         pnlConfig.Controls.Add(lblPortLabel);
         pnlConfig.Controls.Add(txtAppPool);
@@ -286,12 +290,30 @@ partial class InstallerForm
         pnlConfig.TabIndex = 1;
         pnlConfig.Visible = false;
         // 
+        // chkGrantAppPoolAccess
+        // 
+        chkGrantAppPoolAccess.AutoSize = true;
+        chkGrantAppPoolAccess.Location = new Point(0, 200);
+        chkGrantAppPoolAccess.Name = "chkGrantAppPoolAccess";
+        chkGrantAppPoolAccess.Size = new Size(380, 19);
+        chkGrantAppPoolAccess.TabIndex = 13;
+        chkGrantAppPoolAccess.Text = "Grant App Pool identity access to SQL Server (local SQL only)";
+        // 
+        // lblGrantAppPoolNote
+        // 
+        lblGrantAppPoolNote.ForeColor = SystemColors.GrayText;
+        lblGrantAppPoolNote.Location = new Point(20, 222);
+        lblGrantAppPoolNote.Name = "lblGrantAppPoolNote";
+        lblGrantAppPoolNote.Size = new Size(640, 30);
+        lblGrantAppPoolNote.TabIndex = 14;
+        lblGrantAppPoolNote.Text = "Enable this when SQL Server is installed on this machine and the connection uses Windows Authentication. Not applicable for remote or Azure SQL servers.";
+        // 
         // lblConfigNote
         // 
         lblConfigNote.ForeColor = SystemColors.GrayText;
-        lblConfigNote.Location = new Point(0, 210);
+        lblConfigNote.Location = new Point(0, 258);
         lblConfigNote.Name = "lblConfigNote";
-        lblConfigNote.Size = new Size(660, 200);
+        lblConfigNote.Size = new Size(660, 160);
         lblConfigNote.TabIndex = 0;
         lblConfigNote.Text = resources.GetString("lblConfigNote.Text");
         // 
@@ -660,6 +682,8 @@ partial class InstallerForm
     private TextBox txtAppPool;
     private Label lblPortLabel;
     private TextBox txtPort;
+    private CheckBox chkGrantAppPoolAccess;
+    private Label lblGrantAppPoolNote;
     private Label lblConfigNote;
 
     // ── Step 3 – Database Connection ────────────────────────────────
