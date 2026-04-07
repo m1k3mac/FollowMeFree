@@ -65,16 +65,22 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<FmfDataContext>();
     var config = db.Configs.OrderBy(o => o.Id).FirstOrDefault();
-    if (!string.IsNullOrWhiteSpace(config?.ApiallowedNetwork))
+
+    if (string.IsNullOrWhiteSpace(config?.JobFilePath))
     {
-        var options = app.Services.GetRequiredService<IpWhitelistOptions>();
-        options.SetNetwork(config.ApiallowedNetwork);
-        app.Logger.LogInformation("IP whitelist configured: {Network}", config.ApiallowedNetwork);
+        app.Logger.LogInformation("JobFilePath has not been configured! Use the FollowMeFree Commander to configure it.");
     }
-    else
-    {
-        app.Logger.LogWarning("No APIAllowedNetwork configured – all IPs are allowed");
-    }
+
+    //if (!string.IsNullOrWhiteSpace(config?.ApiallowedNetwork))
+    //{
+    //    var options = app.Services.GetRequiredService<IpWhitelistOptions>();
+    //    options.SetNetwork(config.ApiallowedNetwork);
+    //    app.Logger.LogInformation("IP whitelist configured: {Network}", config.ApiallowedNetwork);
+    //}
+    //else
+    //{
+    //    app.Logger.LogWarning("No APIAllowedNetwork configured – all IPs are allowed");
+    //}
 }
 
 // Restrict access to the configured allowed network

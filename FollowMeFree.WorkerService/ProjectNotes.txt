@@ -10,6 +10,8 @@ Run the following command in the Package Manager Console (Visual Studio) after
 making changes to the FMFData database. Set the Default project dropdown in the
 Package Manager Console to "FollowMeFree.WorkerService" before running.
 
+* Ensure the project you are scaffolding is the startup project!
+
 WorkerService
 Scaffold-DbContext "Server=YOUR_SERVER.database.windows.net;Database=FMFData;User ID=YOUR_USER;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data\Scaffolded -ContextDir Data -Context FollowMeFreeDbContext -NoOnConfiguring -Force
 

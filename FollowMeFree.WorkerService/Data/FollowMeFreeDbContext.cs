@@ -30,6 +30,9 @@ public partial class FollowMeFreeDbContext : DbContext
         {
             entity.ToTable("Config");
 
+            entity.Property(e => e.ApiallowedNetwork)
+                .IsUnicode(false)
+                .HasColumnName("APIAllowedNetwork");
             entity.Property(e => e.FmfprinterName)
                 .IsUnicode(false)
                 .HasColumnName("FMFPrinterName");
@@ -45,12 +48,6 @@ public partial class FollowMeFreeDbContext : DbContext
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasIndex(e => e.Source, "IX_Logs_Source");
-
-            entity.HasIndex(e => new { e.Source, e.Timestamp }, "IX_Logs_Source_Timestamp").IsDescending(false, true);
-
-            entity.HasIndex(e => e.Timestamp, "IX_Logs_Timestamp").IsDescending();
-
             entity.Property(e => e.Category).HasMaxLength(256);
             entity.Property(e => e.LogLevel).HasMaxLength(20);
             entity.Property(e => e.Source).HasMaxLength(50);
@@ -79,8 +76,6 @@ public partial class FollowMeFreeDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasIndex(e => e.UserName, "UQ_Users_UserName").IsUnique();
-
             entity.Property(e => e.AllowedPrinterIds).IsUnicode(false);
             entity.Property(e => e.FirstName)
                 .HasMaxLength(100)
