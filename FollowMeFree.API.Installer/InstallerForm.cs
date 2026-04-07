@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.AccessControl;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Data.SqlClient;
@@ -445,6 +446,18 @@ public partial class InstallerForm : Form
 
         try
         {
+            // 0 ── Grant IIS_IUSRS full control on the JobFilePath folder (must happen first)
+            string connectionString = BuildConnectionString();
+            bool folderAccessOk = await GrantIisUsrsFolderAccessAsync(connectionString);
+            if (!folderAccessOk)
+            {
+                lblProgressTitle.Text = "Installation Aborted";
+                return;
+            }
+            SetProgress(5);
+
+            _cts.Token.ThrowIfCancellationRequested();
+
             // 1 ── Locate bundled API files
             AppendLog("Locating bundled API files...");
             string? sourceDir = FindBundledApiFiles();
@@ -470,7 +483,6 @@ public partial class InstallerForm : Form
             _cts.Token.ThrowIfCancellationRequested();
 
             // 3 ── Update connection string
-            string connectionString = BuildConnectionString();
             if (!string.IsNullOrWhiteSpace(connectionString))
             {
                 AppendLog("Updating connection string in published appsettings.json...");
@@ -690,6 +702,103 @@ public partial class InstallerForm : Form
                                    || ex.Number == 15063) // Login already has an account under a different user name
         {
             AppendLog($"  {objectType} already exists – skipping.");
+        }
+    }
+
+    // ── Grant IIS_IUSRS folder access ────────────────────────────────
+
+    /// <summary>
+    /// Reads the JobFilePath from the database and grants IIS_IUSRS full control.
+    /// Returns true if installation should continue, false to abort.
+    /// </summary>
+    private async Task<bool> GrantIisUsrsFolderAccessAsync(string connectionString)
+    {
+        string? jobFilePath = null;
+
+        try
+        {
+            jobFilePath = await Task.Run(() =>
+            {
+                using var conn = new SqlConnection(connectionString);
+                conn.Open();
+                using var cmd = new SqlCommand("SELECT TOP 1 JobFilePath FROM [dbo].[Config]", conn);
+                var result = cmd.ExecuteScalar();
+                return result as string;
+            });
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"WARNING: Could not read JobFilePath from Config table: {ex.Message}");
+        }
+
+        if (string.IsNullOrWhiteSpace(jobFilePath))
+        {
+            AppendLog("ERROR: JobFilePath is not configured in the database. Installation aborted.");
+            MessageBox.Show(
+                "The Job File Path has not been configured.\n\n" +
+                "Please create the Job File Path using the FollowMeFree Commander Desktop application before running the installer.",
+                "Installation Aborted",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            return false;
+        }
+
+        if (!Directory.Exists(jobFilePath))
+        {
+            AppendLog($"JobFilePath directory does not exist: {jobFilePath}. Creating it...");
+            try
+            {
+                Directory.CreateDirectory(jobFilePath);
+                AppendLog($"Created directory: {jobFilePath}");
+            }
+            catch (Exception ex)
+            {
+                AppendLog($"ERROR: Failed to create JobFilePath directory: {ex.Message}");
+                return false;
+            }
+        }
+
+        AppendLog($"Granting IIS_IUSRS full control on: {jobFilePath}");
+
+        try
+        {
+            await Task.Run(() =>
+            {
+                var directoryInfo = new DirectoryInfo(jobFilePath);
+                var directorySecurity = directoryInfo.GetAccessControl();
+
+                var accessRule = new FileSystemAccessRule(
+                    "IIS_IUSRS",
+                    FileSystemRights.FullControl,
+                    InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                    PropagationFlags.None,
+                    AccessControlType.Allow);
+
+                directorySecurity.AddAccessRule(accessRule);
+                directoryInfo.SetAccessControl(directorySecurity);
+            });
+
+            AppendLog("IIS_IUSRS granted full control successfully.");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"WARNING: Failed to grant IIS_IUSRS folder access: {ex.Message}");
+
+            MessageBox.Show(
+                $"The installer was unable to grant the IIS_IUSRS group full permissions on the folder:\n\n" +
+                $"  {jobFilePath}\n\n" +
+                $"Please add this manually:\n\n" +
+                $"1. Open Windows Explorer and navigate to the folder above.\n" +
+                $"2. Right-click the folder and select 'Properties'.\n" +
+                $"3. Go to the 'Security' tab and click 'Edit'.\n" +
+                $"4. Click 'Add', type 'IIS_IUSRS', then click 'Check Names' and 'OK'.\n" +
+                $"5. Select 'IIS_IUSRS', check 'Full control' under 'Allow', then click 'OK'.\n\n" +
+                $"Error: {ex.Message}",
+                "Folder Permission Required",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return true;
         }
     }
 
