@@ -297,7 +297,7 @@ partial class InstallerForm
         chkGrantAppPoolAccess.Name = "chkGrantAppPoolAccess";
         chkGrantAppPoolAccess.Size = new Size(380, 19);
         chkGrantAppPoolAccess.TabIndex = 13;
-        chkGrantAppPoolAccess.Text = "Grant App Pool identity access to SQL Server (local SQL only)";
+        chkGrantAppPoolAccess.Text = "Check this if SQL Server is installed on this computer (Grant App Pool identity access to SQL)";
         // 
         // lblGrantAppPoolNote
         // 
@@ -501,7 +501,7 @@ partial class InstallerForm
         chkWindowsAuth.Size = new Size(167, 19);
         chkWindowsAuth.TabIndex = 4;
         chkWindowsAuth.Text = "Use Windows Authentication";
-        chkWindowsAuth.CheckState = CheckState.Checked;
+        //chkWindowsAuth.CheckState = CheckState.Checked;
         chkWindowsAuth.CheckedChanged += chkWindowsAuth_CheckedChanged;
         // 
         // lblUsernameLabel
@@ -519,6 +519,7 @@ partial class InstallerForm
         txtUsername.Name = "txtUsername";
         txtUsername.Size = new Size(300, 23);
         txtUsername.TabIndex = 6;
+        txtUsername.Enabled = false;
         txtUsername.TextChanged += OnDbFieldChanged;
         // 
         // lblPasswordLabel
@@ -537,6 +538,7 @@ partial class InstallerForm
         txtPassword.Size = new Size(300, 23);
         txtPassword.TabIndex = 8;
         txtPassword.UseSystemPasswordChar = true;
+        txtPassword.Enabled = false;
         txtPassword.TextChanged += OnDbFieldChanged;
         // 
         // btnTestConnection

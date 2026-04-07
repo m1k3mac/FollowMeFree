@@ -253,6 +253,7 @@ partial class InstallerForm
 
         txtUsername.Location = new Point(20, 140);
         txtUsername.Size = new Size(300, 23);
+        txtUsername.Enabled = false;
         txtUsername.TextChanged += ConnectionField_TextChanged;
 
         lblPassword.AutoSize = true;
@@ -261,6 +262,7 @@ partial class InstallerForm
 
         txtPassword.Location = new Point(340, 140);
         txtPassword.Size = new Size(300, 23);
+        txtPassword.Enabled = false;
         txtPassword.UseSystemPasswordChar = true;
         txtPassword.TextChanged += ConnectionField_TextChanged;
 

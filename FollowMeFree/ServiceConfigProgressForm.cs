@@ -122,9 +122,16 @@ namespace FollowMeFree
                     UpdateAppSettingsConnectionString(appSettingsPath, sqlConnectionString);
                     worker.ReportProgress(0, "appsettings.json updated.");
 
-                    // Step 5 - Grant database access to the Windows service account
-                    worker.ReportProgress(0, "Granting database access to NT AUTHORITY\\SYSTEM...");
-                    GrantServiceDatabaseAccess(sqlConnectionString, worker);
+                    // Step 5 - Grant database access (only needed for Windows Authentication)
+                    if (IsWindowsAuthentication(sqlConnectionString))
+                    {
+                        worker.ReportProgress(0, "Windows Authentication detected. Granting database access to NT AUTHORITY\\SYSTEM...");
+                        GrantServiceDatabaseAccess(sqlConnectionString, worker);
+                    }
+                    else
+                    {
+                        worker.ReportProgress(0, "SQL Authentication detected (username/password). Skipping Windows service account database grant.");
+                    }
 
                     // Step 6 - Start the service
                     worker.ReportProgress(0, "Starting the service...");
@@ -308,6 +315,19 @@ namespace FollowMeFree
             catch
             {
                 return null;
+            }
+        }
+
+        private static bool IsWindowsAuthentication(string sqlConnectionString)
+        {
+            try
+            {
+                var builder = new SqlConnectionStringBuilder(sqlConnectionString);
+                return builder.IntegratedSecurity;
+            }
+            catch
+            {
+                return false;
             }
         }
 
