@@ -1,0 +1,34 @@
+﻿Installation:
+
+Notes: The FollowMeFree API and FollowMeFree Service must be installed on the same machine. They use named pipes to communicate with eachother.
+The FollowMeFree Commander must be installed on the same machine initially. This will be used to configure the API and Service. Once configured, the FollowMeFree Commander can be uninstalled and installed on any another PC if desired.
+
+Prerequisites:
+
+Install SQL Server Express (free version). If you wish to use an already installed SQL Server on your network you can skip this step.
+Install .NET Framework 4.8 or higher. The file NDP48-x86-x64-AllOS-ENU.exe is included. This is required for the FollowMeFree Commander.
+Install .NET 8.0.25 or higher hosting bundle. The file dotnet-hosting-8.0.25-win.exe is included. This is required for the FollowMeFree API.
+Install .NET Desktop Runtime 8.0.19 or higher. The file windowsdesktop-runtime-8.0.19-win-x64.exe is included. This is required for the FollowMeFree Service.
+
+1.1 Install the FollowMeFree Commander application.
+1.2 Once installed launch it and the Configuration screen should appear. Configure the JobFilePath.
+Click Save to save the configuration.
+
+
+
+
+Troubleshooting:
+
+(a) Local Folder and Permissions
+
+Check if the JobFilePath folder is created and has full access permissions have been granted for local security group IIS_IUSRS.
+If not, create the folder and grant permissions to the group. (full access)
+
+Right click on the folder and select properties, then go to the security tab and click on edit. Add the group IIS_IUSRS and grant full control permissions.
+If you cannot locate the group by searching for it, then select location and choose the local machine (usually the first item at the top), then click on Advanced, then click on Find Now. Scroll down and find it in the list.
+Once added, in the permissions list, select the group and check the box for full control permissions, then click apply and ok to save the changes.
+
+(b) API
+
+Open Internet Information Services (IIS) manager and check if the site hosting the API is running (default name is FollowMeFreeAPI). If it is stopped, start it and check if the service is working properly.
+Open the application pool and look for FollowMeFreeAPIPool (default name during install) and check if it is running. If it is stopped, start it and check if the service is working properly.
