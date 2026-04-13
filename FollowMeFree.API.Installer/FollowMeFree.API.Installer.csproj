@@ -12,6 +12,12 @@
     <Description>Installer for publishing and deploying the FollowMeFree API to IIS</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="License.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <!-- Bundle pre-published API files when present (created by build-api-installer.ps1) -->
   <ItemGroup Condition="Exists('api-publish')">
     <None Include="api-publish\**\*">

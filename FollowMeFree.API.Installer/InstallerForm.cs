@@ -17,8 +17,9 @@ public partial class InstallerForm : Form
     public InstallerForm()
     {
         InitializeComponent();
-        _steps = [pnlWelcome, pnlConfig, pnlDatabase, pnlProgress];
+        _steps = [pnlWelcome, pnlLicense, pnlConfig, pnlDatabase, pnlProgress];
         CheckPrerequisites();
+        LoadLicense();
         LoadDefaultConnectionString();
         ShowStep(0);
     }
@@ -41,13 +42,17 @@ public partial class InstallerForm : Form
                 break;
             case 1:
                 btnNext.Text = "&Next >";
-                btnNext.Enabled = true;
+                btnNext.Enabled = chkAcceptLicense.Checked;
                 break;
             case 2:
+                btnNext.Text = "&Next >";
+                btnNext.Enabled = true;
+                break;
+            case 3:
                 btnNext.Text = "&Install";
                 btnNext.Enabled = _connectionTested;
                 break;
-            case 3:
+            case 4:
                 if (_installComplete)
                 {
                     btnNext.Text = "&Finish";
@@ -126,6 +131,28 @@ public partial class InstallerForm : Form
             return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
         }
         catch { return false; }
+    }
+
+    // ── License loading ─────────────────────────────────────────────
+
+    private void LoadLicense()
+    {
+        try
+        {
+            string licensePath = Path.Combine(AppContext.BaseDirectory, "License.rtf");
+            if (File.Exists(licensePath))
+            {
+                rtfLicense.LoadFile(licensePath);
+            }
+            else
+            {
+                rtfLicense.Text = "License file not found. Please ensure License.rtf is present in the installer directory.";
+            }
+        }
+        catch (Exception ex)
+        {
+            rtfLicense.Text = $"Unable to load license file: {ex.Message}";
+        }
     }
 
     // ── Connection string auto-load ─────────────────────────────────
@@ -248,6 +275,12 @@ public partial class InstallerForm : Form
 
     private void btnRecheck_Click(object? sender, EventArgs e) => CheckPrerequisites();
 
+    private void chkAcceptLicense_CheckedChanged(object? sender, EventArgs e)
+    {
+        if (_currentStep == 1)
+            btnNext.Enabled = chkAcceptLicense.Checked;
+    }
+
     private void chkCreateIisSite_CheckedChanged(object? sender, EventArgs e)
     {
         bool enabled = chkCreateIisSite.Checked;
@@ -276,7 +309,7 @@ public partial class InstallerForm : Form
     private void OnDbFieldChanged(object? sender, EventArgs e)
     {
         _connectionTested = false;
-        if (_currentStep == 2)
+        if (_currentStep == 3)
             btnNext.Enabled = false;
     }
 
@@ -337,14 +370,24 @@ public partial class InstallerForm : Form
         }
         else if (_currentStep == 1)
         {
-            if (!ValidateConfig())
+            if (!chkAcceptLicense.Checked)
+            {
+                MessageBox.Show("You must accept the license agreement to continue.",
+                    "License Agreement", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-
+            }
             ShowStep(2);
         }
         else if (_currentStep == 2)
         {
+            if (!ValidateConfig())
+                return;
+
             ShowStep(3);
+        }
+        else if (_currentStep == 3)
+        {
+            ShowStep(4);
             await RunInstallation();
         }
     }
@@ -554,7 +597,7 @@ public partial class InstallerForm : Form
         {
             _cts = null;
             btnCancel.Text = "&Close";
-            ShowStep(3);
+            ShowStep(4);
         }
     }
 

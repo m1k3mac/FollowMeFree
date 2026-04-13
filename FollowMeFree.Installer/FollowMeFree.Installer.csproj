@@ -20,6 +20,9 @@
     <Content Include="FMFappIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="License.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <!-- Bundle pre-published app files when present (created by build-app-installer.ps1) -->

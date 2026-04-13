@@ -33,6 +33,11 @@ partial class InstallerForm
         lblInstallPathLabel = new Label();
         lblWelcomeDesc = new Label();
         lblWelcomeTitle = new Label();
+        pnlLicense = new Panel();
+        lblLicenseTitle = new Label();
+        lblLicenseDesc = new Label();
+        rtfLicense = new RichTextBox();
+        chkAcceptLicense = new CheckBox();
         pnlConnection = new Panel();
         lblConnNote = new Label();
         grpConnectionDetails = new GroupBox();
@@ -57,6 +62,7 @@ partial class InstallerForm
         pnlButtons.SuspendLayout();
         pnlWelcome.SuspendLayout();
         grpWelcomeTips.SuspendLayout();
+        pnlLicense.SuspendLayout();
         pnlConnection.SuspendLayout();
         grpConnectionDetails.SuspendLayout();
         pnlProgress.SuspendLayout();
@@ -255,6 +261,57 @@ partial class InstallerForm
         lblWelcomeTitle.Size = new Size(91, 25);
         lblWelcomeTitle.TabIndex = 7;
         lblWelcomeTitle.Text = "Welcome";
+        // 
+        // pnlLicense
+        // 
+        pnlLicense.Controls.Add(chkAcceptLicense);
+        pnlLicense.Controls.Add(rtfLicense);
+        pnlLicense.Controls.Add(lblLicenseDesc);
+        pnlLicense.Controls.Add(lblLicenseTitle);
+        pnlLicense.Location = new Point(15, 82);
+        pnlLicense.Name = "pnlLicense";
+        pnlLicense.Size = new Size(670, 420);
+        pnlLicense.TabIndex = 8;
+        pnlLicense.Visible = false;
+        // 
+        // lblLicenseTitle
+        // 
+        lblLicenseTitle.AutoSize = true;
+        lblLicenseTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+        lblLicenseTitle.Location = new Point(0, 0);
+        lblLicenseTitle.Name = "lblLicenseTitle";
+        lblLicenseTitle.Size = new Size(168, 25);
+        lblLicenseTitle.TabIndex = 0;
+        lblLicenseTitle.Text = "License Agreement";
+        // 
+        // lblLicenseDesc
+        // 
+        lblLicenseDesc.Location = new Point(0, 32);
+        lblLicenseDesc.Name = "lblLicenseDesc";
+        lblLicenseDesc.Size = new Size(660, 20);
+        lblLicenseDesc.TabIndex = 1;
+        lblLicenseDesc.Text = "Please read the following license agreement. You must accept the terms to continue.";
+        // 
+        // rtfLicense
+        // 
+        rtfLicense.BackColor = SystemColors.Window;
+        rtfLicense.Location = new Point(0, 58);
+        rtfLicense.Name = "rtfLicense";
+        rtfLicense.ReadOnly = true;
+        rtfLicense.ScrollBars = RichTextBoxScrollBars.Vertical;
+        rtfLicense.Size = new Size(660, 325);
+        rtfLicense.TabIndex = 2;
+        rtfLicense.Text = "";
+        // 
+        // chkAcceptLicense
+        // 
+        chkAcceptLicense.AutoSize = true;
+        chkAcceptLicense.Location = new Point(0, 392);
+        chkAcceptLicense.Name = "chkAcceptLicense";
+        chkAcceptLicense.Size = new Size(292, 19);
+        chkAcceptLicense.TabIndex = 3;
+        chkAcceptLicense.Text = "I accept the terms in the License Agreement";
+        chkAcceptLicense.CheckedChanged += chkAcceptLicense_CheckedChanged;
         // 
         // pnlConnection
         // 
@@ -465,6 +522,7 @@ partial class InstallerForm
         ClientSize = new Size(700, 560);
         Controls.Add(pnlProgress);
         Controls.Add(pnlConnection);
+        Controls.Add(pnlLicense);
         Controls.Add(pnlWelcome);
         Controls.Add(pnlSepBottom);
         Controls.Add(pnlButtons);
@@ -481,6 +539,8 @@ partial class InstallerForm
         pnlWelcome.ResumeLayout(false);
         pnlWelcome.PerformLayout();
         grpWelcomeTips.ResumeLayout(false);
+        pnlLicense.ResumeLayout(false);
+        pnlLicense.PerformLayout();
         pnlConnection.ResumeLayout(false);
         pnlConnection.PerformLayout();
         grpConnectionDetails.ResumeLayout(false);
@@ -515,7 +575,14 @@ partial class InstallerForm
     private GroupBox grpWelcomeTips;
     private Label lblWelcomeTips;
 
-    // ?? Step 2 – Database Connection ????????????????????????????????
+    // ?? Step 2 – License Agreement ???????????????????????????????????
+    private Panel pnlLicense;
+    private Label lblLicenseTitle;
+    private Label lblLicenseDesc;
+    private RichTextBox rtfLicense;
+    private CheckBox chkAcceptLicense;
+
+    // ?? Step 3 – Database Connection ????????????????????????????????
     private Panel pnlConnection;
     private Label lblConnTitle;
     private Label lblConnDesc;
@@ -533,7 +600,7 @@ partial class InstallerForm
     private Label lblTestResult;
     private Label lblConnNote;
 
-    // ?? Step 3 – Progress ???????????????????????????????????????????
+    // ?? Step 4 – Progress ???????????????????????????????????????????
     private Panel pnlProgress;
     private Label lblProgressTitle;
     private ProgressBar progressBar;
