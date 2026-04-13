@@ -497,6 +497,9 @@ public partial class InstallerForm : Form
             shortcut.TargetPath = targetExe;
             shortcut.WorkingDirectory = installPath;
             shortcut.Description = "FollowMeFree";
+            string icoPath = Path.Combine(installPath, "FMFappIcon.ico");
+            if (File.Exists(icoPath))
+                shortcut.IconLocation = $"{icoPath},0";
             shortcut.Save();
         }
         finally
