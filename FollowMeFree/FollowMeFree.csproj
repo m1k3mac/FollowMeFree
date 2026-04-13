@@ -245,7 +245,9 @@
       <DependentUpon>EFModel.edmx</DependentUpon>
       <LastGenOutput>EFModel.cs</LastGenOutput>
     </Content>
-    <None Include="FMFappIcon.ico" />
+    <Content Include="FMFappIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="FMFappIcon.png" />
   </ItemGroup>
   <ItemGroup>

@@ -484,6 +484,15 @@ public partial class InstallerForm : Form
         string targetExe = Path.Combine(installPath, "FollowMeFree.exe");
         string shortcutPath = Path.Combine(shortcutDir, "FollowMeFree.lnk");
 
+        // Ensure the icon file is present in the install directory
+        string icoPath = Path.Combine(installPath, "FMFappIcon.ico");
+        if (!File.Exists(icoPath))
+        {
+            string installerIco = Path.Combine(AppContext.BaseDirectory, "FMFappIcon.ico");
+            if (File.Exists(installerIco))
+                File.Copy(installerIco, icoPath, overwrite: false);
+        }
+
         // Use Windows Script Host COM object to create .lnk shortcut
         var shellType = Type.GetTypeFromProgID("WScript.Shell");
         if (shellType == null) return;
@@ -497,7 +506,6 @@ public partial class InstallerForm : Form
             shortcut.TargetPath = targetExe;
             shortcut.WorkingDirectory = installPath;
             shortcut.Description = "FollowMeFree";
-            string icoPath = Path.Combine(installPath, "FMFappIcon.ico");
             if (File.Exists(icoPath))
                 shortcut.IconLocation = $"{icoPath},0";
             shortcut.Save();
