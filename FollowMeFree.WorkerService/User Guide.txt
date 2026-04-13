@@ -9,10 +9,23 @@ Install SQL Server Express (free version). If you wish to use an already install
 Install .NET Framework 4.8 or higher. The file NDP48-x86-x64-AllOS-ENU.exe is included. This is required for the FollowMeFree Commander.
 Install .NET 8.0.25 or higher hosting bundle. The file dotnet-hosting-8.0.25-win.exe is included. This is required for the FollowMeFree API.
 Install .NET Desktop Runtime 8.0.19 or higher. The file windowsdesktop-runtime-8.0.19-win-x64.exe is included. This is required for the FollowMeFree Service.
+Install IIS (Internet Information Services through Turn Windows features on or off) with ASP.NET and .NET Extensibility features. This is required for the FollowMeFree API.
 
-1.1 Install the FollowMeFree Commander application.
-1.2 Once installed launch it and the Configuration screen should appear. Configure the JobFilePath.
-Click Save to save the configuration.
+Manually add a local printer with its associated printer driver. Use local port LPT1 for the printer port. Once added, you need to set the printer to Paused. Name the printer something like "FMF Print Queue" and share it using the same name. You will need this name later.
+Add the physical network printer and name it accordingly, eg: Kyocera Accounts Dept. This is the printer that will be used to print the actual documents. You will need this name later.
+Add your additional printers.
+
+1.1 Install the FollowMeFree Service.
+1.2 Install the FollowMeFree Commander application.
+1.3 Once installed launch FollowMeFree Commander as administrator (right click - run as administrator). The Configuration screen should appear. Configure the JobFilePath.
+1.4 Set the FMF Printer name to the name of the local printer you added, eg: FMF Print Queue.
+1.5 Click Save
+1.5 Under the Windows Service heading click Configure.
+1.6 Close the settings window and click View Logs on the ribbon at the top. You should see some logs from Source "Service". This means the service is configured and running. If you do not see any logs, check the troubleshooting section below.
+
+1.7 Install the FollowMeFree API.
+
+
 
 
 
@@ -32,3 +45,4 @@ Once added, in the permissions list, select the group and check the box for full
 
 Open Internet Information Services (IIS) manager and check if the site hosting the API is running (default name is FollowMeFreeAPI). If it is stopped, start it and check if the service is working properly.
 Open the application pool and look for FollowMeFreeAPIPool (default name during install) and check if it is running. If it is stopped, start it and check if the service is working properly.
+Firewall Permissions
