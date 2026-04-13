@@ -60,27 +60,51 @@ builder.Services.AddSingleton<IpWhitelistOptions>();
 
 var app = builder.Build();
 
-// Load allowed network from database Config table
-using (var scope = app.Services.CreateScope())
+// Load allowed network from database Config table.
+// Retry logic handles the case where SQL Server has a delayed start (e.g. after a reboot)
+// and is not yet available when IIS starts the application.
+const int maxRetries = 20;
+const int delaySeconds = 6;
+
+for (int attempt = 1; attempt <= maxRetries; attempt++)
 {
-    var db = scope.ServiceProvider.GetRequiredService<FmfDataContext>();
-    var config = db.Configs.OrderBy(o => o.Id).FirstOrDefault();
-
-    if (string.IsNullOrWhiteSpace(config?.JobFilePath))
+    try
     {
-        app.Logger.LogInformation("JobFilePath has not been configured! Use the FollowMeFree Commander to configure it.");
-    }
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<FmfDataContext>();
+        var config = db.Configs.OrderBy(o => o.Id).FirstOrDefault();
 
-    //if (!string.IsNullOrWhiteSpace(config?.ApiallowedNetwork))
-    //{
-    //    var options = app.Services.GetRequiredService<IpWhitelistOptions>();
-    //    options.SetNetwork(config.ApiallowedNetwork);
-    //    app.Logger.LogInformation("IP whitelist configured: {Network}", config.ApiallowedNetwork);
-    //}
-    //else
-    //{
-    //    app.Logger.LogWarning("No APIAllowedNetwork configured – all IPs are allowed");
-    //}
+        if (string.IsNullOrWhiteSpace(config?.JobFilePath))
+        {
+            app.Logger.LogInformation("JobFilePath has not been configured! Use the FollowMeFree Commander to configure it.");
+        }
+
+        //if (!string.IsNullOrWhiteSpace(config?.ApiallowedNetwork))
+        //{
+        //    var options = app.Services.GetRequiredService<IpWhitelistOptions>();
+        //    options.SetNetwork(config.ApiallowedNetwork);
+        //    app.Logger.LogInformation("IP whitelist configured: {Network}", config.ApiallowedNetwork);
+        //}
+        //else
+        //{
+        //    app.Logger.LogWarning("No APIAllowedNetwork configured – all IPs are allowed");
+        //}
+
+        break; // Success — exit the retry loop
+    }
+    catch (Exception ex) when (attempt < maxRetries)
+    {
+        app.Logger.LogWarning(
+            "Database not available on startup (attempt {Attempt}/{MaxRetries}). Retrying in {Delay}s... Error: {Message}",
+            attempt, maxRetries, delaySeconds, ex.Message);
+        Thread.Sleep(TimeSpan.FromSeconds(delaySeconds));
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex,
+            "Database not available after {MaxRetries} attempts. The application will continue but startup configuration could not be loaded.",
+            maxRetries);
+    }
 }
 
 // Restrict access to the configured allowed network
