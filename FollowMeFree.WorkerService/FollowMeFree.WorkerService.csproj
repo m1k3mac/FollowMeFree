@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-FollowMeFree.WorkerService-6e191a7b-63e2-45b0-9d7c-1f4e1c573d2e</UserSecretsId>
+    <PlatformTarget>x64</PlatformTarget>
+    <Company>Michael McNamara</Company>
+    <Copyright>Copyright 2026</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
