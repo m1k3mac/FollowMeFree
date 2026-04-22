@@ -187,6 +187,12 @@ namespace FollowMeFree.WorkerService
                                 logger?.LogWarning("[PrnPrinter] User '{Submitter}' not found in the database. PrintJob will be recorded without a DepartmentId.",
                                     snapshot.Submitter);
 
+                            // Lookup printer id from Printers table based on printer name. If not found, log a warning and continue without it.
+                            var printer = db.Printers.Where(p => p.Printer1 == printerName).OrderBy(o => o.Printer1).FirstOrDefault();
+                            if (printer == null)
+                                logger?.LogWarning("[PrnPrinter] Printer '{PrinterName}' not found in the database. PrintJob will be recorded without a PrinterId.",
+                                    printerName);
+
                             var printJob = new PrintJob
                             {
                                 UserName = snapshot.Submitter,
@@ -195,7 +201,8 @@ namespace FollowMeFree.WorkerService
                                 JobId = snapshot.JobId,
                                 Pages = snapshot.NumberOfPages,
                                 DateTimePrinted = snapshot.TimeSubmitted,
-                                DataType = snapshot.Datatype
+                                DataType = snapshot.Datatype,
+                                PrinterId = printer?.Id
                             };
                             db.PrintJobs.Add(printJob);
                             db.SaveChanges();

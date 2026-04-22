@@ -14,6 +14,7 @@
         <AssociationConnector Association="FMFDataModel.FK_PrintJobs_Departments" ManuallyRouted="false" />
         <AssociationConnector Association="FMFDataModel.FK_Users_Departments" ManuallyRouted="false" />
         <EntityTypeShape EntityType="FMFDataModel.sysdiagram" Width="1.5" PointX="5.375" PointY="7.75" />
+        <AssociationConnector Association="FMFDataModel.FK_PrintJobs_Printers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

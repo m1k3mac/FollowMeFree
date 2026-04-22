@@ -49,6 +49,7 @@
           <Property Name="DocumentName" Type="varchar(max)" Nullable="false" />
           <Property Name="JobId" Type="int" Nullable="false" />
           <Property Name="Pages" Type="int" Nullable="false" />
+          <Property Name="PrinterId" Type="int" />
           <Property Name="DateTimePrinted" Type="datetime2" Precision="0" Nullable="false" />
           <Property Name="DataType" Type="varchar(max)" Nullable="false" />
           <Property Name="DepartmentId" Type="int" />
@@ -87,6 +88,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PrintJobs_Printers">
+          <End Role="Printers" Type="Self.Printers" Multiplicity="0..1" />
+          <End Role="PrintJobs" Type="Self.PrintJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Printers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PrintJobs">
+              <PropertyRef Name="PrinterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Users_Departments">
           <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -109,6 +122,10 @@
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_PrintJobs_Departments" Association="Self.FK_PrintJobs_Departments">
             <End Role="Departments" EntitySet="Departments" />
+            <End Role="PrintJobs" EntitySet="PrintJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintJobs_Printers" Association="Self.FK_PrintJobs_Printers">
+            <End Role="Printers" EntitySet="Printers" />
             <End Role="PrintJobs" EntitySet="PrintJobs" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Departments" Association="Self.FK_Users_Departments">
@@ -154,6 +171,8 @@
           <Property Name="DataType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DepartmentId" Type="Int32" />
           <NavigationProperty Name="Department" Relationship="Self.FK_PrintJobs_Departments" FromRole="PrintJobs" ToRole="Departments" />
+          <Property Name="PrinterId" Type="Int32" />
+          <NavigationProperty Name="Printer" Relationship="FMFDataModel.FK_PrintJobs_Printers" FromRole="PrintJob" ToRole="Printer" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -183,6 +202,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Printer1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PrintJobs" Relationship="FMFDataModel.FK_PrintJobs_Printers" FromRole="Printer" ToRole="PrintJob" />
         </EntityType>
         <Association Name="FK_PrintJobs_Departments">
           <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
@@ -224,6 +244,10 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
           <EntitySet Name="sysdiagrams" EntityType="FMFDataModel.sysdiagram" />
+          <AssociationSet Name="FK_PrintJobs_Printers" Association="FMFDataModel.FK_PrintJobs_Printers">
+            <End Role="Printer" EntitySet="Printers" />
+            <End Role="PrintJob" EntitySet="PrintJobs" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -235,6 +259,18 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <Association Name="FK_PrintJobs_Printers">
+          <End Type="FMFDataModel.Printer" Role="Printer" Multiplicity="0..1" />
+          <End Type="FMFDataModel.PrintJob" Role="PrintJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Printer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PrintJob">
+              <PropertyRef Name="PrinterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -265,6 +301,7 @@
           <EntitySetMapping Name="PrintJobs">
             <EntityTypeMapping TypeName="FMFDataModel.PrintJob">
               <MappingFragment StoreEntitySet="PrintJobs">
+                <ScalarProperty Name="PrinterId" ColumnName="PrinterId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />

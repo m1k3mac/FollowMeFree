@@ -65,6 +65,10 @@ public partial class FollowMeFreeDbContext : DbContext
             entity.HasOne(d => d.Department).WithMany(p => p.PrintJobs)
                 .HasForeignKey(d => d.DepartmentId)
                 .HasConstraintName("FK_PrintJobs_Departments");
+
+            entity.HasOne(d => d.Printer).WithMany(p => p.PrintJobs)
+                .HasForeignKey(d => d.PrinterId)
+                .HasConstraintName("FK_PrintJobs_Printers");
         });
 
         modelBuilder.Entity<Printer>(entity =>

@@ -22,7 +22,9 @@ namespace FollowMeFree
         public System.DateTime DateTimePrinted { get; set; }
         public string DataType { get; set; }
         public Nullable<int> DepartmentId { get; set; }
+        public Nullable<int> PrinterId { get; set; }
     
         public virtual Department Department { get; set; }
+        public virtual Printer Printer { get; set; }
     }
 }

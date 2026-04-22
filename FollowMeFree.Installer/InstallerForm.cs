@@ -703,9 +703,12 @@ BEGIN
         [DateTimePrinted]  DATETIME2(0)  NOT NULL,
         [DataType]         VARCHAR(MAX)  NOT NULL,
         [DepartmentId]     INT           NULL,
+        [PrinterId]        INT           NULL,
         CONSTRAINT [PK_PrintJobs] PRIMARY KEY CLUSTERED ([Id] ASC),
         CONSTRAINT [FK_PrintJobs_Departments] FOREIGN KEY ([DepartmentId])
-            REFERENCES [dbo].[Departments] ([Id])
+            REFERENCES [dbo].[Departments] ([Id]),
+        CONSTRAINT [FK_PrintJobs_Printers] FOREIGN KEY ([PrinterId])
+            REFERENCES [dbo].[Printers] ([Id])
     );
 END;
 

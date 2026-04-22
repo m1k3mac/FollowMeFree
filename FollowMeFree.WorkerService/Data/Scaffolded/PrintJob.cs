@@ -15,6 +15,8 @@ public partial class PrintJob
 
     public int Pages { get; set; }
 
+    public int? PrinterId { get; set; }
+
     public DateTime DateTimePrinted { get; set; }
 
     public string DataType { get; set; } = null!;
@@ -22,4 +24,6 @@ public partial class PrintJob
     public int? DepartmentId { get; set; }
 
     public virtual Department? Department { get; set; }
+
+    public virtual Printer? Printer { get; set; }
 }
