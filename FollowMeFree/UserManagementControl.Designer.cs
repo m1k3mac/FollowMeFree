@@ -35,6 +35,7 @@
             this.barButtonItem_New = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_EditUser = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem_ChangePIN = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem_Refresh = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -47,9 +48,8 @@
             this.colSurname = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Department = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPIN = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colAllowedPrinterIds = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.barButtonItem_Refresh = new DevExpress.XtraBars.BarButtonItem();
+            this.colPrinters = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userBindingSource)).BeginInit();
@@ -120,6 +120,15 @@
             this.barButtonItem_ChangePIN.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barButtonItem_ChangePIN.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_ChangePIN_ItemClick);
             // 
+            // barButtonItem_Refresh
+            // 
+            this.barButtonItem_Refresh.Caption = "Refresh";
+            this.barButtonItem_Refresh.Id = 3;
+            this.barButtonItem_Refresh.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem_Refresh.ImageOptions.SvgImage")));
+            this.barButtonItem_Refresh.Name = "barButtonItem_Refresh";
+            this.barButtonItem_Refresh.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem_Refresh.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Refresh_ItemClick);
+            // 
             // barDockControlTop
             // 
             this.barDockControlTop.CausesValidation = false;
@@ -180,7 +189,7 @@
             this.colSurname,
             this.Department,
             this.colPIN,
-            this.colAllowedPrinterIds});
+            this.colPrinters});
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.False;
@@ -229,13 +238,6 @@
             this.colPIN.Visible = true;
             this.colPIN.VisibleIndex = 4;
             // 
-            // colAllowedPrinterIds
-            // 
-            this.colAllowedPrinterIds.FieldName = "AllowedPrinterIds";
-            this.colAllowedPrinterIds.Name = "colAllowedPrinterIds";
-            this.colAllowedPrinterIds.Visible = true;
-            this.colAllowedPrinterIds.VisibleIndex = 5;
-            // 
             // popupMenu1
             // 
             this.popupMenu1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
@@ -245,14 +247,14 @@
             this.popupMenu1.Manager = this.barManager1;
             this.popupMenu1.Name = "popupMenu1";
             // 
-            // barButtonItem_Refresh
+            // colPrinters
             // 
-            this.barButtonItem_Refresh.Caption = "Refresh";
-            this.barButtonItem_Refresh.Id = 3;
-            this.barButtonItem_Refresh.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem1.ImageOptions.SvgImage")));
-            this.barButtonItem_Refresh.Name = "barButtonItem_Refresh";
-            this.barButtonItem_Refresh.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barButtonItem_Refresh.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Refresh_ItemClick);
+            this.colPrinters.Caption = "Printers";
+            this.colPrinters.FieldName = "colPrinters";
+            this.colPrinters.Name = "colPrinters";
+            this.colPrinters.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            this.colPrinters.Visible = true;
+            this.colPrinters.VisibleIndex = 5;
             // 
             // UserManagementControl
             // 
@@ -294,9 +296,9 @@
         private DevExpress.XtraGrid.Columns.GridColumn colFirstName;
         private DevExpress.XtraGrid.Columns.GridColumn colSurname;
         private DevExpress.XtraGrid.Columns.GridColumn colPIN;
-        private DevExpress.XtraGrid.Columns.GridColumn colAllowedPrinterIds;
         private DevExpress.XtraGrid.Columns.GridColumn Department;
         private DevExpress.XtraBars.PopupMenu popupMenu1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Refresh;
+        private DevExpress.XtraGrid.Columns.GridColumn colPrinters;
     }
 }

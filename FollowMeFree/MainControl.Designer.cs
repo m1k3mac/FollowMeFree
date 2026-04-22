@@ -230,8 +230,7 @@
             // 
             // colDateTimePrinted
             // 
-            this.colDateTimePrinted.DisplayFormat.FormatString = "DateTime \"yyyy-MM-dd HH:mm:ss\"";
-            this.colDateTimePrinted.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.colDateTimePrinted.DisplayFormat.FormatString = "DateTime \"dd-MMMM-yyyy H:mm\"";
             this.colDateTimePrinted.FieldName = "DateTimePrinted";
             this.colDateTimePrinted.Name = "colDateTimePrinted";
             this.colDateTimePrinted.Visible = true;

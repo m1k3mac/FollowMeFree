@@ -18,6 +18,7 @@ namespace FollowMeFree
         private FMFDataEntities _dbContext;
         private bool hasDepartments;
         private bool hasPrinters;
+        private Dictionary<int, string> _userPrinterNames = new Dictionary<int, string>();
         public UserManagementControl()
         {
             InitializeComponent();
@@ -26,13 +27,47 @@ namespace FollowMeFree
 
         private void UserManagementControl_Load(object sender, EventArgs e)
         {
-            _dbContext = new FMFDataEntities();
-            var query = _dbContext.Users.AsNoTracking().Include(x => x.Department).OrderBy(u => u.UserName).ToList();            
+            gridView1.CustomUnboundColumnData += GridView1_CustomUnboundColumnData;
+            RefreshData();
+        }
+
+        private void LoadUsers()
+        {
+            var allPrinters = _dbContext.Printers.AsNoTracking().ToList();
+            var query = _dbContext.Users.AsNoTracking().Include(x => x.Department).OrderBy(u => u.UserName).ToList();
+
+            _userPrinterNames.Clear();
+            foreach (var user in query)
+            {
+                if (!string.IsNullOrEmpty(user.AllowedPrinterIds))
+                {
+                    var printerIds = user.AllowedPrinterIds
+                        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(id => int.Parse(id))
+                        .ToList();
+                    var allowedPrinters = allPrinters.Where(p => printerIds.Contains(p.Id)).Select(p => p.Printer1).ToList();
+                    _userPrinterNames[user.Id] = string.Join(", ", allowedPrinters);
+                }
+                else
+                {
+                    _userPrinterNames[user.Id] = string.Empty;
+                }
+            }
+
             userBindingSource.DataSource = query;
             gridView1.BestFitColumns();
+        }
 
-            LoadDepartments();
-            LoadPrinters();
+        private void GridView1_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
+        {
+            if (e.Column.FieldName == "colPrinters" && e.IsGetData)
+            {
+                var user = e.Row as User;
+                if (user != null && _userPrinterNames.TryGetValue(user.Id, out var printerNames))
+                {
+                    e.Value = printerNames;
+                }
+            }
         }
 
         private void barButtonItem_New_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -158,10 +193,8 @@ namespace FollowMeFree
 
         private void RefreshData()
         {
-            var query = _dbContext.Users.AsNoTracking().Include(x => x.Department).OrderBy(u => u.UserName).ToList();
-            userBindingSource.DataSource = query;
-            gridView1.BestFitColumns();
-
+            _dbContext = new FMFDataEntities();
+            LoadUsers();
             LoadDepartments();
             LoadPrinters();
         }
