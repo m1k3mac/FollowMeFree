@@ -19,6 +19,14 @@ namespace FollowMeFree
             LoadUser();
         }
 
+        // Override of Form.OnShown — fires once, right after the form becomes visible
+        // This is a hack to ensure that the printer names are shown and not the Id's in the CheckedComboBoxEdit when the form is first displayed
+        protected override void OnShown(System.EventArgs e)
+        {            
+            base.OnShown(e);            
+            checkedComboBoxEditPrinters.ShowPopup();
+        }
+
         private void LoadDepartments()
         {
             using (var db = new FMFDataEntities())

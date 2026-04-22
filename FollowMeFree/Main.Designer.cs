@@ -193,10 +193,10 @@
             // ribbonPageGroup2
             // 
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Close, true);
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Stats, true);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_UserManagement, true);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_PrinterManagement);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_DepartmentManagement);
-            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Stats, true);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Logs, true);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem_Advanced, true);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
