@@ -34,11 +34,6 @@ The FollowMeFree ecosystem consists of three core components:
     Ensure "ASP.NET" and ".NET Extensibility" features are enabled.
     Required for FollowMeFree API.
 
-[E] .NET HOSTING BUNDLE:
-    Install .NET 8.0.25 or higher Hosting Bundle 
-    (File: dotnet-hosting-8.0.25-win.exe). 
-    Required for hosting the API in IIS.
-
 
 3. PRINTER PREPARATION
 ----------------------
