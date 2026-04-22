@@ -27,7 +27,7 @@ namespace FollowMeFree
         private void UserManagementControl_Load(object sender, EventArgs e)
         {
             _dbContext = new FMFDataEntities();
-            var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();            
+            var query = _dbContext.Users.AsNoTracking().Include(x => x.Department).OrderBy(u => u.UserName).ToList();            
             userBindingSource.DataSource = query;
             gridView1.BestFitColumns();
 
@@ -52,8 +52,7 @@ namespace FollowMeFree
 
             Cursor = Cursors.Default;
 
-            var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();
-            userBindingSource.DataSource = query;
+            RefreshData();
         }
 
         private void barButtonItem_Edit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -74,8 +73,7 @@ namespace FollowMeFree
 
             Cursor = Cursors.Default;
 
-            var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();
-            userBindingSource.DataSource = query;
+            RefreshData();
         }
 
         private void barButtonItem_ChangePIN_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -96,9 +94,7 @@ namespace FollowMeFree
 
             Cursor = Cursors.Default;
 
-            var query = _dbContext.Users.Include(x => x.Department).OrderBy(u => u.UserName).ToList();
-            userBindingSource.DataSource = query;
-            gridView1.BestFitColumns();
+            RefreshData();
         }
 
         private void gridControl1_DoubleClick(object sender, EventArgs e)
@@ -141,7 +137,7 @@ namespace FollowMeFree
         {
             using (var db = new FMFDataEntities())
             {
-                var departments = db.Departments.ToList();
+                var departments = db.Departments.AsNoTracking().ToList();
                 hasDepartments = departments.Any();                
             }
         }
@@ -150,9 +146,24 @@ namespace FollowMeFree
         {
             using (var db = new FMFDataEntities())
             {
-                var printers = db.Printers.ToList();
+                var printers = db.Printers.AsNoTracking().ToList();
                 hasPrinters = printers.Any();                
             }
+        }
+
+        private void barButtonItem_Refresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void RefreshData()
+        {
+            var query = _dbContext.Users.AsNoTracking().Include(x => x.Department).OrderBy(u => u.UserName).ToList();
+            userBindingSource.DataSource = query;
+            gridView1.BestFitColumns();
+
+            LoadDepartments();
+            LoadPrinters();
         }
     }
 }

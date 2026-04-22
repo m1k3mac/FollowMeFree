@@ -43,7 +43,7 @@ namespace FollowMeFree
         private void LoadCharts()
         {
             LoadPrintJobsByDepartmentChart();
-            LoadPrintJobsOverTimeChart();
+            LoadPrintJobsByPrinterChart();
         }
 
         private void LoadPrintJobsByDepartmentChart()
@@ -85,55 +85,39 @@ namespace FollowMeFree
             }
         }
 
-        private void LoadPrintJobsOverTimeChart()
+        private void LoadPrintJobsByPrinterChart()
         {
-            chartControlOverTime.Series.Clear();
-            chartControlOverTime.Titles.Clear();
+            chartControlByPrinter.Series.Clear();
+            chartControlByPrinter.Titles.Clear();
 
-            var timeData = _dbContext.PrintJobs
-                .GroupBy(p => new { p.DateTimePrinted.Year, p.DateTimePrinted.Month })
-                .Select(g => new
-                {
-                    Year = g.Key.Year,
-                    Month = g.Key.Month,
-                    Count = g.Count()
-                })
-                .OrderBy(x => x.Year)
-                .ThenBy(x => x.Month)
-                .ToList()
-                .Select(x => new
-                {
-                    Date = new DateTime(x.Year, x.Month, 1),
-                    x.Count
-                })
+            var printerData = _dbContext.PrintJobs
+                .Include(p => p.Printer)
+                .GroupBy(p => p.Printer != null ? p.Printer.Printer1 : "Unknown")
+                .Select(g => new { PrinterName = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .Take(10)
                 .ToList();
 
-            var series = new Series("Total Print Jobs", ViewType.Line);
-            foreach (var item in timeData)
+            var series = new Series("Total Prints", ViewType.Doughnut);
+            foreach (var item in printerData)
             {
-                series.Points.Add(new SeriesPoint(item.Date, item.Count));
+                series.Points.Add(new SeriesPoint(item.PrinterName, item.Count));
             }
 
             series.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            ((LineSeriesView)series.View).MarkerVisibility = DevExpress.Utils.DefaultBoolean.True;
+            series.Label.TextPattern = "{A}: {V}";
+            ((DoughnutSeriesView)series.View).HoleRadiusPercent = 40;
 
-            chartControlOverTime.Series.Add(series);
+            chartControlByPrinter.Series.Add(series);
 
             var title = new ChartTitle();
-            title.Text = "Total Print Jobs Over Time";
+            title.Text = "Total Prints by Printer";
             title.Font = new Font("Tahoma", 9F, FontStyle.Bold);
-            chartControlOverTime.Titles.Add(title);
+            chartControlByPrinter.Titles.Add(title);
 
-            chartControlOverTime.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
-
-            var diagram = chartControlOverTime.Diagram as XYDiagram;
-            if (diagram != null)
-            {
-                diagram.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
-                diagram.AxisX.Label.Angle = -45;
-                diagram.AxisX.Label.EnableAntialiasing = DevExpress.Utils.DefaultBoolean.True;
-                diagram.AxisX.Label.TextPattern = "{A:MMM yyyy}";
-            }
+            chartControlByPrinter.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControlByPrinter.Legend.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+            chartControlByPrinter.Legend.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
         }
     }
 }

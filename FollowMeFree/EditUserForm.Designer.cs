@@ -51,6 +51,8 @@ namespace FollowMeFree
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            this.label1 = new System.Windows.Forms.Label();
+            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEditUserName.Properties)).BeginInit();
@@ -66,10 +68,12 @@ namespace FollowMeFree
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemPrinters)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
             // 
+            this.layoutControl1.Controls.Add(this.label1);
             this.layoutControl1.Controls.Add(this.textEditUserName);
             this.layoutControl1.Controls.Add(this.textEditFirstName);
             this.layoutControl1.Controls.Add(this.textEditSurname);
@@ -79,12 +83,12 @@ namespace FollowMeFree
             this.layoutControl1.Location = new System.Drawing.Point(0, 24);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
-            this.layoutControl1.Size = new System.Drawing.Size(480, 281);
+            this.layoutControl1.Size = new System.Drawing.Size(480, 328);
             this.layoutControl1.TabIndex = 0;
             // 
             // textEditUserName
             // 
-            this.textEditUserName.Location = new System.Drawing.Point(101, 12);
+            this.textEditUserName.Location = new System.Drawing.Point(101, 36);
             this.textEditUserName.Name = "textEditUserName";
             this.textEditUserName.Size = new System.Drawing.Size(367, 20);
             this.textEditUserName.StyleController = this.layoutControl1;
@@ -92,7 +96,7 @@ namespace FollowMeFree
             // 
             // textEditFirstName
             // 
-            this.textEditFirstName.Location = new System.Drawing.Point(101, 36);
+            this.textEditFirstName.Location = new System.Drawing.Point(101, 60);
             this.textEditFirstName.Name = "textEditFirstName";
             this.textEditFirstName.Size = new System.Drawing.Size(367, 20);
             this.textEditFirstName.StyleController = this.layoutControl1;
@@ -100,7 +104,7 @@ namespace FollowMeFree
             // 
             // textEditSurname
             // 
-            this.textEditSurname.Location = new System.Drawing.Point(101, 60);
+            this.textEditSurname.Location = new System.Drawing.Point(101, 84);
             this.textEditSurname.Name = "textEditSurname";
             this.textEditSurname.Size = new System.Drawing.Size(367, 20);
             this.textEditSurname.StyleController = this.layoutControl1;
@@ -108,7 +112,7 @@ namespace FollowMeFree
             // 
             // lookUpEditDepartment
             // 
-            this.lookUpEditDepartment.Location = new System.Drawing.Point(101, 84);
+            this.lookUpEditDepartment.Location = new System.Drawing.Point(101, 108);
             this.lookUpEditDepartment.Name = "lookUpEditDepartment";
             this.lookUpEditDepartment.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
@@ -119,7 +123,7 @@ namespace FollowMeFree
             // 
             // checkedComboBoxEditPrinters
             // 
-            this.checkedComboBoxEditPrinters.Location = new System.Drawing.Point(101, 108);
+            this.checkedComboBoxEditPrinters.Location = new System.Drawing.Point(101, 132);
             this.checkedComboBoxEditPrinters.Name = "checkedComboBoxEditPrinters";
             this.checkedComboBoxEditPrinters.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
@@ -137,15 +141,16 @@ namespace FollowMeFree
             this.layoutControlItemSurname,
             this.layoutControlItemDepartment,
             this.layoutControlItemPrinters,
-            this.emptySpaceItem1});
+            this.emptySpaceItem1,
+            this.layoutControlItem1});
             this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(480, 281);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(480, 328);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItemUserName
             // 
             this.layoutControlItemUserName.Control = this.textEditUserName;
-            this.layoutControlItemUserName.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItemUserName.Location = new System.Drawing.Point(0, 24);
             this.layoutControlItemUserName.Name = "layoutControlItemUserName";
             this.layoutControlItemUserName.Size = new System.Drawing.Size(460, 24);
             this.layoutControlItemUserName.Text = "Username";
@@ -154,7 +159,7 @@ namespace FollowMeFree
             // layoutControlItemFirstName
             // 
             this.layoutControlItemFirstName.Control = this.textEditFirstName;
-            this.layoutControlItemFirstName.Location = new System.Drawing.Point(0, 24);
+            this.layoutControlItemFirstName.Location = new System.Drawing.Point(0, 48);
             this.layoutControlItemFirstName.Name = "layoutControlItemFirstName";
             this.layoutControlItemFirstName.Size = new System.Drawing.Size(460, 24);
             this.layoutControlItemFirstName.Text = "First Name";
@@ -163,7 +168,7 @@ namespace FollowMeFree
             // layoutControlItemSurname
             // 
             this.layoutControlItemSurname.Control = this.textEditSurname;
-            this.layoutControlItemSurname.Location = new System.Drawing.Point(0, 48);
+            this.layoutControlItemSurname.Location = new System.Drawing.Point(0, 72);
             this.layoutControlItemSurname.Name = "layoutControlItemSurname";
             this.layoutControlItemSurname.Size = new System.Drawing.Size(460, 24);
             this.layoutControlItemSurname.Text = "Surname";
@@ -172,7 +177,7 @@ namespace FollowMeFree
             // layoutControlItemDepartment
             // 
             this.layoutControlItemDepartment.Control = this.lookUpEditDepartment;
-            this.layoutControlItemDepartment.Location = new System.Drawing.Point(0, 72);
+            this.layoutControlItemDepartment.Location = new System.Drawing.Point(0, 96);
             this.layoutControlItemDepartment.Name = "layoutControlItemDepartment";
             this.layoutControlItemDepartment.Size = new System.Drawing.Size(460, 24);
             this.layoutControlItemDepartment.Text = "Department";
@@ -181,7 +186,7 @@ namespace FollowMeFree
             // layoutControlItemPrinters
             // 
             this.layoutControlItemPrinters.Control = this.checkedComboBoxEditPrinters;
-            this.layoutControlItemPrinters.Location = new System.Drawing.Point(0, 96);
+            this.layoutControlItemPrinters.Location = new System.Drawing.Point(0, 120);
             this.layoutControlItemPrinters.Name = "layoutControlItemPrinters";
             this.layoutControlItemPrinters.Size = new System.Drawing.Size(460, 24);
             this.layoutControlItemPrinters.Text = "Allowed Printers";
@@ -190,9 +195,9 @@ namespace FollowMeFree
             // emptySpaceItem1
             // 
             this.emptySpaceItem1.AllowHotTrack = false;
-            this.emptySpaceItem1.Location = new System.Drawing.Point(0, 120);
+            this.emptySpaceItem1.Location = new System.Drawing.Point(0, 144);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(460, 141);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(460, 164);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // barManager1
@@ -257,7 +262,7 @@ namespace FollowMeFree
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 305);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 352);
             this.barDockControlBottom.Manager = this.barManager1;
             this.barDockControlBottom.Size = new System.Drawing.Size(480, 0);
             // 
@@ -267,7 +272,7 @@ namespace FollowMeFree
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 281);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 328);
             // 
             // barDockControlRight
             // 
@@ -275,13 +280,32 @@ namespace FollowMeFree
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.barDockControlRight.Location = new System.Drawing.Point(480, 24);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 281);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 328);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(101, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(367, 20);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Ensure the UserName matches the windows or AD account name.";
+            // 
+            // layoutControlItem1
+            // 
+            this.layoutControlItem1.AppearanceItemCaption.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.layoutControlItem1.AppearanceItemCaption.Options.UseFont = true;
+            this.layoutControlItem1.Control = this.label1;
+            this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem1.Name = "layoutControlItem1";
+            this.layoutControlItem1.Size = new System.Drawing.Size(460, 24);
+            this.layoutControlItem1.Text = "NOTE:";
+            this.layoutControlItem1.TextSize = new System.Drawing.Size(77, 13);
             // 
             // EditUserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 305);
+            this.ClientSize = new System.Drawing.Size(480, 352);
             this.Controls.Add(this.layoutControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
@@ -309,6 +333,7 @@ namespace FollowMeFree
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItemPrinters)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -337,5 +362,7 @@ namespace FollowMeFree
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Save;
         private DevExpress.XtraBars.BarButtonItem barButtonItem_Cancel;
+        private System.Windows.Forms.Label label1;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
     }
 }

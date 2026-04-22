@@ -49,6 +49,7 @@
             this.colPIN = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colAllowedPrinterIds = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.barButtonItem_Refresh = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userBindingSource)).BeginInit();
@@ -68,9 +69,10 @@
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.barButtonItem_New,
             this.barButtonItem_EditUser,
-            this.barButtonItem_ChangePIN});
+            this.barButtonItem_ChangePIN,
+            this.barButtonItem_Refresh});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 3;
+            this.barManager1.MaxItemId = 4;
             // 
             // bar2
             // 
@@ -81,7 +83,8 @@
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_New),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_EditUser),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_ChangePIN)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_ChangePIN),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_Refresh, true)});
             this.bar2.OptionsBar.AllowQuickCustomization = false;
             this.bar2.OptionsBar.DisableClose = true;
             this.bar2.OptionsBar.DisableCustomization = true;
@@ -242,6 +245,15 @@
             this.popupMenu1.Manager = this.barManager1;
             this.popupMenu1.Name = "popupMenu1";
             // 
+            // barButtonItem_Refresh
+            // 
+            this.barButtonItem_Refresh.Caption = "Refresh";
+            this.barButtonItem_Refresh.Id = 3;
+            this.barButtonItem_Refresh.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barButtonItem1.ImageOptions.SvgImage")));
+            this.barButtonItem_Refresh.Name = "barButtonItem_Refresh";
+            this.barButtonItem_Refresh.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem_Refresh.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem_Refresh_ItemClick);
+            // 
             // UserManagementControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -285,5 +297,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn colAllowedPrinterIds;
         private DevExpress.XtraGrid.Columns.GridColumn Department;
         private DevExpress.XtraBars.PopupMenu popupMenu1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem_Refresh;
     }
 }
