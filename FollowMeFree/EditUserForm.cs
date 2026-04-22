@@ -61,28 +61,14 @@ namespace FollowMeFree
 
                 if (!string.IsNullOrEmpty(user.AllowedPrinterIds))
                 {
-                    var allowedIds = user.AllowedPrinterIds.Split(',');
-                    foreach (var item in checkedComboBoxEditPrinters.Properties.Items)
-                    {
-                        var listItem = item as DevExpress.XtraEditors.Controls.CheckedListBoxItem;
-                        if (listItem != null && allowedIds.Contains(listItem.Value.ToString()))
-                        {
-                            listItem.CheckState = CheckState.Checked;
-                        }
-                    }
+                    checkedComboBoxEditPrinters.EditValue = user.AllowedPrinterIds;
                 }
             }
         }
 
         private string GetSelectedPrinterIds()
         {
-            var checkedItems = checkedComboBoxEditPrinters.Properties.Items;
-            var selectedIds = checkedItems
-                .Cast<DevExpress.XtraEditors.Controls.CheckedListBoxItem>()
-                .Where(item => item.CheckState == CheckState.Checked)
-                .Select(item => item.Value.ToString());
-
-            return string.Join(",", selectedIds);
+            return checkedComboBoxEditPrinters.EditValue?.ToString() ?? string.Empty;
         }
 
         private void barButtonItem_Save_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

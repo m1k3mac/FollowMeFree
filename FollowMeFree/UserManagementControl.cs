@@ -29,6 +29,7 @@ namespace FollowMeFree
         {
             gridView1.CustomUnboundColumnData += GridView1_CustomUnboundColumnData;
             RefreshData();
+            gridView1.BestFitColumns();
         }
 
         private void LoadUsers()
@@ -54,8 +55,7 @@ namespace FollowMeFree
                 }
             }
 
-            userBindingSource.DataSource = query;
-            gridView1.BestFitColumns();
+            userBindingSource.DataSource = query;            
         }
 
         private void GridView1_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
