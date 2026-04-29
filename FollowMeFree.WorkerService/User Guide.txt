@@ -67,8 +67,7 @@ The FollowMeFree ecosystem consists of three core components:
 2.1 Install FollowMeFree Mobile app from the Google Play Store. Use the app to connect to the API and test printing. Create a user account froom the Commander app and set a pin code.
 Test the system by logging into it from the mobile app. You will need the IP address of the API server and the port number. Default is 8080 (if it was not changed). eg. 192.168.8.100:8080
 
-Next section: creating users, departments and printers in the Commander app, and testing printing from the mobile app.
-
+--> Next: Create users, departments and printers in the Commander app. Ensure the "FMF Printer Queue" or whatever you named it is shared on your network. Print to this shared printer and release from the mobile app.
 
 
 5. TROUBLESHOOTING
