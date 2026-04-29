@@ -1,6 +1,4 @@
-=============================================================
-     FOLLOWMEFREE: INSTALLATION & TROUBLESHOOTING GUIDE
-=============================================================
+FOLLOWMEFREE: INSTALLATION & TROUBLESHOOTING GUIDE
 
 1. OVERVIEW
 -----------
