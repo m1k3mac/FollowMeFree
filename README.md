@@ -1,4 +1,4 @@
-FOLLOWMEFREE: INSTALLATION & TROUBLESHOOTING GUIDE
+**FOLLOWMEFREE: INSTALLATION & TROUBLESHOOTING GUIDE** 
 
 1. OVERVIEW
 -----------
@@ -27,8 +27,7 @@ The FollowMeFree ecosystem consists of three core components:
     Required for FollowMeFree Service.
 
 [D] IIS (INTERNET INFORMATION SERVICES):
-    Enable via "Turn Windows features on or off". 
-    Ensure "ASP.NET" and ".NET Extensibility" features are enabled.
+    Enable via "Turn Windows features on or off".     
     Required for FollowMeFree API.
 
 
