@@ -23,7 +23,7 @@ namespace FollowMeFree
         }
 
         private void MainControl_Load(object sender, EventArgs e)
-        {
+        {   
             var query = _dbContext.PrintJobs.Include(i => i.Department).OrderByDescending(p => p.DateTimePrinted).Take(500).ToList();
             printJobBindingSource.DataSource = query;
             gridView1.BestFitColumns();

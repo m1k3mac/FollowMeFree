@@ -48,8 +48,8 @@
             this.colSurname = new DevExpress.XtraGrid.Columns.GridColumn();
             this.Department = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colPIN = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
             this.colPrinters = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userBindingSource)).BeginInit();
@@ -181,7 +181,7 @@
             // 
             // gridView1
             // 
-            this.gridView1.Appearance.EvenRow.BackColor = System.Drawing.Color.FloralWhite;
+            this.gridView1.Appearance.EvenRow.BackColor = System.Drawing.Color.GhostWhite;
             this.gridView1.Appearance.EvenRow.Options.UseBackColor = true;
             this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.colUserName,
@@ -238,15 +238,6 @@
             this.colPIN.Visible = true;
             this.colPIN.VisibleIndex = 4;
             // 
-            // popupMenu1
-            // 
-            this.popupMenu1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_ChangePIN),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_EditUser),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_New)});
-            this.popupMenu1.Manager = this.barManager1;
-            this.popupMenu1.Name = "popupMenu1";
-            // 
             // colPrinters
             // 
             this.colPrinters.Caption = "Printers";
@@ -255,6 +246,15 @@
             this.colPrinters.UnboundType = DevExpress.Data.UnboundColumnType.String;
             this.colPrinters.Visible = true;
             this.colPrinters.VisibleIndex = 5;
+            // 
+            // popupMenu1
+            // 
+            this.popupMenu1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_ChangePIN),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_EditUser),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem_New)});
+            this.popupMenu1.Manager = this.barManager1;
+            this.popupMenu1.Name = "popupMenu1";
             // 
             // UserManagementControl
             // 

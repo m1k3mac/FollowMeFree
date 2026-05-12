@@ -3,6 +3,7 @@ using System;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.ServiceProcess;
 using System.Windows.Forms;
 
 namespace FollowMeFree
@@ -206,6 +207,44 @@ namespace FollowMeFree
             using (var progressForm = new ServiceConfigProgressForm())
             {
                 progressForm.ShowDialog(this);
+            }
+        }
+
+        private void simpleButton_RestartService_Click(object sender, EventArgs e)
+        {
+            const string serviceName = "FollowMeFreeService";
+            const int timeoutMs = 30000;
+
+            try
+            {
+                using (var sc = new System.ServiceProcess.ServiceController(serviceName))
+                {
+                    if (sc.Status != System.ServiceProcess.ServiceControllerStatus.Stopped &&
+                        sc.Status != System.ServiceProcess.ServiceControllerStatus.StopPending)
+                    {
+                        sc.Stop();
+                        sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(timeoutMs));
+                    }
+
+                    sc.Start();
+                    sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(timeoutMs));
+                }
+
+                XtraMessageBox.Show("Service restarted successfully.", "Restart Service", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (InvalidOperationException ex)
+            {
+                XtraMessageBox.Show("Could not find or access the service. Make sure the application is running as Administrator.\n\n" + ex.Message,
+                    "Restart Service", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (System.ServiceProcess.TimeoutException)
+            {
+                XtraMessageBox.Show("The service did not respond in time. Please check the service status manually.",
+                    "Restart Service", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show("Error restarting service: " + ex.Message, "Restart Service", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

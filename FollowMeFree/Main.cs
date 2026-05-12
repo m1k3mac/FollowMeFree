@@ -32,6 +32,7 @@ namespace FollowMeFree
             }
 
             ShowControl(new MainControl());
+            this.Text = $"FollowMeFree Commander - v1.0.2";
         }
 
         private void ShowControl(Control control)

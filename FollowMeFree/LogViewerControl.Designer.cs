@@ -94,6 +94,7 @@ namespace FollowMeFree
             // colId
             // 
             this.colId.FieldName = "Id";
+            this.colId.MinWidth = 50;
             this.colId.Name = "colId";
             this.colId.Visible = true;
             this.colId.VisibleIndex = 0;
@@ -104,6 +105,7 @@ namespace FollowMeFree
             this.colTimestamp.DisplayFormat.FormatString = "yyyy-MM-dd HH:mm:ss";
             this.colTimestamp.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.colTimestamp.FieldName = "Timestamp";
+            this.colTimestamp.MinWidth = 115;
             this.colTimestamp.Name = "colTimestamp";
             this.colTimestamp.Visible = true;
             this.colTimestamp.VisibleIndex = 1;
@@ -112,14 +114,16 @@ namespace FollowMeFree
             // colLogLevel
             // 
             this.colLogLevel.FieldName = "LogLevel";
+            this.colLogLevel.MinWidth = 80;
             this.colLogLevel.Name = "colLogLevel";
             this.colLogLevel.Visible = true;
             this.colLogLevel.VisibleIndex = 2;
-            this.colLogLevel.Width = 70;
+            this.colLogLevel.Width = 100;
             // 
             // colSource
             // 
             this.colSource.FieldName = "Source";
+            this.colSource.MinWidth = 60;
             this.colSource.Name = "colSource";
             this.colSource.Visible = true;
             this.colSource.VisibleIndex = 3;
@@ -128,10 +132,11 @@ namespace FollowMeFree
             // colCategory
             // 
             this.colCategory.FieldName = "Category";
+            this.colCategory.MinWidth = 120;
             this.colCategory.Name = "colCategory";
             this.colCategory.Visible = true;
             this.colCategory.VisibleIndex = 4;
-            this.colCategory.Width = 100;
+            this.colCategory.Width = 120;
             // 
             // colMessage
             // 
@@ -144,6 +149,7 @@ namespace FollowMeFree
             // colException
             // 
             this.colException.FieldName = "Exception";
+            this.colException.MinWidth = 60;
             this.colException.Name = "colException";
             this.colException.Visible = true;
             this.colException.VisibleIndex = 6;
